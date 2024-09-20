@@ -1,0 +1,44 @@
+# DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
+
+prefix: "<gradient:#3FE9B1:#308EBC><b>AxPlayerWarps</b></gradient> &7» "
+
+database:
+  # options: h2, sqlite, mysql, postgresql
+  type: "h2"
+
+  # you only need to touch these when using mysql/postgresql
+  address: 127.0.0.1
+  port: 3306
+  database: admin
+  username: admin
+  password: 'admin'
+  pool:
+    maximum-pool-size: 10
+    minimum-idle: 10
+    maximum-lifetime: 1800000
+    keepalive-time: 0
+    connection-timeout: 5000
+
+# you must define at least 1
+open-command-aliases:
+  - "axplayerwarps"
+  - "axpw"
+  - "pw"
+  - "playerwarps"
+  - "playerwarp"
+  - "pwarp"
+  - "pwarps"
+
+# should be plugin notify you if there is a new update?
+update-notifier:
+  # if enabled, it will display the message in the console
+  enabled: true
+  # if enabled, it will broadcast the update message to all players who have the <plugin-name>.update-notify permission
+  on-join: true
+
+# prints out a lot of random information about the plugin in the console
+# only use if the developers ask you for this
+debug: false
+
+# do not change this
+version: 1

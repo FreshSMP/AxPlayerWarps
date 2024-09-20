@@ -1,0 +1,14 @@
+name: AxPlayerWarps
+version: '${project.version}'
+main: com.artillexstudios.axplayerwarps.AxPlayerWarps
+api-version: '1.18'
+folia-supported: true
+
+permissions:
+  axplayerwarps.open:
+    default: true
+  axplayerwarps.warps.1:
+    default: true
+
+softdepend:
+  - PlaceholderAPI
