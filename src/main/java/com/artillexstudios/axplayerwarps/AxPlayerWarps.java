@@ -11,8 +11,15 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.U
 import com.artillexstudios.axapi.utils.FeatureFlags;
 import com.artillexstudios.axapi.utils.MessageUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
+import com.artillexstudios.axplayerwarps.category.CategoryManager;
 import com.artillexstudios.axplayerwarps.database.Database;
+import com.artillexstudios.axplayerwarps.database.impl.H2;
+import com.artillexstudios.axplayerwarps.database.impl.MySQL;
+import com.artillexstudios.axplayerwarps.database.impl.PostgreSQL;
+import com.artillexstudios.axplayerwarps.hooks.HookManager;
+import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
 import com.artillexstudios.axplayerwarps.utils.LogUtils;
+import com.artillexstudios.axplayerwarps.world.WorldManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -27,6 +34,7 @@ public final class AxPlayerWarps extends AxPlugin {
     public static BukkitAudiences BUKKITAUDIENCES;
     public static Config CONFIG;
     public static Config LANG;
+    public static Config CURRENCIES;
 
     public static ThreadedQueue<Runnable> getThreadedQueue() {
         return threadedQueue;
@@ -46,12 +54,28 @@ public final class AxPlayerWarps extends AxPlugin {
 
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         LANG = new Config(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
+        CURRENCIES = new Config(new File(getDataFolder(), "currencies.yml"), getResource("currencies.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
 
         threadedQueue = new ThreadedQueue<>("AxPlayerWarps-Datastore-thread");
 
         MESSAGEUTILS = new MessageUtils(LANG.getBackingDocument(), "prefix", CONFIG.getBackingDocument());
 
+        switch (CONFIG.getString("database.type").toLowerCase()) {
+//            case "sqlite" -> database = new SQLite();
+            case "mysql" -> database = new MySQL();
+            case "postgresql" -> database = new PostgreSQL();
+            default -> database = new H2();
+        }
+
+        database.setup();
+
         LogUtils.DEBUG = CONFIG.getBoolean("debug", false);
+        HookManager.setupHooks();
+
+        getServer().getPluginManager().registerEvents(new WorldListeners(), this);
+
+        WorldManager.reload();
+        CategoryManager.reload();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 

@@ -29,6 +29,33 @@ open-command-aliases:
   - "pwarp"
   - "pwarps"
 
+# to disable categories you can set this to []
+# also make sure to remove the category selector from the gui
+#
+# you can add/remove categories here
+categories:
+  building:
+    material: OAK_PLANKS
+    name: "Building"
+  farm:
+    material: WHEAT
+    name: "Farm"
+  pvp:
+    material: TARGET
+    name: "PvP"
+  event:
+    material: DIAMOND
+    name: "Event"
+  fun:
+    material: FIREWORK_ROCKET
+    name: "Fun"
+  special:
+    material: NETHER_STAR
+    name: "Special"
+  other:
+    material: MAP
+    name: "Other"
+
 # should be plugin notify you if there is a new update?
 update-notifier:
   # if enabled, it will display the message in the console
