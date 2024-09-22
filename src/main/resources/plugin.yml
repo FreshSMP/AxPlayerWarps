@@ -7,6 +7,14 @@ folia-supported: true
 permissions:
   axplayerwarps.open:
     default: true
+  axplayerwarps.open.other:
+    default: op
+  axplayerwarps.create:
+    default: true
+  axplayerwarps.create.other:
+    default: op
+  axplayerwarps.reload:
+    default: op
   axplayerwarps.warps.1:
     default: true
 

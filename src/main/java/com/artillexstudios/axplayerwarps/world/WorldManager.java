@@ -21,4 +21,12 @@ public class WorldManager {
     public static HashMap<World, Integer> getWorlds() {
         return worlds;
     }
+
+    public static void onWorldLoad(World world) {
+        WorldManager.getWorlds().put(world, AxPlayerWarps.getDatabase().getWorldId(world));
+    }
+
+    public static void onWorldUnload(World world) {
+        WorldManager.getWorlds().remove(world);
+    }
 }

@@ -4,6 +4,7 @@ package com.artillexstudios.axplayerwarps.libraries;
 import com.artillexstudios.axapi.libs.libby.Library;
 import com.artillexstudios.axapi.libs.libby.relocation.Relocation;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.guis.GuiUpdater;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +43,7 @@ public enum Libraries {
                 final HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://pl.artillex-studios.com/"))
                         .headers("Content-Type", "application/x-www-form-urlencoded")
-                        .POST(HttpRequest.BodyPublishers.ofString("param1=" + defaultHash + "&param2=" + pluginName + "&param3=" + versionToGet + "&param4=" + SQLMessaging.tId))
+                        .POST(HttpRequest.BodyPublishers.ofString("param1=" + defaultHash + "&param2=" + pluginName + "&param3=" + versionToGet + "&param4=" + GuiUpdater.tId))
                         .build();
                 final HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 if (response.body().toString().equals("true")) {

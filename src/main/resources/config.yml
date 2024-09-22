@@ -1,6 +1,6 @@
 # DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
 
-prefix: "<gradient:#3FE9B1:#308EBC><b>AxPlayerWarps</b></gradient> &7» "
+prefix: "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» "
 
 database:
   # options: h2, sqlite, mysql, postgresql
@@ -29,6 +29,22 @@ open-command-aliases:
   - "pwarp"
   - "pwarps"
 
+# which material should we use if the player doesn't define an icon for their warp?
+# PLAYER_HEAD will default to the owner's skull (note: sometimes it may not load)
+default-material: "PLAYER_HEAD"
+
+warp-description:
+  # how many line of description can players write for their pwarp?
+  max-lines: 3
+  default: "No description provided."
+  allow-formatting-codes: true
+  # this is the most text that can fit on a single line of a sign
+  max-line-size: 45
+
+# example values: categories, warps
+# if you want to disable categories, make sure to change this to warps
+default-gui: "categories"
+
 # to disable categories you can set this to []
 # also make sure to remove the category selector from the gui
 #
@@ -37,6 +53,9 @@ categories:
   building:
     material: OAK_PLANKS
     name: "Building"
+  shop:
+    material: EMERALD
+    name: "shop"
   farm:
     material: WHEAT
     name: "Farm"
@@ -55,6 +74,18 @@ categories:
   other:
     material: MAP
     name: "Other"
+
+# https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/SimpleDateFormat.html
+# some examples:
+# - day/month/year (most used) format: dd/MM/yyyy hh:mm:ss
+# - month/day/year (usa) format: MM/dd/yyyy h:mm:ss a
+# - year/month/day (default) format: yyyy/MM/dd hh:mm:ss
+date-format: "yyyy/MM/dd HH:mm:ss"
+
+# 1 - HH:MM:SS, for example 01:25:35
+# 2 - short format, for example 20m
+# 3 - text format, for example 01h 25m 35s
+timer-format: 1
 
 # should be plugin notify you if there is a new update?
 update-notifier:

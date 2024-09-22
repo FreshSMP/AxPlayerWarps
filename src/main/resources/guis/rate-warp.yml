@@ -1,0 +1,95 @@
+# DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
+# ITEM BUILDER: https://docs.artillex-studios.com/item-builder.html
+
+title: "&0&lAxPWarps > &8Viewing %warp%"
+# a gui can have 1-6 rows
+rows: 5
+
+# ----- ITEMS -----
+
+# you can add as many decorations as you wish
+filler:
+  name: " "
+  slot:
+    - "0-9"
+    - "17-18"
+    - "26-27"
+    - "35-44"
+  type: LIGHT_BLUE_STAINED_GLASS_PANE
+
+rate:
+  slot: 20
+  # this font is called 'small caps'
+  name: "&#33EEBB&lʀᴀᴛᴇ ᴡᴀʀᴘ"
+  type: GOLDEN_APPLE
+  lore:
+    - " "
+    - "&#33EEBBInformation"
+    - "  &#444444❙ &#BBFFDDRating: &#FFDD00%rating_stars% &#FFAA00%rating_decimal% &#AAAAAA(%rating_decimal_7d% last 7 days)"
+    - " "
+    - "&#33EEBBYour current rating: &#FFDD00%given_rating_stars% &#FFAA00%given_rating_decimal%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDRate Warp"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDDelete Your Rating"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+teleport:
+  slot: 22
+  name: "&#33EEBB&lᴛᴇʟᴇᴘᴏʀᴛ"
+  type: ENDER_PEARL
+  lore:
+    - " "
+    - "&#33EEBBInformation"
+    - "  &#444444❙ &#BBFFDDLocation: &f%world%, %x%, %y%, %z%"
+    - " "
+    - "&#33EEBBCost of teleporting: &#BBFFDD%price%"
+    - "&#33EEBBAccess: &#BBFFDD%access%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDTeleport"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+favorite:
+  slot: 24
+  not-favorited:
+    name: "&#33EEBB&lᴀᴅᴅ ᴛᴏ ғᴀᴠᴏʀɪᴛᴇs"
+    type: BELL
+    lore:
+      - " "
+      - "&#33EEBBIs it in your favorites? &#BBFFDDNo"
+      - " "
+      - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDAdd to Favorites"
+  favorited:
+    name: "&#33EEBB&lʀᴇᴍᴏᴠᴇ ғʀᴏᴍ ғᴀᴠᴏʀɪᴛᴇs"
+    type: BELL
+    glow: true
+    lore:
+      - " "
+      - "&#33EEBBIs it in your favorites? &#BBFFDDYes"
+      - " "
+      - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDRemove from Favorites"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+back:
+  slot: 40
+  name: "&#33EEBB&lʙᴀᴄᴋ"
+  type: BARRIER
+  lore:
+    - " "
+    - " &fClick here to go back"
+    - " &fto the previous menu!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
+  actions:
+    - "[MENU] warps"
+    - "[SOUND] ui.button.click|1|1"
+
+#decoration-example:
+#  slot: 10
+#  type: STONE
+#  name: "&eDecoration!"
+#  actions:
+#    - "[MENU] close"
+#    - "[MESSAGE] &#FF0000Message"

@@ -8,17 +8,24 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.Du
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
+import com.artillexstudios.axapi.libs.libby.BukkitLibraryManager;
 import com.artillexstudios.axapi.utils.FeatureFlags;
 import com.artillexstudios.axapi.utils.MessageUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
+import com.artillexstudios.axplayerwarps.commands.MainCommand;
 import com.artillexstudios.axplayerwarps.database.Database;
 import com.artillexstudios.axplayerwarps.database.impl.H2;
 import com.artillexstudios.axplayerwarps.database.impl.MySQL;
 import com.artillexstudios.axplayerwarps.database.impl.PostgreSQL;
+import com.artillexstudios.axplayerwarps.guis.GuiUpdater;
+import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
+import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
+import com.artillexstudios.axplayerwarps.libraries.Libraries;
 import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
 import com.artillexstudios.axplayerwarps.utils.LogUtils;
+import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
@@ -48,9 +55,24 @@ public final class AxPlayerWarps extends AxPlugin {
         return instance;
     }
 
+    public void load() {
+        instance = this;
+        BukkitLibraryManager libraryManager = new BukkitLibraryManager(this, "lib");
+        libraryManager.addMavenCentral();
+        libraryManager.addJitPack();
+        libraryManager.addRepository("https://repo.codemc.org/repository/maven-public/");
+        libraryManager.addRepository("https://repo.papermc.io/repository/maven-public/");
+
+        for (Libraries lib : Libraries.values()) {
+            libraryManager.loadLibrary(lib.getLibrary());
+        }
+    }
+
     public void enable() {
         new Metrics(this, 21645);
         instance = this;
+
+        BUKKITAUDIENCES = BukkitAudiences.create(this);
 
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         LANG = new Config(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
@@ -59,6 +81,9 @@ public final class AxPlayerWarps extends AxPlugin {
         threadedQueue = new ThreadedQueue<>("AxPlayerWarps-Datastore-thread");
 
         MESSAGEUTILS = new MessageUtils(LANG.getBackingDocument(), "prefix", CONFIG.getBackingDocument());
+
+        CategoryGui.reload();
+        WarpsGui.reload();
 
         switch (CONFIG.getString("database.type").toLowerCase()) {
 //            case "sqlite" -> database = new SQLite();
@@ -76,6 +101,10 @@ public final class AxPlayerWarps extends AxPlugin {
 
         WorldManager.reload();
         CategoryManager.reload();
+        MainCommand.registerCommand();
+        GuiUpdater.start();
+
+        WarpManager.load();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
@@ -84,6 +113,7 @@ public final class AxPlayerWarps extends AxPlugin {
 
     public void disable() {
         database.disable();
+        GuiUpdater.stop();
     }
 
     public void updateFlags() {

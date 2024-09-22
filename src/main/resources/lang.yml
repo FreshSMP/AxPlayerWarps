@@ -1,5 +1,31 @@
 # DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
 
+access:
+  private: "&#EE0000Private"
+  whitelisted: "&#EEEE00Whitelisted"
+  public: "&#00EE00Public"
+
+placeholders:
+  no-category: "---"
+  free: "Free"
+  no-rating: "No Rating"
+  star:
+    bright: "&#FFFF00⭐"
+    dark: "&#DDDDDD⭐"
+
+# keep the first line empty
+rating-sign:
+  - " "
+  - "-----------"
+  - "Write new rating!"
+  - "Valid values: 1-5"
+
+time:
+  second: "s"
+  minute: "m"
+  hour: "h"
+  day: "d"
+
 reload:
   success: "&#33FF33Plugin successfully reloaded!"
   failed: "&#FF3333Failed to reload the plugin! Something is wrong in the &f%file%&#FF3333 file, look in the console or use a yaml validator to fix the errors!"

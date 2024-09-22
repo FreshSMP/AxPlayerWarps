@@ -14,7 +14,7 @@ public class CategoryManager {
     public static void reload() {
         categories.clear();
 
-        for (String raw : CONFIG.getStringList("categories")) {
+        for (String raw : CONFIG.getSection("categories").getRoutesAsStrings(false)) {
             Section section = CONFIG.getSection("categories." + raw);
 
             String name = section.getString("name");
@@ -23,5 +23,9 @@ public class CategoryManager {
             Category category = new Category(id, raw, name, section);
             categories.put(raw, category);
         }
+    }
+
+    public static HashMap<String, Category> getCategories() {
+        return categories;
     }
 }
