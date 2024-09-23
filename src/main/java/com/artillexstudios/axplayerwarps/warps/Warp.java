@@ -89,12 +89,18 @@ public class Warp {
         return description;
     }
 
-    public void setDescription(String description) {
+    @Nullable
+    public String getRealDescription() {
+        return description;
+    }
+
+    public void setDescription(@Nullable String description) {
         this.description = description;
     }
 
     public void setDescription(List<String> description) {
-        this.description = String.join("\n", description);
+        String newDesc = String.join("\n", description);
+        this.description = newDesc.isBlank() ? null : newDesc;
     }
 
     @Nullable

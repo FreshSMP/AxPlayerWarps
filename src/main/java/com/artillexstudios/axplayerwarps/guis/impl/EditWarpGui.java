@@ -2,14 +2,18 @@ package com.artillexstudios.axplayerwarps.guis.impl;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.gui.SignInput;
+import com.artillexstudios.axapi.items.WrappedItemStack;
+import com.artillexstudios.axapi.items.component.DataComponents;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.scheduler.Scheduler;
+import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.enums.Access;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
@@ -22,6 +26,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,6 +113,15 @@ public class EditWarpGui extends GuiFrame {
             open();
         }, Map.of());
 
+        createItem("access", event -> {
+            Actions.run(player, this, file.getStringList("access.actions"));
+            Access currAccess = warp.getAccess();
+            Access.values()
+            warp.setAccess(player.getLocation());
+            AxPlayerWarps.getDatabase().updateWarp(warp);
+            open();
+        }, Map.of());
+
         createItem("delete", event -> {
             if (event.isShiftClick() && event.isRightClick()) {
                 Actions.run(player, this, file.getStringList("delete.actions"));
@@ -117,11 +131,27 @@ public class EditWarpGui extends GuiFrame {
             }
         }, Map.of());
 
+        ItemBuilder builder = new ItemBuilder(file.getSection("description"));
+        WrappedItemStack wrap = WrappedItemStack.wrap(builder.get());
+        List<String> lore = new ArrayList<>();
+        String[] description = warp.getDescription().split("\n");
+        for (Component line : wrap.get(DataComponents.lore()).lines()) {
+            String serialized = Placeholders.mm.serialize(line);
+            if (serialized.contains("%description%")) {
+                for (String s : description) {
+                    lore.add(serialized.replace("%description%", s));
+                }
+                continue;
+            }
+            lore.add(serialized);
+        }
+        builder.setLore(lore);
         createItem("description", event -> {
             Actions.run(player, this, file.getStringList("description.actions"));
-            List<String> desc = new ArrayList<>(Arrays.stream(warp.getDescription().split("\n")).toList());
+            var realDesc = warp.getRealDescription();
+            List<String> desc = realDesc == null ? new ArrayList<>() : new ArrayList<>(Arrays.stream(realDesc.split("\n")).toList());
             if (event.isLeftClick()) {
-                if (CONFIG.getInt("warp-description.max-lines") >= desc.size()) {
+                if (CONFIG.getInt("warp-description.max-lines") <= desc.size()) {
                     // todo: max lines reached
                     open();
                     return;
@@ -148,7 +178,7 @@ public class EditWarpGui extends GuiFrame {
                 AxPlayerWarps.getDatabase().updateWarp(warp);
                 open();
             }
-        }, Map.of());
+        }, builder.get());
 
         gui.update();
         gui.open(player);

@@ -70,7 +70,7 @@ public class Placeholders {
         return wrap.toBukkit();
     }
 
-    private static final MiniMessage mm = MiniMessage.builder().build();
+    public static final MiniMessage mm = MiniMessage.builder().build();
     public static Component parse(Warp warp, @Nullable OfflinePlayer player, Component t) {
         String string = mm.serialize(t);
         string = parse(warp, player, string);

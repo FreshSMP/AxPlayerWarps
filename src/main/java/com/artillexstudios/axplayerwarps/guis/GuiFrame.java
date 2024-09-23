@@ -143,6 +143,14 @@ public class GuiFrame {
         return createItem(route, action, replacements, getSlots(slots.isEmpty() ? List.of(file.getString(route + ".slot")) : slots));
     }
 
+    protected GuiItem createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, ItemStack item) {
+        if (file.getString(route + ".slot") == null && file.getStringList(route + ".slot").isEmpty()) return null;
+        final List<String> slots = file.getBackingDocument().getStringList(route + ".slot");
+        final GuiItem guiItem = new GuiItem(item, action);
+        gui.setItem(getSlots(slots.isEmpty() ? List.of(file.getString(route + ".slot")) : slots), guiItem);
+        return guiItem;
+    }
+
     protected GuiItem createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, Map<String, String> replacements, IntArrayList slots) {
         final GuiItem guiItem = new GuiItem(buildItem(route, replacements), action);
         gui.setItem(slots, guiItem);
