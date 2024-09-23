@@ -1,7 +1,7 @@
 # DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
 # ITEM BUILDER: https://docs.artillex-studios.com/item-builder.html
 
-title: "&0&lAxPWarps > &8Warps (%page%/%pages%)"
+title: "&0&lAxPWarps > &8My Warps (%page%/%pages%)"
 # a gui can have 1-6 rows
 rows: 6
 # how many items should be shown on a single page?
@@ -17,7 +17,6 @@ warp:
     - "&#444444❙ &f%description%"
     - " "
     - "&#33EEBBInformation"
-    - "  &#444444❙ &#BBFFDDOwner: &f%owner%"
     - "  &#444444❙ &#BBFFDDCreated: &f%created%"
     - "  &#444444❙ &#BBFFDDLocation: &f%world%, %x%, %y%, %z%"
     - "  &#444444❙ &#BBFFDDCategory: &f%category%"
@@ -31,23 +30,23 @@ warp:
     - "&#33EEBBAccess: &#BBFFDD%access%"
     - " "
     - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDTeleport"
-    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDReview & Options"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDEdit Warp"
 
 # ----- ITEMS -----
 
 my-warps:
   slot: 45
   # this font is called 'small caps'
-  name: "&#33EEBB&lᴍʏ ᴡᴀʀᴘs"
-  type: ENDER_PEARL
+  name: "&#33EEBB&lᴡᴀʀᴘs"
+  type: ENDER_EYE
   lore:
     - " "
-    - " &fClick here to view/edit/delete"
-    - " &fyour &#33EEBB%my_warps% &fwarps!"
+    - " &fClick here to view all the"
+    - " &f&#33EEBB%all_warps% &fwarps on the server!"
     - " "
-    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDOpen My Warps"
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDOpen Warps"
   actions:
-    - "[MENU] my-warps"
+    - "[MENU] warps"
     - "[SOUND] ui.button.click|1|1"
 
 sorting:

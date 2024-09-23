@@ -41,9 +41,9 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
-public class WarpsGui extends GuiFrame {
-    private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/warps.yml"),
-            AxPlayerWarps.getInstance().getResource("guis/warps.yml"),
+public class MyWarpsGui extends GuiFrame {
+    private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/my-warps.yml"),
+            AxPlayerWarps.getInstance().getResource("guis/my-warps.yml"),
             GeneralSettings.builder().setUseDefaults(false).build(),
             LoaderSettings.builder().build(),
             DumperSettings.DEFAULT,
@@ -62,24 +62,24 @@ public class WarpsGui extends GuiFrame {
     private String search = null;
     private WarpUser user;
 
-    public WarpsGui(Player player, Category category, String search) {
+    public MyWarpsGui(Player player, Category category, String search) {
         this(player, category);
         this.search = search;
     }
 
-    public WarpsGui(Player player, Category category) {
+    public MyWarpsGui(Player player, Category category) {
         this(player);
         this.category = category;
     }
 
-    public WarpsGui(Player player) {
+    public MyWarpsGui(Player player) {
         super(GUI, player);
         this.user = Users.get(player);
         setPlaceholder(new Placeholder((player1, s) -> {
             s = s.replace("%search%", search == null ? LANG.getString("placeholders.no-search") : search);
             s = s.replace("%sorting_selected%", user.getSorting().name());
             s = s.replace("%category_selected%", category == null ? LANG.getString("placeholders.no-category") : category.formatted());
-            s = s.replace("%my_warps%", "" + WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).count());
+            s = s.replace("%all_warps%", "" + WarpManager.getWarps().size());
             return s;
         }));
         setGui(gui);
@@ -116,7 +116,7 @@ public class WarpsGui extends GuiFrame {
             open(gui.getCurrentPageNum());
         }, Map.of());
 
-        createItem("category", event -> {
+        createItem("description", event -> {
             Actions.run(player, this, file.getStringList("category.actions"));
             if (event.isShiftClick()) {
                 user.resetCategory();
@@ -145,7 +145,7 @@ public class WarpsGui extends GuiFrame {
         final CompletableFuture<Void> future = new CompletableFuture<>();
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
-            for (Warp warp : WarpManager.getWarps().stream().sorted(new WarpComparator(user.getSorting(), player)).toList()) {
+            for (Warp warp : WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).sorted(new WarpComparator(user.getSorting(), player)).toList()) {
 
                 // category
                 if (category != null && !Objects.equals(warp.getCategory(), category)) continue;
@@ -183,7 +183,7 @@ public class WarpsGui extends GuiFrame {
                     if (event.isLeftClick()) {
                         warp.teleportPlayer(player);
                     } else {
-                        new RateWarpGui(player, warp).open();
+                        new EditWarpGui(player, warp).open();
                     }
                 }));
             }

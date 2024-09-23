@@ -1,0 +1,181 @@
+# DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
+# ITEM BUILDER: https://docs.artillex-studios.com/item-builder.html
+
+title: "&0&lAxPWarps > &8Editing %warp%"
+# a gui can have 1-6 rows
+rows: 5
+
+# ----- ITEMS -----
+
+# you can add as many decorations as you wish
+filler:
+  name: " "
+  slot:
+    - "0-9"
+    - "17-18"
+    - "26-27"
+    - "35-44"
+  type: LIME_STAINED_GLASS_PANE
+
+name-icon:
+  slot: 4
+  # this font is called 'small caps'
+  name: "&#33EEBB&lɴᴀᴍᴇ & ɪᴄᴏɴ"
+  type: ANVIL
+  lore:
+    - " "
+    - "&#33EEBBCurrent name:"
+    - "&#444444❙ &#BBFFDD%name%"
+    - "&#AAAAAAIf you rename a warp, other players"
+    - "&#AAAAAAwill be able to take the old name!"
+    - " "
+    - "&#33EEBBCurrent icon:"
+    - "&#444444❙ &#BBFFDD%icon%"
+    - "&#AAAAAAYou can change the icon by clicking on"
+    - "&#AAAAAAan item in your bottom inventory!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDRename Warp"
+    - "&#33EEBB&lClick On Item &#DDDDDD» &#BBFFDDChange Icon"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDReset Icon"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+description:
+  slot: 20
+  name: "&#33EEBB&lᴅᴇsᴄʀɪᴘᴛɪᴏɴ"
+  type: PAPER
+  lore:
+    - " "
+    - "&#33EEBBCurrent description:"
+    - " &#444444❙ &f%description%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDAdd Line"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDRemove Last Line"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDClear Lines"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+category:
+  slot: 21
+  name: "&#33EEBB&lᴄᴀᴛᴇɢᴏʀʏ"
+  type: HOPPER
+  lore:
+    - " "
+    - "&#33EEBBCurrent category:"
+    - " &#444444❙ &#BBFFDD%category%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDPrevious Category"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDNext Category"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDUnset Category"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+location:
+  slot: 22
+  name: "&#33EEBB&lʟᴏᴄᴀᴛɪᴏɴ"
+  type: ENDER_PEARL
+  lore:
+    - " "
+    - "&#33EEBBTeleport location:"
+    - " &#444444❙ &#BBFFDD%world%, %x%, %y%, %z%"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDUpdate Location"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+access:
+  slot: 23
+  name: "&#33EEBB&lᴀᴄᴄᴇss"
+  type: TRIPWIRE_HOOK
+  lore:
+    - " "
+    - "&#33EEBBCurrent status:"
+    - " &#444444❙ &#BBFFDD%access%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDPrevious Status"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDNext Status"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDReset Access"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+price:
+  slot: 24
+  name: "&#33EEBB&lᴛᴇʟᴇᴘᴏʀᴛ ᴘʀɪᴄᴇ"
+  type: GOLD_NUGGET
+  lore:
+    - " "
+    - "&#33EEBBCurrent:"
+    - " &#444444❙ &fPrice: &#BBFFDD%price%"
+    - " &#444444❙ &fCurrency: &#BBFFDD%currency%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDPrevious Currency"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDNext Currency"
+    - "&#33EEBB&lShift + Left Click &#DDDDDD» &#BBFFDDChange Price"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDMake Free"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+whitelist:
+  slot: 39
+  name: "&#33EEBB&lᴡʜɪᴛᴇʟɪsᴛ"
+  type: WHITE_CANDLE
+  lore:
+    - "&#AAAAAAWhitelisted players can use your warp"
+    - "&#AAAAAAwhen it is set to the whitelisted access mode!"
+    - " "
+    - " &fThere are currently"
+    - " &#BBFFDD%whitelisted% &fplayers!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDEdit Whitelist"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+blacklist:
+  slot: 41
+  name: "&#33EEBB&lʙʟᴀᴄᴋʟɪsᴛ"
+  type: BLACK_CANDLE
+  lore:
+    - "&#AAAAAABlacklisted players can"
+    - "&#AAAAAAnever use your warp!"
+    - " "
+    - " &fThere are currently"
+    - " &#BBFFDD%blacklisted% &fplayers!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDEdit Blacklist"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+delete:
+  slot: 0
+  name: "&#EE0000&lᴅᴇʟᴇᴛᴇ ᴡᴀʀᴘ"
+  type: TNT
+  lore:
+    - " "
+    - " &fClick here to remove the warp!"
+    - " &#FFAAAAThis is irreversible!"
+    - " "
+    - "&#EE0000&lShift + Right Click &#DDDDDD» &#FFAAAADelete Warp"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+back:
+  slot: 8
+  name: "&#33EEBB&lʙᴀᴄᴋ"
+  type: BARRIER
+  lore:
+    - " "
+    - " &fClick here to go back"
+    - " &fto the previous menu!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
+  actions:
+    - "[MENU] my-warps"
+    - "[SOUND] ui.button.click|1|1"
+
+#decoration-example:
+#  slot: 10
+#  type: STONE
+#  name: "&eDecoration!"
+#  actions:
+#    - "[MENU] close"
+#    - "[MESSAGE] &#FF0000Message"

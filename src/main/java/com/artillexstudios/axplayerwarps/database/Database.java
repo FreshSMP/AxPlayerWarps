@@ -31,6 +31,8 @@ public interface Database {
 
     UUID getUUIDFromId(int id);
 
+    Pair<UUID, String> getUUIDAndNameFromId(int id);
+
     World getWorldFromId(int id);
 
     int getCategoryId(String category);
@@ -41,6 +43,8 @@ public interface Database {
 
     CurrencyHook getCurrencyFromId(int id);
 
+    int getMaterialId(Material material);
+
     int getMaterialId(String material);
 
     Material getMaterialFromId(int id);
@@ -48,6 +52,8 @@ public interface Database {
     int createWarp(OfflinePlayer player, Location location, String warpName);
 
     void updateWarp(Warp warp);
+
+    void deleteWarp(Warp warp);
 
     void setRating(Player player, Warp warp, int stars);
 
@@ -57,6 +63,26 @@ public interface Database {
     Integer getRating(Player player, Warp warp);
 
     Pair<Integer, Float> getRatings(Warp warp);
+
+    void addToFavorites(Player player, Warp warp);
+
+    void removeFromFavorites(Player player, Warp warp);
+
+    void removeAllFavorites(Player player);
+
+    int getFavorites(Warp warp);
+
+    int getFavorites(Player player);
+
+    boolean isFavorite(Player player, Warp warp);
+
+    void addVisit(Player player, Warp warp);
+
+    int getVisits(Warp warp);
+
+    int getUniqueVisits(Warp warp);
+
+    boolean warpExists(String name);
 
     void loadWarps();
 

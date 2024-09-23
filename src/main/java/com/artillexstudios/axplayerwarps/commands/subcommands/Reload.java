@@ -4,8 +4,11 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
 import com.artillexstudios.axplayerwarps.commands.MainCommand;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
+import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
+import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
+import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -52,9 +55,22 @@ public enum Reload {
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/warps.yml&#99FFDD!"));
 
+        if (!RateWarpGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/rate-warp.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/rate-warp.yml&#99FFDD!"));
+
+        if (!EditWarpGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/edit-warp.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/edit-warp.yml&#99FFDD!"));
+
         HookManager.updateHooks();
         WorldManager.reload();
         CategoryManager.reload();
+        SortingManager.reload();
         MainCommand.registerCommand();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╚ &#99FFDDSuccessful reload!"));

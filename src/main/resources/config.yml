@@ -38,8 +38,6 @@ warp-description:
   max-lines: 3
   default: "No description provided."
   allow-formatting-codes: true
-  # this is the most text that can fit on a single line of a sign
-  max-line-size: 45
 
 # example values: categories, warps
 # if you want to disable categories, make sure to change this to warps
@@ -51,29 +49,78 @@ default-gui: "categories"
 # you can add/remove categories here
 categories:
   building:
-    material: OAK_PLANKS
     name: "Building"
   shop:
-    material: EMERALD
-    name: "shop"
+    name: "Shop"
   farm:
-    material: WHEAT
     name: "Farm"
   pvp:
-    material: TARGET
     name: "PvP"
   event:
-    material: DIAMOND
     name: "Event"
   fun:
-    material: FIREWORK_ROCKET
     name: "Fun"
   special:
-    material: NETHER_STAR
     name: "Special"
   other:
-    material: MAP
     name: "Other"
+
+# this is all the possible sorting that you can enable/disable
+# forwards: it goes in the original direction, for example forwards rating = it will go from the highest rating to the lowest rating
+# backwards: it goes in the opposite direction, for example backwards rating = it will go from the lowest rating to the highest rating
+# if you disable any of them, it will not show up in the sorting button
+# you can define the default by setting default to true, NOTE that only 1 sorting can the default!
+sorting:
+  alphabetical:
+    forwards:
+      enabled: true
+      default: true
+      name: "A to Z"
+    backwards:
+      enabled: true
+      name: "Z to A"
+  visits:
+    forwards:
+      enabled: true
+      name: "Most visits"
+    backwards:
+      enabled: true
+      name: "Least visits"
+  rating:
+    forwards:
+      enabled: true
+      name: "Highest rating"
+    backwards:
+      enabled: true
+      name: "Lowest rating"
+  rating_count:
+    forwards:
+      enabled: true
+      name: "Most rated"
+    backwards:
+      enabled: true
+      name: "Least rated"
+  favorites:
+    forwards:
+      enabled: true
+      name: "Most favorited"
+    backwards:
+      enabled: true
+      name: "Least favorited"
+  distance:
+    forwards:
+      enabled: true
+      name: "Closest"
+    backwards:
+      enabled: true
+      name: "Furthest"
+  creation_date:
+    forwards:
+      enabled: true
+      name: "Newest"
+    backwards:
+      enabled: true
+      name: "Oldest"
 
 # https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/SimpleDateFormat.html
 # some examples:

@@ -49,6 +49,10 @@ public class GuiFrame {
         this.placeholder = placeholder;
     }
 
+    public void setPlaceholder(Placeholder placeholder) {
+        this.placeholder = placeholder;
+    }
+
     public static IntArrayList getSlots(List<String> s) {
         final IntArrayList slots = new IntArrayList();
 
@@ -123,25 +127,26 @@ public class GuiFrame {
         return item;
     }
 
-    protected void createItem(@NotNull String route) {
-        createItem(route, event -> {
+    protected GuiItem createItem(@NotNull String route) {
+        return createItem(route, event -> {
             Actions.run(player, this, file.getStringList(route + ".actions"));
         }, Map.of());
     }
 
-    protected void createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action) {
-        createItem(route, action, Map.of());
+    protected GuiItem createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action) {
+        return createItem(route, action, Map.of());
     }
 
-    protected void createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, Map<String, String> replacements) {
-        if (file.getString(route + ".slot") == null && file.getStringList(route + ".slot").isEmpty()) return;
+    protected GuiItem createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, Map<String, String> replacements) {
+        if (file.getString(route + ".slot") == null && file.getStringList(route + ".slot").isEmpty()) return null;
         final List<String> slots = file.getBackingDocument().getStringList(route + ".slot");
-        createItem(route, action, replacements, getSlots(slots.isEmpty() ? List.of(file.getString(route + ".slot")) : slots));
+        return createItem(route, action, replacements, getSlots(slots.isEmpty() ? List.of(file.getString(route + ".slot")) : slots));
     }
 
-    protected void createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, Map<String, String> replacements, IntArrayList slots) {
+    protected GuiItem createItem(@NotNull String route, @Nullable GuiAction<InventoryClickEvent> action, Map<String, String> replacements, IntArrayList slots) {
         final GuiItem guiItem = new GuiItem(buildItem(route, replacements), action);
         gui.setItem(slots, guiItem);
+        return guiItem;
     }
 
     protected void createItem(@NotNull String route, @NotNull ItemStack item, @Nullable GuiAction<InventoryClickEvent> action) {
@@ -161,5 +166,9 @@ public class GuiFrame {
     }
 
     public void updateTitle() {
+    }
+
+    public void open() {
+
     }
 }

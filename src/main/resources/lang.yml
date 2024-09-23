@@ -12,6 +12,7 @@ placeholders:
   star:
     bright: "&#FFFF00⭐"
     dark: "&#DDDDDD⭐"
+  no-search: "---"
 
 # keep the first line empty
 rating-sign:
@@ -19,6 +20,24 @@ rating-sign:
   - "-----------"
   - "Write new rating!"
   - "Valid values: 1-5"
+
+search-sign:
+  - " "
+  - "-----------"
+  - "Search for warp"
+  - "in the first line!"
+
+rename-sign:
+  - " "
+  - "-----------"
+  - "Write new name"
+  - "in the first line!"
+
+add-line-sign:
+  - " "
+  - "-----------"
+  - "Write new text"
+  - "in the first line!"
 
 time:
   second: "s"

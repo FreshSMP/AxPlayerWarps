@@ -29,9 +29,15 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 
 public class MainCommand implements OrphanCommand {
 
-    @DefaultFor({"~", "~ open"})
+    @DefaultFor({"~"})
     @CommandPermission("axplayerwarps.open")
-    public void open(@NotNull CommandSender sender, @CommandPermission("axplayerwarps.open.other") @Optional Player player) {
+    public void open(@NotNull CommandSender sender) {
+        Open.INSTANCE.execute(sender, null);
+    }
+
+    @Subcommand({"open"})
+    @CommandPermission("axplayerwarps.open")
+    public void open2(@NotNull CommandSender sender, @CommandPermission("axplayerwarps.open.other") @Optional Player player) {
         Open.INSTANCE.execute(sender, player);
     }
 

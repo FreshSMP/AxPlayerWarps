@@ -34,6 +34,7 @@ public class CategoryGui extends GuiFrame {
     public CategoryGui(Player player) {
         super(GUI, player, new Placeholder((pl, s) -> {
             s = s.replace("%total_warps%", "" + WarpManager.getWarps().size());
+            s = s.replace("%favorite_warps%", "" + AxPlayerWarps.getDatabase().getFavorites(player));
             return s;
         }));
         setGui(gui);

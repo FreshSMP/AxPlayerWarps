@@ -20,10 +20,14 @@ import com.artillexstudios.axplayerwarps.database.impl.MySQL;
 import com.artillexstudios.axplayerwarps.database.impl.PostgreSQL;
 import com.artillexstudios.axplayerwarps.guis.GuiUpdater;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
+import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
+import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.libraries.Libraries;
+import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
 import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
+import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.utils.LogUtils;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
@@ -84,6 +88,8 @@ public final class AxPlayerWarps extends AxPlugin {
 
         CategoryGui.reload();
         WarpsGui.reload();
+        RateWarpGui.reload();
+        EditWarpGui.reload();
 
         switch (CONFIG.getString("database.type").toLowerCase()) {
 //            case "sqlite" -> database = new SQLite();
@@ -98,9 +104,11 @@ public final class AxPlayerWarps extends AxPlugin {
         HookManager.setupHooks();
 
         getServer().getPluginManager().registerEvents(new WorldListeners(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
 
         WorldManager.reload();
         CategoryManager.reload();
+        SortingManager.reload();
         MainCommand.registerCommand();
         GuiUpdater.start();
 

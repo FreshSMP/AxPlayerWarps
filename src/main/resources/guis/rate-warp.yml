@@ -15,7 +15,7 @@ filler:
     - "17-18"
     - "26-27"
     - "35-44"
-  type: LIGHT_BLUE_STAINED_GLASS_PANE
+  type: LIME_STAINED_GLASS_PANE
 
 rate:
   slot: 20
@@ -52,7 +52,7 @@ teleport:
 
 favorite:
   slot: 24
-  not-favorited:
+  not-favorite:
     name: "&#33EEBB&lᴀᴅᴅ ᴛᴏ ғᴀᴠᴏʀɪᴛᴇs"
     type: BELL
     lore:
@@ -60,7 +60,7 @@ favorite:
       - "&#33EEBBIs it in your favorites? &#BBFFDDNo"
       - " "
       - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDAdd to Favorites"
-  favorited:
+  favorite:
     name: "&#33EEBB&lʀᴇᴍᴏᴠᴇ ғʀᴏᴍ ғᴀᴠᴏʀɪᴛᴇs"
     type: BELL
     glow: true

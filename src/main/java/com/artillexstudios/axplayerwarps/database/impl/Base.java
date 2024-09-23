@@ -130,6 +130,7 @@ public class Base implements Database {
                 	id INT NOT NULL AUTO_INCREMENT,
                 	player_id INT NOT NULL,
                 	warp_id INT NOT NULL,
+                	date BIGINT,
                 	PRIMARY KEY (id)
                 );
         """);
@@ -232,6 +233,21 @@ public class Base implements Database {
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return UUID.fromString(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Pair<UUID, String> getUUIDAndNameFromId(int id) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT uuid, name FROM axplayerwarps_players WHERE id = ?",
+                id)
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return new Pair<>(UUID.fromString(rs.getString(1)), rs.getString(2));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -342,15 +358,20 @@ public class Base implements Database {
     }
 
     @Override
+    public int getMaterialId(Material material) {
+        return getMaterialId(material.name());
+    }
+
+    @Override
     public int getMaterialId(String material) {
         try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
-                "SELECT id FROM axplayerwarps_materials WHERE currency = ?",
+                "SELECT id FROM axplayerwarps_materials WHERE material = ?",
                 material)
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return rs.getInt(1);
                 else {
-                    return insert("INSERT INTO axplayerwarps_materials (currency) VALUES (?)", material);
+                    return insert("INSERT INTO axplayerwarps_materials (material) VALUES (?)", material);
                 }
             }
         } catch (SQLException ex) {
@@ -405,7 +426,7 @@ public class Base implements Database {
                 icon_id = ?,
                 currency_id = ?,
                 price = ?,
-                access = ?,
+                access = ?
                 WHERE id = ?
                 """,
                 getPlayerId(warp.getOwner()),
@@ -418,11 +439,18 @@ public class Base implements Database {
                 warp.getName(),
                 warp.getDescription(),
                 warp.getCategory() == null ? null : getCategoryId(warp.getCategory().raw()),
+                warp.getIcon() == null ? null : getMaterialId(warp.getIcon()),
                 warp.getCurrency() == null ? null : getCurrencyId(warp.getCurrency().getName()),
                 warp.getTeleportPrice(),
                 warp.getAccess().ordinal(),
                 warp.getId()
         );
+    }
+
+    @Override
+    public void deleteWarp(Warp warp) {
+        execute("DELETE FROM axplayerwarps_warps WHERE id = ?;", warp.getId());
+        WarpManager.getWarps().remove(warp);
     }
 
     @Override
@@ -470,6 +498,121 @@ public class Base implements Database {
     }
 
     @Override
+    public void addToFavorites(Player player, Warp warp) {
+        removeFromFavorites(player, warp);
+        execute("INSERT INTO axplayerwarps_favorites (player_id, warp_id, date) VALUES (?, ?, ?);",
+                getPlayerId(player), warp.getId(), System.currentTimeMillis());
+    }
+
+    @Override
+    public void removeFromFavorites(Player player, Warp warp) {
+        execute("DELETE FROM axplayerwarps_favorites WHERE player_id = ? AND warp_id = ?;",
+                getPlayerId(player), warp.getId());
+    }
+
+    @Override
+    public void removeAllFavorites(Player player) {
+        execute("DELETE FROM axplayerwarps_favorites WHERE player_id = ?;",
+                getPlayerId(player));
+    }
+
+    @Override
+    public int getFavorites(Warp warp) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT count(*) FROM axplayerwarps_favorites WHERE warp_id = ?;",
+                warp.getId())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getFavorites(Player player) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT count(*) FROM axplayerwarps_favorites WHERE player_id = ?;",
+                getPlayerId(player))
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isFavorite(Player player, Warp warp) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT id FROM axplayerwarps_favorites WHERE player_id = ? AND warp_id = ? LIMIT 1;",
+                getPlayerId(player), warp.getId())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void addVisit(Player player, Warp warp) {
+        execute("INSERT INTO axplayerwarps_visits (visitor_id, warp_id, date) VALUES (?, ?, ?);",
+                getPlayerId(player), warp.getId(), System.currentTimeMillis());
+    }
+
+    @Override
+    public int getVisits(Warp warp) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT count(*) FROM axplayerwarps_visits WHERE warp_id = ?;",
+                warp.getId())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getUniqueVisits(Warp warp) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT count(*) FROM (SELECT DISTINCT visitor_id FROM axplayerwarps_visits WHERE warp_id = ?);",
+                warp.getId())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean warpExists(String name) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT id FROM axplayerwarps_warps WHERE UPPER(name) = UPPER(?)",
+                name)
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public void loadWarps() {
         try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
                 "SELECT * FROM axplayerwarps_warps;")
@@ -501,8 +644,8 @@ public class Base implements Database {
                         material = getMaterialFromId(rs.getInt("icon_id"));
                     }
 
-                    UUID uuid = getUUIDFromId(rs.getInt("owner_id"));
-                    if (uuid == null) continue;
+                    Pair<UUID, String> player = getUUIDAndNameFromId(rs.getInt("owner_id"));
+                    if (player == null) continue;
 
                     Warp warp = new Warp(
                             rs.getInt("id"),
@@ -511,7 +654,8 @@ public class Base implements Database {
                             rs.getString("name"),
                             loc,
                             category,
-                            uuid,
+                            player.getKey(),
+                            player.getValue(),
                             Access.values()[rs.getInt("access")],
                             currencyHook,
                             rs.getDouble("price"),

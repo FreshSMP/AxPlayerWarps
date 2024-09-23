@@ -1,7 +1,6 @@
 package com.artillexstudios.axplayerwarps.commands.subcommands;
 
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionMenu;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;

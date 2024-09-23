@@ -49,6 +49,10 @@ public class Placeholders {
         int starAm = Math.round(rating.getValue());
         t = t.replace("%rating_stars%", StarUtils.getFormatted(starAm, 5));
         t = t.replace("%rating_amount%", "" + rating.getKey());
+        t = t.replace("%visitors%", "" + AxPlayerWarps.getDatabase().getVisits(warp));
+        t = t.replace("%visitors_unique%", "" + AxPlayerWarps.getDatabase().getUniqueVisits(warp));
+        t = t.replace("%favorites%", "" + AxPlayerWarps.getDatabase().getFavorites(warp));
+        t = t.replace("%icon%", warp.getIcon().name().toLowerCase());
 
         return t;
     }

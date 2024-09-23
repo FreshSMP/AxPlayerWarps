@@ -3,12 +3,12 @@ package com.artillexstudios.axplayerwarps.category;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.block.implementation.Section;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 
 public class CategoryManager {
-    private static final HashMap<String, Category> categories = new HashMap<>();
+    private static final LinkedHashMap<String, Category> categories = new LinkedHashMap<>();
 
     // todo: reload parts of Warp
     public static void reload() {
@@ -25,7 +25,7 @@ public class CategoryManager {
         }
     }
 
-    public static HashMap<String, Category> getCategories() {
+    public static LinkedHashMap<String, Category> getCategories() {
         return categories;
     }
 }

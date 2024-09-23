@@ -8,6 +8,7 @@ import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionMenu;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionMessage;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionPage;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionPlayerCommand;
+import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionRefresh;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionSound;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ public class Actions {
     private static final Action MENU = register(new ActionMenu());
     private static final Action PAGE = register(new ActionPage());
     private static final Action CATEGORY = register(new ActionCategory());
+    private static final Action REFRESH = register(new ActionRefresh());
 
     public static Action register(Action action) {
         ACTIONS.put(action.getId(), action);

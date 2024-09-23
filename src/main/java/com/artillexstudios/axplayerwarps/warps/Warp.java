@@ -1,6 +1,7 @@
 package com.artillexstudios.axplayerwarps.warps;
 
 import com.artillexstudios.axapi.utils.PaperUtils;
+import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.enums.Access;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
@@ -16,6 +18,7 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 public class Warp {
     private final int id;
     private UUID owner;
+    private String ownerName;
     private Location location;
     private String name;
     private @Nullable String description;
@@ -28,7 +31,7 @@ public class Warp {
 
     public Warp(int id, long created, @Nullable String description, String name,
                 Location location, @Nullable Category category,
-                UUID owner, Access access, @Nullable CurrencyHook currency,
+                UUID owner, String ownerName, Access access, @Nullable CurrencyHook currency,
                 double teleportPrice, @Nullable Material icon
     ) {
         this.id = id;
@@ -38,6 +41,7 @@ public class Warp {
         this.location = location;
         this.category = category;
         this.owner = owner;
+        this.ownerName = ownerName;
         this.access = access;
         this.currency = currency;
         this.teleportPrice = teleportPrice;
@@ -72,8 +76,10 @@ public class Warp {
         return name;
     }
 
-    public void setName(String name) {
+    public boolean setName(String name) {
+        if (AxPlayerWarps.getDatabase().warpExists(name)) return false;
         this.name = name;
+        return true;
     }
 
     public String getDescription() {
@@ -85,6 +91,10 @@ public class Warp {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setDescription(List<String> description) {
+        this.description = String.join("\n", description);
     }
 
     @Nullable
@@ -136,11 +146,19 @@ public class Warp {
         this.icon = icon;
     }
 
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
     public void teleportPlayer(Player player) {
         // todo: check balance
         // todo: check if safe
-        // todo: add visitor
         // todo: send message
         PaperUtils.teleportAsync(player, location);
+        AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().addVisit(player, this));
     }
 }

@@ -6,37 +6,23 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.Du
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
-import com.artillexstudios.axapi.nms.NMSHandlers;
 import com.artillexstudios.axapi.scheduler.Scheduler;
-import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.NumberUtils;
-import com.artillexstudios.axapi.utils.PaperUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
-import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
@@ -74,9 +60,18 @@ public class RateWarpGui extends GuiFrame {
         return GUI.reload();
     }
 
-    public void open() { // todo: check if favorite
-        createItem("favorite." + "not-favorited", event -> {
+    public void open() {
+        boolean isFavorite = AxPlayerWarps.getDatabase().isFavorite(player, warp);
+        createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
             Actions.run(player, this, file.getStringList("favorite.actions"));
+            AxPlayerWarps.getThreadedQueue().submit(() -> {
+                if (isFavorite) {
+                    AxPlayerWarps.getDatabase().removeFromFavorites(player, warp);
+                } else {
+                    AxPlayerWarps.getDatabase().addToFavorites(player, warp);
+                }
+                Scheduler.get().run(this::open);
+            });
         }, Map.of(), getSlots("favorite"));
 
         createItem("teleport", event -> {
