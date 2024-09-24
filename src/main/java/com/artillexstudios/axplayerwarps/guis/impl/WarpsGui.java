@@ -93,9 +93,14 @@ public class WarpsGui extends GuiFrame {
         open(1);
     }
 
-    public void open(int page) { // todo: category
+    public void open(int page) {
         createItem("search", event -> {
             Actions.run(player, this, file.getStringList("search.actions"));
+            if (event.isShiftClick()) {
+                search = null;
+                open();
+                return;
+            }
             SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("search-sign")).toArray(Component[]::new), (player1, result) -> {
                 String msg = MiniMessage.builder().build().serialize(result[0]).toLowerCase();
                 if (msg.isBlank()) search = null;
@@ -167,8 +172,8 @@ public class WarpsGui extends GuiFrame {
                         lore.add(line);
                         continue;
                     }
-                    for (String s : description) {
-                        lore.add(i, line.replace("%description%", s));
+                    for (int j = description.length - 1; j >= 0; j--) {
+                        lore.add(i, line.replace("%description%", description[j]));
                     }
                 }
                 builder.setLore(Placeholders.parseList(warp, player, lore));

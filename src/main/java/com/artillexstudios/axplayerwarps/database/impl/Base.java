@@ -5,6 +5,7 @@ import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
 import com.artillexstudios.axplayerwarps.database.Database;
 import com.artillexstudios.axplayerwarps.enums.Access;
+import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -22,6 +23,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Base implements Database {
@@ -140,6 +143,7 @@ public class Base implements Database {
                 	id INT NOT NULL AUTO_INCREMENT,
                 	player_id INT NOT NULL,
                 	warp_id INT NOT NULL,
+                	date BIGINT,
                 	PRIMARY KEY (id)
                 );
         """);
@@ -149,6 +153,7 @@ public class Base implements Database {
                 	id INT NOT NULL AUTO_INCREMENT,
                 	player_id INT NOT NULL,
                 	warp_id INT NOT NULL,
+                	date BIGINT,
                 	PRIMARY KEY (id)
                 );
         """);
@@ -223,6 +228,22 @@ public class Base implements Database {
             ex.printStackTrace();
         }
         return "---";
+    }
+
+    @Nullable
+    @Override
+    public UUID getUUIDFromName(String name) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT uuid FROM axplayerwarps_players WHERE UPPER(name) = UPPER(?)",
+                name)
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return UUID.fromString(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Nullable
@@ -611,6 +632,62 @@ public class Base implements Database {
         }
         return false;
     }
+
+    @Override
+    public void addToList(Warp warp, AccessList al, OfflinePlayer player) {
+        removeFromList(warp, AccessList.BLACKLIST, player);
+        removeFromList(warp, AccessList.WHITELIST, player);
+        execute("INSERT INTO " + al.getTable() + " (player_id, warp_id, date) VALUES (?, ?, ?);",
+                getPlayerId(player), warp.getId(), System.currentTimeMillis());
+    }
+
+    @Override
+    public void removeFromList(Warp warp, AccessList al, OfflinePlayer player) {
+        execute("DELETE FROM " + al.getTable() + " WHERE player_id = ? AND warp_id = ?;",
+                getPlayerId(player), warp.getId());
+    }
+
+    @Override
+    public void clearList(Warp warp, AccessList al) {
+        execute("DELETE FROM " + al.getTable() + " WHERE warp_id = ?;",
+                warp.getId());
+    }
+
+    @Override
+    public boolean isOnList(Warp warp, AccessList al, OfflinePlayer player) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT id FROM " + al.getTable() + " WHERE warp_id = ? AND player_id = (SELECT id FROM axplayerwarps_players WHERE uuid = ? LIMIT 1) LIMIT 1",
+                warp.getId(), player.getUniqueId().toString())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public List<AccessPlayer> getAccessList(Warp warp, AccessList al) {
+        List<AccessPlayer> list = new ArrayList<>();
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT axplayerwarps_players.uuid, axplayerwarps_players.name, " + al.getTable() + ".date FROM axplayerwarps_players INNER JOIN " + al.getTable() + " ON axplayerwarps_players.id = " + al.getTable() + ".player_id WHERE " + al.getTable() + ".warp_id = ?",
+                warp.getId())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    AccessPlayer ap = new AccessPlayer(Bukkit.getOfflinePlayer(UUID.fromString(rs.getString(1))), rs.getLong(3), rs.getString(2));
+                    list.add(ap);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+    public record AccessPlayer(OfflinePlayer player, long added, String name) {}
 
     @Override
     public void loadWarps() {

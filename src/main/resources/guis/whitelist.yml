@@ -1,0 +1,107 @@
+# DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
+# ITEM BUILDER: https://docs.artillex-studios.com/item-builder.html
+
+title: "&0&lAxPWarps > &8Editing %warp%"
+# a gui can have 1-6 rows
+rows: 5
+# how many items should be shown on a single page?
+page-size: 21
+
+# ----- ITEMS -----
+
+whitelisted:
+  material: WHITE_CANDLE
+  name: "&#33EEBB&l%player%"
+  lore:
+    - "&#AAAAAAThis player is whitelisted!"
+    - " "
+    - "&#33EEBBSince: &#BBFFDD%added-date%"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDRemove From Whitelist"
+
+# you can add as many decorations as you wish
+filler:
+  name: " "
+  slot:
+    - "0-9"
+    - "17-18"
+    - "26-27"
+    - "35-44"
+  type: WHITE_STAINED_GLASS_PANE
+
+add:
+  slot: 4
+  # this font is called 'small caps'
+  name: "&#33EEBB&lᴡʜɪᴛᴇʟɪsᴛ ᴘʟᴀʏᴇʀ"
+  type: NAME_TAG
+  lore:
+    - "&#AAAAAAWhitelisted players can use your warp"
+    - "&#AAAAAAwhen it is set to the whitelisted access mode!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDAdd Player to Whitelist"
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDClear Whitelist"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+back:
+  slot: 8
+  name: "&#33EEBB&lʙᴀᴄᴋ"
+  type: BARRIER
+  lore:
+    - " "
+    - " &fClick here to go back"
+    - " &fto the previous menu!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
+previous-page:
+  slot: 39
+  material: "ARROW"
+  name: "&#33EEBB&lᴘʀᴇᴠɪᴏᴜs ᴘᴀɢᴇ"
+  lore:
+    - " "
+    - " &fClick here to go back"
+    - " &fto the previous page!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDPrevious Page"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+    - "[PAGE] previous"
+
+refresh:
+  slot: 40
+  material: "SUNFLOWER"
+  name: "&#33EEBB&lʀᴇғʀᴇsʜ"
+  lore:
+    - " "
+    - " &fClick here to"
+    - " &frefresh the page!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDRefresh Page"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+    - "[REFRESH]"
+
+next-page:
+  slot: 41
+  material: "ARROW"
+  name: "&#33EEBB&lɴᴇxᴛ ᴘᴀɢᴇ"
+  lore:
+    - " "
+    - " &fClick here to go"
+    - " &fto the next page!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDNext Page"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+    - "[PAGE] next"
+
+#decoration-example:
+#  slot: 10
+#  type: STONE
+#  name: "&eDecoration!"
+#  actions:
+#    - "[MENU] close"
+#    - "[MESSAGE] &#FF0000Message"

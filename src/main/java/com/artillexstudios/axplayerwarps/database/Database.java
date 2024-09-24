@@ -2,6 +2,8 @@ package com.artillexstudios.axplayerwarps.database;
 
 import com.artillexstudios.axapi.utils.Pair;
 import com.artillexstudios.axplayerwarps.category.Category;
+import com.artillexstudios.axplayerwarps.database.impl.Base;
+import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import org.bukkit.Location;
@@ -11,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface Database {
@@ -24,6 +27,9 @@ public interface Database {
     int getPlayerId(UUID uuid);
 
     String getPlayerName(UUID uuid);
+
+    @Nullable
+    UUID getUUIDFromName(String name);
 
     int getWorldId(String world);
 
@@ -83,6 +89,16 @@ public interface Database {
     int getUniqueVisits(Warp warp);
 
     boolean warpExists(String name);
+
+    void addToList(Warp warp, AccessList al, OfflinePlayer player);
+
+    void removeFromList(Warp warp, AccessList al, OfflinePlayer player);
+
+    void clearList(Warp warp, AccessList al);
+
+    boolean isOnList(Warp warp, AccessList al, OfflinePlayer player);
+
+    List<Base.AccessPlayer> getAccessList(Warp warp, AccessList al);
 
     void loadWarps();
 

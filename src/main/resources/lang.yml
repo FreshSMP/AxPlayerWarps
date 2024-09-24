@@ -33,10 +33,22 @@ rename-sign:
   - "Write new name"
   - "in the first line!"
 
+price-sign:
+  - " "
+  - "-----------"
+  - "Write new price"
+  - "in the first line!"
+
 add-line-sign:
   - " "
   - "-----------"
   - "Write new text"
+  - "in the first line!"
+
+add-player-sign:
+  - " "
+  - "-----------"
+  - "Write the name"
   - "in the first line!"
 
 time:

@@ -164,6 +164,9 @@ public class Warp {
         // todo: check balance
         // todo: check if safe
         // todo: send message
+        // todo: check whitelist/blacklist
+        // todo: check access state
+        // todo: double click if not safe / paid
         PaperUtils.teleportAsync(player, location);
         AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().addVisit(player, this));
     }

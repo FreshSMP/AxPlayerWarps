@@ -19,10 +19,12 @@ import com.artillexstudios.axplayerwarps.database.impl.H2;
 import com.artillexstudios.axplayerwarps.database.impl.MySQL;
 import com.artillexstudios.axplayerwarps.database.impl.PostgreSQL;
 import com.artillexstudios.axplayerwarps.guis.GuiUpdater;
+import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
+import com.artillexstudios.axplayerwarps.guis.impl.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.libraries.Libraries;
 import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
@@ -109,6 +111,8 @@ public final class AxPlayerWarps extends AxPlugin {
         WorldManager.reload();
         CategoryManager.reload();
         SortingManager.reload();
+        WhitelistGui.reload();
+        BlacklistGui.reload();
         MainCommand.registerCommand();
         GuiUpdater.start();
 

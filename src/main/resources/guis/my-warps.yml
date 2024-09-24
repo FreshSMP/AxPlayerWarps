@@ -131,6 +131,7 @@ search:
     - "&#33EEBBCurrent search: &#BBFFDD%search%"
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDSearch"
+    - "&#33EEBB&lShift + Click &#DDDDDD» &#BBFFDDClear Search"
   actions:
     - "[SOUND] ui.button.click|1|1"
 

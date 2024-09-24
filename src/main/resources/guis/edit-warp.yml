@@ -104,9 +104,8 @@ price:
   type: GOLD_NUGGET
   lore:
     - " "
-    - "&#33EEBBCurrent:"
-    - " &#444444❙ &fPrice: &#BBFFDD%price%"
-    - " &#444444❙ &fCurrency: &#BBFFDD%currency%"
+    - "&#33EEBBCurrent price:"
+    - " &#444444❙ &#BBFFDD%price-full%"
     - " "
     - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDPrevious Currency"
     - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDNext Currency"

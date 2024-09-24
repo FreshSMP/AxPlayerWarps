@@ -6,6 +6,7 @@ import com.artillexstudios.axapi.items.component.ItemLore;
 import com.artillexstudios.axapi.utils.Pair;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.utils.TimeUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -25,6 +26,17 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 public class Placeholders {
     public static final DecimalFormat df = new DecimalFormat("#.##");
 
+    public static String parse(Base.AccessPlayer accessPlayer, @Nullable OfflinePlayer player, String t) {
+        t = t.replace("%player%", accessPlayer.name());
+        t = t.replace("%added-date%", TimeUtils.formatDate(accessPlayer.added()));
+
+        return t;
+    }
+
+    public static List<String> parseList(Base.AccessPlayer accessPlayer, @Nullable OfflinePlayer player, List<String> t) {
+        t.replaceAll(s -> parse(accessPlayer, player, s)); return t;
+    }
+
     // todo: optimize
     public static String parse(Warp warp, @Nullable OfflinePlayer player, String t) {
         t = t.replace("%name%", warp.getName());
@@ -41,7 +53,9 @@ public class Placeholders {
         else
             t = t.replace("%category%", LANG.getString("placeholders.no-category"));
         double price = warp.getCurrency() == null ? 0 : warp.getTeleportPrice();
-        t = t.replace("%price%", price == 0 ? LANG.getString("placeholders.free") : df.format(price));
+        boolean isFree = warp.getCurrency() == null || warp.getTeleportPrice() == 0;
+        t = t.replace("%price%", isFree ? LANG.getString("placeholders.free") : warp.getCurrency().getDisplayName().replace("%price%", df.format(price)));
+        t = t.replace("%price-full%", warp.getCurrency() == null ? df.format(warp.getTeleportPrice()) : warp.getCurrency().getDisplayName().replace("%price%", df.format(warp.getTeleportPrice())));
         t = t.replace("%access%", LANG.getString("access." + warp.getAccess().name().toLowerCase()));
 
         Pair<Integer, Float> rating = AxPlayerWarps.getDatabase().getRatings(warp);

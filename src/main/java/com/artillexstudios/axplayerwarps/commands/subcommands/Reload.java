@@ -3,10 +3,12 @@ package com.artillexstudios.axplayerwarps.commands.subcommands;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
 import com.artillexstudios.axplayerwarps.commands.MainCommand;
+import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
+import com.artillexstudios.axplayerwarps.guis.impl.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
@@ -66,6 +68,18 @@ public enum Reload {
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/edit-warp.yml&#99FFDD!"));
+
+        if (!WhitelistGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/whitelist.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/whitelist.yml&#99FFDD!"));
+
+        if (!BlacklistGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/blacklist.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/blacklist.yml&#99FFDD!"));
 
         HookManager.updateHooks();
         WorldManager.reload();
