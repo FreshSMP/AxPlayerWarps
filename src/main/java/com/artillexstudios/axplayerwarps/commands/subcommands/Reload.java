@@ -6,7 +6,9 @@ import com.artillexstudios.axplayerwarps.commands.MainCommand;
 import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
+import com.artillexstudios.axplayerwarps.guis.impl.FavoritesGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
+import com.artillexstudios.axplayerwarps.guis.impl.RecentsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
@@ -80,6 +82,18 @@ public enum Reload {
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/blacklist.yml&#99FFDD!"));
+
+        if (!FavoritesGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/favorites.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/favorites.yml&#99FFDD!"));
+
+        if (!RecentsGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/recent.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/recent.yml&#99FFDD!"));
 
         HookManager.updateHooks();
         WorldManager.reload();

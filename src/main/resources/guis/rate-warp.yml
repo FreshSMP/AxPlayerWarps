@@ -83,7 +83,7 @@ back:
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
   actions:
-    - "[MENU] warps"
+    - "[BACK]"
     - "[SOUND] ui.button.click|1|1"
 
 #decoration-example:

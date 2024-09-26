@@ -123,7 +123,7 @@ whitelist:
     - "&#AAAAAAwhen it is set to the whitelisted access mode!"
     - " "
     - " &fThere are currently"
-    - " &#BBFFDD%whitelisted% &fplayers!"
+    - " &#BBFFDD%whitelisted% &fwhitelisted players!"
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDEdit Whitelist"
   actions:
@@ -138,7 +138,7 @@ blacklist:
     - "&#AAAAAAnever use your warp!"
     - " "
     - " &fThere are currently"
-    - " &#BBFFDD%blacklisted% &fplayers!"
+    - " &#BBFFDD%blacklisted% &fblacklisted players!"
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDEdit Blacklist"
   actions:
@@ -168,7 +168,7 @@ back:
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
   actions:
-    - "[MENU] my-warps"
+    - "[BACK]"
     - "[SOUND] ui.button.click|1|1"
 
 #decoration-example:

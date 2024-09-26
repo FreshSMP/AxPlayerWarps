@@ -1,6 +1,7 @@
 package com.artillexstudios.axplayerwarps.guis.actions;
 
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
+import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionBack;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionCategory;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionConsoleCommand;
 import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionFirework;
@@ -28,6 +29,7 @@ public class Actions {
     private static final Action PAGE = register(new ActionPage());
     private static final Action CATEGORY = register(new ActionCategory());
     private static final Action REFRESH = register(new ActionRefresh());
+    private static final Action BACK = register(new ActionBack());
 
     public static Action register(Action action) {
         ACTIONS.put(action.getId(), action);

@@ -2,8 +2,6 @@ package com.artillexstudios.axplayerwarps.guis.impl;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.gui.SignInput;
-import com.artillexstudios.axapi.items.WrappedItemStack;
-import com.artillexstudios.axapi.items.component.DataComponents;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
@@ -11,24 +9,14 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.U
 import com.artillexstudios.axapi.nms.NMSHandlers;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
-import com.artillexstudios.axapi.utils.NumberUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.category.Category;
-import com.artillexstudios.axplayerwarps.category.CategoryManager;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
-import com.artillexstudios.axplayerwarps.enums.Access;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
-import com.artillexstudios.axplayerwarps.hooks.HookManager;
-import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
-import com.artillexstudios.axplayerwarps.sorting.WarpComparator;
-import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
@@ -37,18 +25,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
 public class BlacklistGui extends GuiFrame {

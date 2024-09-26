@@ -1,7 +1,7 @@
 # DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
 # ITEM BUILDER: https://docs.artillex-studios.com/item-builder.html
 
-title: "&0&lAxPWarps > &8Editing %warp%"
+title: "&0&lAxPWarps > &8Recent Warps (%page%/%pages%)"
 # a gui can have 1-6 rows
 rows: 5
 # how many items should be shown on a single page?
@@ -9,15 +9,29 @@ page-size: 21
 
 # ----- ITEMS -----
 
-blacklisted:
-  material: BLACK_CANDLE
-  name: "&#33EEBB&l%player%"
+warp:
+  name: "&#33EEBB&l%name%"
   lore:
-    - "&#AAAAAAThis player is blacklisted!"
     - " "
-    - "&#33EEBBSince: &#BBFFDD%added-date%"
+    - "&#33EEBBDescription:"
+    - "&#444444❙ &f%description%"
     - " "
-    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDRemove From Blacklist"
+    - "&#33EEBBInformation"
+    - "  &#444444❙ &#BBFFDDOwner: &f%owner%"
+    - "  &#444444❙ &#BBFFDDCreated: &f%created%"
+    - "  &#444444❙ &#BBFFDDLocation: &f%world%, %x%, %y%, %z%"
+    - "  &#444444❙ &#BBFFDDCategory: &f%category%"
+    - " "
+    - "&#33EEBBStatistics"
+    - "  &#444444❙ &#BBFFDDVisits: &f%visitors_unique% &#AAAAAA(%visitors_unique_1d% last 24 hours)"
+    - "  &#444444❙ &#BBFFDDRating: &#FFDD00%rating_stars% &#FFAA00%rating_decimal% &#AAAAAA(%rating_decimal_7d% last 7 days)"
+    - "  &#444444❙ &#BBFFDDFavorite of: &f%favorites% players"
+    - " "
+    - "&#33EEBBCost of teleporting: &#BBFFDD%price%"
+    - "&#33EEBBAccess: &#BBFFDD%access%"
+    - " "
+    - "&#33EEBB&lLeft Click &#DDDDDD» &#BBFFDDTeleport"
+    - "&#33EEBB&lRight Click &#DDDDDD» &#BBFFDDReview & Options"
 
 # you can add as many decorations as you wish
 filler:
@@ -27,24 +41,10 @@ filler:
     - "17-18"
     - "26-27"
     - "35-44"
-  type: BLACK_STAINED_GLASS_PANE
-
-add:
-  slot: 0
-  # this font is called 'small caps'
-  name: "&#33EEBB&lʙʟᴀᴄᴋʟɪsᴛ ᴘʟᴀʏᴇʀ"
-  type: NAME_TAG
-  lore:
-    - "&#AAAAAABlacklisted players can"
-    - "&#AAAAAAnever use your warp!"
-    - " "
-    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDAdd Player to Blacklist"
-    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDClear Blacklist"
-  actions:
-    - "[SOUND] ui.button.click|1|1"
+  type: LIME_STAINED_GLASS_PANE
 
 back:
-  slot: 8
+  slot: 4
   name: "&#33EEBB&lʙᴀᴄᴋ"
   type: BARRIER
   lore:
@@ -54,6 +54,7 @@ back:
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
   actions:
+    - "[MENU] categories"
     - "[SOUND] ui.button.click|1|1"
 
 previous-page:

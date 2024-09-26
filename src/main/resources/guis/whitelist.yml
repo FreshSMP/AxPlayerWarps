@@ -30,7 +30,7 @@ filler:
   type: WHITE_STAINED_GLASS_PANE
 
 add:
-  slot: 4
+  slot: 0
   # this font is called 'small caps'
   name: "&#33EEBB&lᴡʜɪᴛᴇʟɪsᴛ ᴘʟᴀʏᴇʀ"
   type: NAME_TAG

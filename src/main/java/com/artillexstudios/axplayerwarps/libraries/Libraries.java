@@ -24,7 +24,9 @@ public enum Libraries {
 
     H2_JDBC("com{}h2database:h2:2.1.214"),
 
-    POSTGRESQL("org{}postgresql:postgresql:42.5.4");
+    POSTGRESQL("org{}postgresql:postgresql:42.5.4"),
+
+    COMMONS_COLLECTIONS("org{}apache{}commons:commons-collections4:4.5.0-M2");
 
     private final Library library;
     private static String defaultHash = "%%__NONCE__%%";

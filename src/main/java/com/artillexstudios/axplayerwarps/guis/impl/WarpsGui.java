@@ -82,6 +82,8 @@ public class WarpsGui extends GuiFrame {
             s = s.replace("%my_warps%", "" + WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).count());
             return s;
         }));
+
+        gui.setOutsideClickAction(event -> new CategoryGui(player).open()); // todo: only if category gui enabled
         setGui(gui);
     }
 

@@ -568,6 +568,48 @@ public class Base implements Database {
     }
 
     @Override
+    public List<Warp> getFavoriteWarps(Player player) {
+        List<Warp> warps = new ArrayList<>();
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT warp_id FROM axplayerwarps_favorites WHERE player_id = ?;",
+                getPlayerId(player))
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    WarpManager.getWarps()
+                            .stream().filter(warp -> warp.getId() == id)
+                            .findAny().ifPresent(warps::add);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return warps;
+    }
+
+    @Override
+    public List<Warp> getRecentWarps(Player player) {
+        List<Warp> warps = new ArrayList<>();
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT DISTINCT warp_id FROM axplayerwarps_visits WHERE visitor_id = ? ORDER BY date DESC;",
+                getPlayerId(player))
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    WarpManager.getWarps()
+                            .stream().filter(warp -> warp.getId() == id)
+                            .findAny().ifPresent(warps::add);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return warps;
+    }
+
+    @Override
     public boolean isFavorite(Player player, Warp warp) {
         try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
                 "SELECT id FROM axplayerwarps_favorites WHERE player_id = ? AND warp_id = ? LIMIT 1;",

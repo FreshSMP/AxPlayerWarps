@@ -80,6 +80,10 @@ public interface Database {
 
     int getFavorites(Player player);
 
+    List<Warp> getFavoriteWarps(Player player);
+
+    List<Warp> getRecentWarps(Player player);
+
     boolean isFavorite(Player player, Warp warp);
 
     void addVisit(Player player, Warp warp);
