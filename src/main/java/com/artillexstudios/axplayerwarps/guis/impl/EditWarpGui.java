@@ -54,13 +54,14 @@ public class EditWarpGui extends GuiFrame {
     private final Warp warp;
 
     public EditWarpGui(Player player, Warp warp) {
-        super(GUI, player, new Placeholder((pl, s) -> {
-            Integer rating = AxPlayerWarps.getDatabase().getRating(player, warp);
+        super(GUI, player);
+        setPlaceholder(new Placeholder((pl, s) -> {
+            Integer rating = warp.getAllRatings().get(player.getUniqueId());
             s = s.replace("%given_rating_decimal%", rating == null ? "" : Placeholders.df.format(rating));
             s = s.replace("%given_rating_stars%", rating == null ? LANG.getString("placeholders.no-rating") : StarUtils.getFormatted(rating, 5));
 
-            s = s.replace("%blacklisted%", "" + AxPlayerWarps.getDatabase().getAccessList(warp, AccessList.BLACKLIST).size());
-            s = s.replace("%whitelisted%", "" + AxPlayerWarps.getDatabase().getAccessList(warp, AccessList.WHITELIST).size());
+            s = s.replace("%blacklisted%", "" + warp.getAccessList(AccessList.BLACKLIST).size());
+            s = s.replace("%whitelisted%", "" + warp.getAccessList(AccessList.WHITELIST).size());
             return s;
         }));
         this.warp = warp;
@@ -76,7 +77,7 @@ public class EditWarpGui extends GuiFrame {
         gui.setPlayerInventoryAction(event -> {
             if (event.getCurrentItem() == null) return;
             warp.setIcon(event.getCurrentItem().getType());
-            AxPlayerWarps.getDatabase().updateWarp(warp);
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
             open();
         });
     }
@@ -90,7 +91,7 @@ public class EditWarpGui extends GuiFrame {
             Actions.run(player, this, file.getStringList("name-icon.actions"));
             if (event.isShiftClick() && event.isRightClick()) {
                 warp.setIcon(null);
-                AxPlayerWarps.getDatabase().updateWarp(warp);
+                AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                 open();
                 return;
             }
@@ -103,7 +104,7 @@ public class EditWarpGui extends GuiFrame {
                 if (!warp.setName(res.replace(" ", "_"))) {
                      // todo: warp exists
                 } else {
-                    AxPlayerWarps.getDatabase().updateWarp(warp);
+                    AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                     // todo: name updated
                 }
                 Scheduler.get().run(this::open);
@@ -117,7 +118,7 @@ public class EditWarpGui extends GuiFrame {
         createItem("location", event -> {
             Actions.run(player, this, file.getStringList("location.actions"));
             warp.setLocation(player.getLocation());
-            AxPlayerWarps.getDatabase().updateWarp(warp);
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
             open();
         }, Map.of());
 
@@ -138,7 +139,7 @@ public class EditWarpGui extends GuiFrame {
                 }
             }
             warp.setAccess(accesses.get(idx));
-            AxPlayerWarps.getDatabase().updateWarp(warp);
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
             open();
         }, Map.of());
 
@@ -160,7 +161,7 @@ public class EditWarpGui extends GuiFrame {
                 }
             }
             warp.setCategory(idx == -1 ? null : categories.get(idx));
-            AxPlayerWarps.getDatabase().updateWarp(warp);
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
             open();
         }, Map.of());
 
@@ -183,9 +184,7 @@ public class EditWarpGui extends GuiFrame {
                                 return;
                             }
                             warp.setTeleportPrice(price);
-                            AxPlayerWarps.getThreadedQueue().submit(() -> {
-                                AxPlayerWarps.getDatabase().updateWarp(warp);
-                            });
+                            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                         }
                         Scheduler.get().run(this::open);
                     });
@@ -205,7 +204,7 @@ public class EditWarpGui extends GuiFrame {
                 }
             }
             warp.setCurrency(idx == -1 ? null : currencies.get(idx));
-            AxPlayerWarps.getDatabase().updateWarp(warp);
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
             open();
         }, Map.of());
 
@@ -247,7 +246,7 @@ public class EditWarpGui extends GuiFrame {
                     String res = MiniMessage.builder().build().serialize(result[0]);
                     desc.add(res);
                     warp.setDescription(desc);
-                    AxPlayerWarps.getDatabase().updateWarp(warp);
+                    AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                     Scheduler.get().run(this::open);
                 });
                 sign.open();
@@ -256,13 +255,13 @@ public class EditWarpGui extends GuiFrame {
                 if (event.isShiftClick()) {
                     desc.clear();
                     warp.setDescription(desc);
-                    AxPlayerWarps.getDatabase().updateWarp(warp);
+                    AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                     open();
                     return;
                 }
                 desc.remove(desc.size() - 1);
                 warp.setDescription(desc);
-                AxPlayerWarps.getDatabase().updateWarp(warp);
+                AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                 open();
             }
         }, builder.get());

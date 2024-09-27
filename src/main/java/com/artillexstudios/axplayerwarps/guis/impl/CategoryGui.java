@@ -9,6 +9,8 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
+import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import dev.triumphteam.gui.guis.Gui;
 import org.bukkit.entity.Player;
@@ -32,9 +34,11 @@ public class CategoryGui extends GuiFrame {
             .create();
 
     public CategoryGui(Player player) {
-        super(GUI, player, new Placeholder((pl, s) -> {
+        super(GUI, player);
+        WarpUser user = Users.get(player);
+        setPlaceholder(new Placeholder((pl, s) -> {
             s = s.replace("%total_warps%", "" + WarpManager.getWarps().size());
-            s = s.replace("%favorite_warps%", "" + AxPlayerWarps.getDatabase().getFavorites(player));
+            s = s.replace("%favorite_warps%", "" + user.getFavorites().size());
             return s;
         }));
         setGui(gui);

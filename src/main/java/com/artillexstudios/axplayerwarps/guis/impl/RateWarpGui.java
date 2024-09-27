@@ -39,8 +39,9 @@ public class RateWarpGui extends GuiFrame {
     private final Warp warp;
 
     public RateWarpGui(Player player, Warp warp) {
-        super(GUI, player, new Placeholder((pl, s) -> {
-            Integer rating = AxPlayerWarps.getDatabase().getRating(player, warp);
+        super(GUI, player);
+        setPlaceholder(new Placeholder((pl, s) -> {
+            Integer rating = warp.getAllRatings().get(player.getUniqueId());
             s = s.replace("%given_rating_decimal%", rating == null ? "" : Placeholders.df.format(rating));
             s = s.replace("%given_rating_stars%", rating == null ? LANG.getString("placeholders.no-rating") : StarUtils.getFormatted(rating, 5));
             return s;
@@ -61,7 +62,7 @@ public class RateWarpGui extends GuiFrame {
     }
 
     public void open() {
-        boolean isFavorite = AxPlayerWarps.getDatabase().isFavorite(player, warp);
+        boolean isFavorite = user.getFavorites().contains(warp);
         createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
             Actions.run(player, this, file.getStringList("favorite.actions"));
             AxPlayerWarps.getThreadedQueue().submit(() -> {

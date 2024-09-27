@@ -12,12 +12,12 @@ public enum Create {
     INSTANCE;
 
     public void execute(Player sender, String warpName, @Nullable OfflinePlayer setPlayer) {
-        if (AxPlayerWarps.getDatabase().warpExists(warpName)) {
-            // todo: warp already exists
-            return;
-        }
-        OfflinePlayer usedPlayer = setPlayer == null ? sender : setPlayer;
         AxPlayerWarps.getThreadedQueue().submit(() -> {
+            if (AxPlayerWarps.getDatabase().warpExists(warpName)) {
+                // todo: warp already exists
+                return;
+            }
+            OfflinePlayer usedPlayer = setPlayer == null ? sender : setPlayer;
             int id = AxPlayerWarps.getDatabase().createWarp(usedPlayer, sender.getLocation(), warpName);
             Warp warp = new Warp(id, System.currentTimeMillis(), null, warpName, sender.getLocation(), null, usedPlayer.getUniqueId(), usedPlayer.getName(), Access.PUBLIC, null, 0, null);
             WarpManager.getWarps().add(warp);

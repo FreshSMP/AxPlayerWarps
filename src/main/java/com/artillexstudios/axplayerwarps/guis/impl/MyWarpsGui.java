@@ -18,7 +18,6 @@ import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.sorting.WarpComparator;
 import com.artillexstudios.axplayerwarps.user.Users;
-import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import dev.triumphteam.gui.guis.Gui;
@@ -60,7 +59,6 @@ public class MyWarpsGui extends GuiFrame {
 
     private Category category = null;
     private String search = null;
-    private WarpUser user;
 
     public MyWarpsGui(Player player, Category category, String search) {
         this(player, category);

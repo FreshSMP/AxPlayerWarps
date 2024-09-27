@@ -3,13 +3,19 @@ package com.artillexstudios.axplayerwarps.warps;
 import com.artillexstudios.axapi.utils.PaperUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
+import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.enums.Access;
+import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +34,12 @@ public class Warp {
     private @Nullable CurrencyHook currency;
     private double teleportPrice;
     private Material icon;
+    private int favorites;
+    private HashMap<UUID, Integer> rating = new HashMap<>();
+    private int visits;
+    private HashSet<UUID> visitors = new HashSet<>();
+    private List<Base.AccessPlayer> whitelisted = Collections.synchronizedList(new ArrayList<>());
+    private List<Base.AccessPlayer> blacklisted = Collections.synchronizedList(new ArrayList<>());
 
     public Warp(int id, long created, @Nullable String description, String name,
                 Location location, @Nullable Category category,
@@ -46,6 +58,15 @@ public class Warp {
         this.currency = currency;
         this.teleportPrice = teleportPrice;
         this.icon = icon;
+
+        AxPlayerWarps.getThreadedQueue().submit(() -> {
+            favorites = AxPlayerWarps.getDatabase().getFavorites(this);
+            rating = AxPlayerWarps.getDatabase().getAllRatings(this);
+            visits = AxPlayerWarps.getDatabase().getVisits(this);
+            visitors = AxPlayerWarps.getDatabase().getVisitors(this);
+            whitelisted = AxPlayerWarps.getDatabase().getAccessList(this, AccessList.WHITELIST);
+            blacklisted = AxPlayerWarps.getDatabase().getAccessList(this, AccessList.BLACKLIST);
+        });
     }
 
     public void reload() {
@@ -158,6 +179,58 @@ public class Warp {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public int getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(int favorites) {
+        this.favorites = favorites;
+    }
+
+    public HashMap<UUID, Integer> getAllRatings() {
+        return rating;
+    }
+
+    public float getRating() {
+        return (float) rating.values().stream().mapToDouble(Integer::doubleValue).average().orElse(0);
+    }
+
+    public int getRatingAmount() {
+        return rating.size();
+    }
+
+    public void setRating(HashMap<UUID, Integer> rating) {
+        this.rating = rating;
+    }
+
+    public int getVisits() {
+        return visits;
+    }
+
+    public void setVisits(int visits) {
+        this.visits = visits;
+    }
+
+    public HashSet<UUID> getVisitors() {
+        return visitors;
+    }
+
+    public int getUniqueVisits() {
+        return visitors.size();
+    }
+
+    public List<Base.AccessPlayer> getBlacklisted() {
+        return blacklisted;
+    }
+
+    public List<Base.AccessPlayer> getWhitelisted() {
+        return whitelisted;
+    }
+
+    public List<Base.AccessPlayer> getAccessList(AccessList al) {
+        return al == AccessList.WHITELIST ? whitelisted : blacklisted;
     }
 
     public void teleportPlayer(Player player) {

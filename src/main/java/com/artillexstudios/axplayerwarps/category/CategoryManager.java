@@ -14,15 +14,17 @@ public class CategoryManager {
     public static void reload() {
         categories.clear();
 
-        for (String raw : CONFIG.getSection("categories").getRoutesAsStrings(false)) {
-            Section section = CONFIG.getSection("categories." + raw);
+        AxPlayerWarps.getThreadedQueue().submit(() -> {
+            for (String raw : CONFIG.getSection("categories").getRoutesAsStrings(false)) {
+                Section section = CONFIG.getSection("categories." + raw);
 
-            String name = section.getString("name");
-            int id = AxPlayerWarps.getDatabase().getCategoryId(raw);
+                String name = section.getString("name");
+                int id = AxPlayerWarps.getDatabase().getCategoryId(raw);
 
-            Category category = new Category(id, raw, name, section);
-            categories.put(raw, category);
-        }
+                Category category = new Category(id, raw, name, section);
+                categories.put(raw, category);
+            }
+        });
     }
 
     public static LinkedHashMap<String, Category> getCategories() {

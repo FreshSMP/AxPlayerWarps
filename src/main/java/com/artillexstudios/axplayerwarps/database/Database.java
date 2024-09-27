@@ -13,6 +13,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +72,8 @@ public interface Database {
 
     Pair<Integer, Float> getRatings(Warp warp);
 
+    HashMap<UUID, Integer> getAllRatings(Warp warp);
+
     void addToFavorites(Player player, Warp warp);
 
     void removeFromFavorites(Player player, Warp warp);
@@ -89,6 +93,8 @@ public interface Database {
     void addVisit(Player player, Warp warp);
 
     int getVisits(Warp warp);
+
+    HashSet<UUID> getVisitors(Warp warp);
 
     int getUniqueVisits(Warp warp);
 

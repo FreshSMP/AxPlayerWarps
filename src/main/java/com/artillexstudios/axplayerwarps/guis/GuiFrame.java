@@ -10,9 +10,8 @@ import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.triumphteam.gui.components.GuiAction;
 import dev.triumphteam.gui.guis.BaseGui;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -29,12 +28,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class GuiFrame {
     protected final Config file;
     protected BaseGui gui;
     protected Player player;
+    protected WarpUser user;
     private Placeholder placeholder;
     private @Nullable Warp warp;
 
@@ -45,8 +44,9 @@ public class GuiFrame {
     public GuiFrame(Config file, Player player) {
         this.file = file;
         this.player = player;
+        this.user = Users.get(player);
         this.placeholder = new Placeholder((player1, s) -> s);
-        Users.get(player).addGui(this);
+        user.addGui(this);
     }
 
     public GuiFrame(Config file, Player player, Placeholder placeholder) {

@@ -10,9 +10,7 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
-import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import dev.triumphteam.gui.guis.Gui;
@@ -74,7 +72,7 @@ public class FavoritesGui extends GuiFrame {
         final CompletableFuture<Void> future = new CompletableFuture<>();
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
-            for (Warp warp : AxPlayerWarps.getDatabase().getFavoriteWarps(player)) {
+            for (Warp warp : user.getFavorites()) {
                 Material icon = warp.getIcon();
                 ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
                 builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));

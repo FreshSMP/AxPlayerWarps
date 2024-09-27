@@ -3,7 +3,6 @@ package com.artillexstudios.axplayerwarps.placeholders;
 import com.artillexstudios.axapi.items.WrappedItemStack;
 import com.artillexstudios.axapi.items.component.DataComponents;
 import com.artillexstudios.axapi.items.component.ItemLore;
-import com.artillexstudios.axapi.utils.Pair;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
@@ -58,14 +57,14 @@ public class Placeholders {
         t = t.replace("%price-full%", warp.getCurrency() == null ? df.format(warp.getTeleportPrice()) : warp.getCurrency().getDisplayName().replace("%price%", df.format(warp.getTeleportPrice())));
         t = t.replace("%access%", LANG.getString("access." + warp.getAccess().name().toLowerCase()));
 
-        Pair<Integer, Float> rating = AxPlayerWarps.getDatabase().getRatings(warp);
-        t = t.replace("%rating_decimal%", df.format(rating.getValue()));
-        int starAm = Math.round(rating.getValue());
+        float rating = warp.getRating();
+        t = t.replace("%rating_decimal%", df.format(rating));
+        int starAm = Math.round(rating);
         t = t.replace("%rating_stars%", StarUtils.getFormatted(starAm, 5));
-        t = t.replace("%rating_amount%", "" + rating.getKey());
-        t = t.replace("%visitors%", "" + AxPlayerWarps.getDatabase().getVisits(warp));
-        t = t.replace("%visitors_unique%", "" + AxPlayerWarps.getDatabase().getUniqueVisits(warp));
-        t = t.replace("%favorites%", "" + AxPlayerWarps.getDatabase().getFavorites(warp));
+        t = t.replace("%rating_amount%", "" + warp.getRatingAmount());
+        t = t.replace("%visitors%", "" + warp.getVisits());
+        t = t.replace("%visitors_unique%", "" + warp.getUniqueVisits());
+        t = t.replace("%favorites%", "" + warp.getFavorites());
         t = t.replace("%icon%", warp.getIcon().name().toLowerCase());
 
         return t;

@@ -113,7 +113,7 @@ public class WhitelistGui extends GuiFrame {
         final CompletableFuture<Void> future = new CompletableFuture<>();
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
-            for (Base.AccessPlayer accessPlayer : AxPlayerWarps.getDatabase().getAccessList(warp, al)) {
+            for (Base.AccessPlayer accessPlayer : warp.getAccessList(al)) {
                 ItemBuilder builder = new ItemBuilder(file.getSection(al.getRoute()));
                 if (builder.get().getType() == Material.PLAYER_HEAD) {
                     final Player pl = Bukkit.getPlayer(warp.getOwner());
@@ -128,7 +128,7 @@ public class WhitelistGui extends GuiFrame {
 
                 gui.addItem(new GuiItem(builder.get(), event -> {
                     AxPlayerWarps.getThreadedQueue().submit(() -> {
-                        AxPlayerWarps.getDatabase().removeFromList(warp, al, player);
+                        AxPlayerWarps.getDatabase().removeFromList(warp, al, accessPlayer.player());
                         open();
                     });
                 }));
