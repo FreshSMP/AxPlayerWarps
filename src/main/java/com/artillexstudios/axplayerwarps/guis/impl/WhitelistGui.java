@@ -74,11 +74,6 @@ public class WhitelistGui extends GuiFrame {
     }
 
     public void open() {
-        createItem("back", event -> {
-            Actions.run(player, this, file.getStringList("back.actions"));
-            lastGui.open();
-        }, Map.of());
-
         createItem("add", event -> {
             Actions.run(player, this, file.getStringList("add.actions"));
             if (event.isRightClick() && event.isShiftClick()) {

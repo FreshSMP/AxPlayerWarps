@@ -14,7 +14,11 @@ public class Users {
 
     @NotNull
     public static WarpUser get(Player player) {
-        return players.getOrDefault(player, create(player));
+        WarpUser user = players.get(player);
+        if (user != null) return user;
+        user = create(player);
+        players.put(player, user);
+        return user;
     }
 
     @NotNull

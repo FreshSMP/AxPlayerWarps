@@ -64,10 +64,6 @@ public class RecentsGui extends GuiFrame {
     }
 
     public void open() {
-        createItem("back", event -> {
-            Actions.run(player, this, file.getStringList("back.actions"));
-        }, Map.of());
-
         load().thenRun(() -> {
             updateTitle();
             gui.open(player);

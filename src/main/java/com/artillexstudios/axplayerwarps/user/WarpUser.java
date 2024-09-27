@@ -56,6 +56,6 @@ public class WarpUser {
 
     public void addGui(GuiFrame guiFrame) {
         lastGuis.add(guiFrame);
-        System.out.println(lastGuis.size());
+//        System.out.println("add: " + lastGuis.size() + " " + guiFrame);
     }
 }
