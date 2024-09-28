@@ -29,11 +29,13 @@ import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.libraries.Libraries;
+import com.artillexstudios.axplayerwarps.listeners.MoveListener;
 import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
 import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.utils.LogUtils;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
+import com.artillexstudios.axplayerwarps.warps.WarpQueue;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
@@ -76,8 +78,8 @@ public final class AxPlayerWarps extends AxPlugin {
         }
     }
 
-    public void enable() {
-        new Metrics(this, 21645);
+    public void enable() { // todo: desc color codes config
+        new Metrics(this, 21645); // todo: more admin commands
         instance = this;
 
         BUKKITAUDIENCES = BukkitAudiences.create(this);
@@ -109,9 +111,6 @@ public final class AxPlayerWarps extends AxPlugin {
         LogUtils.DEBUG = CONFIG.getBoolean("debug", false);
         HookManager.setupHooks();
 
-        getServer().getPluginManager().registerEvents(new WorldListeners(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
-
         WorldManager.reload();
         CategoryManager.reload();
         SortingManager.reload();
@@ -121,6 +120,11 @@ public final class AxPlayerWarps extends AxPlugin {
         GuiUpdater.start();
 
         WarpManager.load();
+        WarpQueue.start();
+
+        getServer().getPluginManager().registerEvents(new WorldListeners(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
+        getServer().getPluginManager().registerEvents(new MoveListener(), this);
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
@@ -130,6 +134,7 @@ public final class AxPlayerWarps extends AxPlugin {
     public void disable() {
         database.disable();
         GuiUpdater.stop();
+        WarpQueue.stop();
     }
 
     public void updateFlags() {

@@ -2,6 +2,8 @@ package com.artillexstudios.axplayerwarps.category;
 
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.block.implementation.Section;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.warps.Warp;
+import com.artillexstudios.axplayerwarps.warps.WarpManager;
 
 import java.util.LinkedHashMap;
 
@@ -10,7 +12,6 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 public class CategoryManager {
     private static final LinkedHashMap<String, Category> categories = new LinkedHashMap<>();
 
-    // todo: reload parts of Warp
     public static void reload() {
         categories.clear();
 
@@ -25,6 +26,13 @@ public class CategoryManager {
                 categories.put(raw, category);
             }
         });
+
+        for (Warp warp : WarpManager.getWarps()) {
+            Category curr = warp.getCategory();
+            if (curr == null) continue;
+            Category nw = categories.get(curr.raw());
+            warp.setCategory(nw);
+        }
     }
 
     public static LinkedHashMap<String, Category> getCategories() {

@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WorldManager {
     private static final ConcurrentHashMap<World, Integer> worlds = new ConcurrentHashMap<>();
 
-    // todo: reload parts of Warp
     public static void reload() {
         worlds.clear();
 

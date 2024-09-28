@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.Map;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class RateWarpGui extends GuiFrame {
     private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/rate-warp.yml"),
@@ -68,8 +69,10 @@ public class RateWarpGui extends GuiFrame {
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 if (isFavorite) {
                     AxPlayerWarps.getDatabase().removeFromFavorites(player, warp);
+                    MESSAGEUTILS.sendLang(player, "favorite.remove");
                 } else {
                     AxPlayerWarps.getDatabase().addToFavorites(player, warp);
+                    MESSAGEUTILS.sendLang(player, "favorite.add");
                 }
                 Scheduler.get().run(this::open);
             });
@@ -85,6 +88,7 @@ public class RateWarpGui extends GuiFrame {
             if (event.isRightClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().removeRating(player, warp);
+                    MESSAGEUTILS.sendLang(player, "rate.remove");
                     Scheduler.get().run(this::open);
                 });
             }
@@ -92,11 +96,12 @@ public class RateWarpGui extends GuiFrame {
                 SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("rating-sign")).toArray(Component[]::new), (player1, result) -> {
                     String res = MiniMessage.builder().build().serialize(result[0]);
                     if (!NumberUtils.isInt(res)) {
-                        // todo: not a number
+                        MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                     } else {
                         int i = Math.max(1, Math.min(5, Integer.parseInt(res)));
                         AxPlayerWarps.getThreadedQueue().submit(() -> {
                             AxPlayerWarps.getDatabase().setRating(player, warp, i);
+                            MESSAGEUTILS.sendLang(player, "rate.add", Map.of("%rating%", "" + i));
                         });
                     }
                     Scheduler.get().run(this::open);

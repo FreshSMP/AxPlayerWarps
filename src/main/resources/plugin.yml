@@ -7,6 +7,14 @@ folia-supported: true
 permissions:
   axplayerwarps.open:
     default: true
+  axplayerwarps.use:
+    default: true
+  axplayerwarps.delete:
+    default: true
+  axplayerwarps.edit:
+    default: true
+  axplayerwarps.info:
+    default: true
   axplayerwarps.open.other:
     default: op
   axplayerwarps.create:
@@ -17,6 +25,8 @@ permissions:
     default: op
   axplayerwarps.warps.1:
     default: true
+  axplayerwarps.delay-bypass:
+    default: op
 
 softdepend:
   - PlaceholderAPI

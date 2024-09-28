@@ -32,6 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class BlacklistGui extends GuiFrame {
     private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/blacklist.yml"),
@@ -60,13 +61,6 @@ public class BlacklistGui extends GuiFrame {
 
         setWarp(warp);
         setGui(gui);
-
-        gui.setPlayerInventoryAction(event -> {
-            if (event.getCurrentItem() == null) return;
-            warp.setIcon(event.getCurrentItem().getType());
-            AxPlayerWarps.getDatabase().updateWarp(warp);
-            open();
-        });
     }
 
     public static boolean reload() {
@@ -79,6 +73,7 @@ public class BlacklistGui extends GuiFrame {
             if (event.isRightClick() && event.isShiftClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().clearList(warp, al);
+                    MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".clear");
                     open();
                 });
                 return;
@@ -86,16 +81,17 @@ public class BlacklistGui extends GuiFrame {
             SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("add-player-sign")).toArray(Component[]::new), (player1, result) -> {
                 String res = MiniMessage.builder().build().serialize(result[0]);
                 if (res.equalsIgnoreCase(player.getName())) {
-                    // todo: self not allowed
+                    MESSAGEUTILS.sendLang(player, "errors." + al.name().toLowerCase() + "-self");
                     Scheduler.get().run(this::open);
                     return;
                 }
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(res);
                     if (uuid == null) {
-                        // todo: player not found
+                        MESSAGEUTILS.sendLang(player, "errors.player-not-found");
                     } else {
                         AxPlayerWarps.getDatabase().addToList(warp, al, Bukkit.getOfflinePlayer(uuid));
+                        MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".add", Map.of("%player%", res));
                     }
                     Scheduler.get().run(this::open);
                 });
@@ -129,6 +125,7 @@ public class BlacklistGui extends GuiFrame {
                 gui.addItem(new GuiItem(builder.get(), event -> {
                     AxPlayerWarps.getThreadedQueue().submit(() -> {
                         AxPlayerWarps.getDatabase().removeFromList(warp, al, accessPlayer.player());
+                        MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".remove", Map.of("%player%", accessPlayer.name()));
                         open();
                     });
                 }));

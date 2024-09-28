@@ -36,7 +36,6 @@ public class Placeholders {
         t.replaceAll(s -> parse(accessPlayer, player, s)); return t;
     }
 
-    // todo: optimize
     public static String parse(Warp warp, @Nullable OfflinePlayer player, String t) {
         t = t.replace("%name%", warp.getName());
         t = t.replace("%owner%", AxPlayerWarps.getDatabase().getPlayerName(warp.getOwner()));
@@ -54,8 +53,12 @@ public class Placeholders {
         double price = warp.getCurrency() == null ? 0 : warp.getTeleportPrice();
         boolean isFree = warp.getCurrency() == null || warp.getTeleportPrice() == 0;
         t = t.replace("%price%", isFree ? LANG.getString("placeholders.free") : warp.getCurrency().getDisplayName().replace("%price%", df.format(price)));
+
         t = t.replace("%price-full%", warp.getCurrency() == null ? df.format(warp.getTeleportPrice()) : warp.getCurrency().getDisplayName().replace("%price%", df.format(warp.getTeleportPrice())));
         t = t.replace("%access%", LANG.getString("access." + warp.getAccess().name().toLowerCase()));
+
+        double earned = warp.getEarnedMoney();
+        t = t.replace("%earned_money%", warp.getCurrency() == null ? df.format(earned) : warp.getCurrency().getDisplayName().replace("%price%", df.format(earned)));
 
         float rating = warp.getRating();
         t = t.replace("%rating_decimal%", df.format(rating));

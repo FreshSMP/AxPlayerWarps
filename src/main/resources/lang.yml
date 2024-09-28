@@ -13,6 +13,7 @@ placeholders:
     bright: "&#FFFF00⭐"
     dark: "&#DDDDDD⭐"
   no-search: "---"
+  warp-not-found: "Warp not found"
 
 # keep the first line empty
 rating-sign:
@@ -50,6 +51,93 @@ add-player-sign:
   - "-----------"
   - "Write the name"
   - "in the first line!"
+
+info:
+  - "&#BBFFDD===== &#33EEBB&l%name% &#BBFFDD====="
+  - " "
+  - " &#33EEBBDescription:"
+  - " &#444444❙ &f%description%"
+  - " "
+  - " &#33EEBBInformation"
+  - "   &#444444❙ &#BBFFDDOwner: &f%owner%"
+  - "   &#444444❙ &#BBFFDDCreated: &f%created%"
+  - "   &#444444❙ &#BBFFDDLocation: &f%world%, %x%, %y%, %z%"
+  - "   &#444444❙ &#BBFFDDCategory: &f%category%"
+  - " "
+  - " &#33EEBBStatistics"
+  - "   &#444444❙ &#BBFFDDVisits: &f%visitors_unique%"
+  - "   &#444444❙ &#BBFFDDRating: &#FFDD00%rating_stars%"
+  - "   &#444444❙ &#BBFFDDFavorite of: &f%favorites% players"
+  - " "
+  - " &#33EEBBCost of teleporting: &#BBFFDD%price%"
+  - " &#33EEBBAccess: &#BBFFDD%access%"
+  - " "
+  - "&#BBFFDD===== &#33EEBB&l%name% &#BBFFDD====="
+
+create:
+  created: "&#BBFFDDYou have successfully created the &#33EEBB%warp% &#BBFFDDwarp!"
+
+whitelist:
+  clear: "&#BBFFDDYou have removed all players from the whitelist!"
+  remove: "&#BBFFDDYou have removed &#33EEBB%player% &#BBFFDDfrom the whitelist!"
+  add: "&#BBFFDDYou have added &#33EEBB%player% &#BBFFDDto the whitelist!"
+
+blacklist:
+  clear: "&#BBFFDDYou have removed all players from the blacklist!"
+  remove: "&#BBFFDDYou have removed &#33EEBB%player% &#BBFFDDfrom the blacklist!"
+  add: "&#BBFFDDYou have added &#33EEBB%player% &#BBFFDDto the blacklist!"
+
+search:
+  show: "&#BBFFDDShowing search results for &#33EEBB%search%&#BBFFDD!"
+  reset: "&#BBFFDDDisabled search!"
+
+rate:
+  add: "&#BBFFDDYou have added a &#33EEBB%rating% &#BBFFDDstar review to this warp!"
+  remove: "&#BBFFDDYou have removed your rating of this warp!"
+
+favorite:
+  add: "&#BBFFDDYou have added the warp to your favorites!"
+  remove: "&#BBFFDDYou have removed this warp from your favorites!"
+
+editor:
+  update-location: "&#BBFFDDYou have changed the warp's location!"
+  update-name: "&#BBFFDDYou have changed the warp's name!"
+  update-icon: "&#BBFFDDYou have changed the warp's icon!"
+  remove-icon: "&#BBFFDDYou have removed the warp's icon!"
+
+delete:
+  deleted: "&#BBFFDDYou have deleted the &#33EEBB%warp% &#BBFFDDwarp!"
+
+teleport:
+  success: "&#BBFFDDYou have successfully teleported to the &#33EEBB%warp% &#BBFFDDwarp!"
+  in: "&#BBFFDDYou will be teleported in &#33EEBB%seconds% &#BBFFDDseconds! Do not move!"
+
+confirm:
+  unsafe: "&#BBFFDDThe &#33EEBB%warp% &#BBFFDDwarp is &#FF0000&nnot safe&#BBFFDD! Warp again to confirm if you still want to teleport!"
+  paid: "&#BBFFDDTeleporting to the &#33EEBB%warp% &#BBFFDDwarp is going to cost &#33EEBB%price%&#BBFFDD! Warp again to confirm if you still want to teleport!"
+
+money:
+  take: "&#33EEBB%price% &#BBFFDDwas removed from your balance!"
+  got: "&#BBFFDDYou have withdrawn &#33EEBB%price% &#BBFFDDfrom the warp's bank!"
+
+errors:
+  blacklist-self: "&#FF4444You can't blacklist yourself!"
+  whitelist-self: "&#FF4444You can't whitelist yourself!"
+  player-not-found: "&#FF4444This player has never played on the server!"
+  not-a-number: "&#FF4444The given value is not a valid number!"
+  must-be-positive: "&#FF4444The given value is not a positive number!"
+  invalid-name: "&#FF4444The given name is not valid."
+  name-exists: "&#FF4444A warp with this name already exists."
+  max-lines: "&#FF4444You can not add more lines to the warp's description!"
+  not-enough-balance: "&#FF4444You do not have enough money to teleport to this warp!"
+  blacklisted: "&#FF4444You can not teleport to the &#FF0000%warp% &#FF4444warp, because you are blacklisted!"
+  whitelisted: "&#FF4444You can not teleport to the &#FF0000%warp% &#FF4444warp, because it is whitelisted and you are not on the whitelist!"
+  private: "&#FF4444The &#FF0000%warp% &#FF4444is currently set to private, only the owner can teleport to it!"
+  invalid-world: "&#FF4444Teleport failed, this warp is in a world that does not exist anymore!"
+  moved: "&#FF4444You have moved, so the teleport was cancelled!"
+  not-found: "&#FF4444Warp with name &#FF0000%warp% &#FF4444not found!"
+  limit-reached: "&#FF4444You have reached the warp limit, you can not create any more warps! &#FF4444(&#FF0000%current%&#FF4444/&#EE0000%limit%&#FF4444)"
+  nothing-withdrawable: "&#FF4444There is no money to be withdrawn!"
 
 time:
   second: "s"

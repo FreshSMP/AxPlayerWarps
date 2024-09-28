@@ -9,6 +9,7 @@ import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.utils.ThreadUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
@@ -90,6 +91,7 @@ public class Base implements Database {
                 	created BIGINT NOT NULL,
                     currency_id INT DEFAULT null,
                     price DOUBLE NOT NULL DEFAULT '0',
+                    earned_money DOUBLE NOT NULL DEFAULT '0',
                     access TINYINT NOT NULL DEFAULT '0',
                 	PRIMARY KEY (id)
                 );
@@ -145,7 +147,7 @@ public class Base implements Database {
         """);
 
         execute("""
-                CREATE TABLE IF NOT EXISTS axplayerwarps_blacklisted (
+                CREATE TABLE IF NOT EXISTS axplayerwarps_whitelisted (
                 	id INT NOT NULL AUTO_INCREMENT,
                 	player_id INT NOT NULL,
                 	warp_id INT NOT NULL,
@@ -155,7 +157,7 @@ public class Base implements Database {
         """);
 
         execute("""
-                CREATE TABLE IF NOT EXISTS axplayerwarps_whitelisted (
+                CREATE TABLE IF NOT EXISTS axplayerwarps_blacklisted (
                 	id INT NOT NULL AUTO_INCREMENT,
                 	player_id INT NOT NULL,
                 	warp_id INT NOT NULL,
@@ -476,6 +478,7 @@ public class Base implements Database {
                 icon_id = ?,
                 currency_id = ?,
                 price = ?,
+                earned_money = ?,
                 access = ?
                 WHERE id = ?
                 """,
@@ -492,6 +495,7 @@ public class Base implements Database {
                 warp.getIcon() == null ? null : getMaterialId(warp.getIcon()),
                 warp.getCurrency() == null ? null : getCurrencyId(warp.getCurrency().getName()),
                 warp.getTeleportPrice(),
+                warp.getEarnedMoney(),
                 warp.getAccess().ordinal(),
                 warp.getId()
         );
@@ -499,7 +503,17 @@ public class Base implements Database {
 
     @Override
     public void deleteWarp(Warp warp) {
+        for (WarpUser user : Users.getPlayers().values()) {
+            user.getFavorites().removeIf(w -> w.equals(warp));
+        }
+
         execute("DELETE FROM axplayerwarps_warps WHERE id = ?;", warp.getId());
+        execute("DELETE FROM axplayerwarps_visits WHERE warp_id = ?;", warp.getId());
+        execute("DELETE FROM axplayerwarps_ratings WHERE warp_id = ?;", warp.getId());
+        execute("DELETE FROM axplayerwarps_favorites WHERE warp_id = ?;", warp.getId());
+        execute("DELETE FROM axplayerwarps_whitelisted WHERE warp_id = ?;", warp.getId());
+        execute("DELETE FROM axplayerwarps_blacklisted WHERE warp_id = ?;", warp.getId());
+
         WarpManager.getWarps().remove(warp);
     }
 
@@ -895,6 +909,7 @@ public class Base implements Database {
                             Access.values()[rs.getInt("access")],
                             currencyHook,
                             rs.getDouble("price"),
+                            rs.getDouble("earned_money"),
                             material
                     );
 

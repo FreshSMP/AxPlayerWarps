@@ -3,10 +3,10 @@
 prefix: "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» "
 
 database:
-  # options: h2, sqlite, mysql, postgresql
+  # options: h2, mysql, postgresql
   type: "h2"
 
-  # you only need to touch these when using mysql/postgresql
+  # you only need to touch these when using mysql or postgresql
   address: 127.0.0.1
   port: 3306
   database: admin
@@ -33,11 +33,18 @@ open-command-aliases:
 # PLAYER_HEAD will default to the owner's skull (note: sometimes it may not load)
 default-material: "PLAYER_HEAD"
 
+# how much time do players have to confirm if a warp is unsafe or paid
+confirmation-milliseconds: 10000
+
+# how many seconds before the player gets teleported?
+# if they move, the teleport will be cancelled
+# you can bypass this with the axplayerwarps.delay-bypass permission
+teleport-delay-seconds: 3
+
 warp-description:
   # how many line of description can players write for their pwarp?
   max-lines: 3
   default: "No description provided."
-  allow-formatting-codes: true
 
 # example values: categories, warps
 # if you want to disable categories, make sure to change this to warps
@@ -69,7 +76,7 @@ categories:
 # forwards: it goes in the original direction, for example forwards rating = it will go from the highest rating to the lowest rating
 # backwards: it goes in the opposite direction, for example backwards rating = it will go from the lowest rating to the highest rating
 # if you disable any of them, it will not show up in the sorting button
-# you can define the default by setting default to true, NOTE that only 1 sorting can the default!
+# you can define the default by setting default to true, NOTE that only 1 sorting can be the default!
 sorting:
   alphabetical:
     forwards:

@@ -8,6 +8,7 @@ import com.artillexstudios.axapi.utils.NumberUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
+import com.artillexstudios.axplayerwarps.guis.actions.impl.ActionBack;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
@@ -84,6 +85,7 @@ public class GuiFrame {
 
     public void setGui(BaseGui gui) {
         this.gui = gui;
+        gui.setOutsideClickAction(event -> new ActionBack().run(player, this, null));
         for (String str : file.getBackingDocument().getRoutesAsStrings(false)) createItem(str);
     }
 

@@ -39,6 +39,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class WarpsGui extends GuiFrame {
     private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/warps.yml"),
@@ -81,7 +82,6 @@ public class WarpsGui extends GuiFrame {
             return s;
         }));
 
-        gui.setOutsideClickAction(event -> new CategoryGui(player).open()); // todo: only if category gui enabled
         setGui(gui);
     }
 
@@ -98,6 +98,7 @@ public class WarpsGui extends GuiFrame {
             Actions.run(player, this, file.getStringList("search.actions"));
             if (event.isShiftClick()) {
                 search = null;
+                MESSAGEUTILS.sendLang(player, "search.reset");
                 open();
                 return;
             }
@@ -105,6 +106,10 @@ public class WarpsGui extends GuiFrame {
                 String msg = MiniMessage.builder().build().serialize(result[0]).toLowerCase();
                 if (msg.isBlank()) search = null;
                 else search = msg;
+                if (search == null)
+                    MESSAGEUTILS.sendLang(player, "search.reset");
+                else
+                    MESSAGEUTILS.sendLang(player, "search.show", Map.of("%search%", search));
                 Scheduler.get().run(() -> open());
             });
             sign.open();

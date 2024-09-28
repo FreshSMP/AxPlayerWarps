@@ -25,7 +25,7 @@ rate:
   lore:
     - " "
     - "&#33EEBBInformation"
-    - "  &#444444❙ &#BBFFDDRating: &#FFDD00%rating_stars% &#FFAA00%rating_decimal% &#AAAAAA(%rating_decimal_7d% last 7 days)"
+    - "  &#444444❙ &#BBFFDDRating: &#FFDD00%rating_stars% &#FFAA00%rating_decimal%"
     - " "
     - "&#33EEBBYour current rating: &#FFDD00%given_rating_stars% &#FFAA00%given_rating_decimal%"
     - " "

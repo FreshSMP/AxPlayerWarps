@@ -17,6 +17,19 @@ filler:
     - "35-44"
   type: LIME_STAINED_GLASS_PANE
 
+delete:
+  slot: 0
+  name: "&#EE0000&lᴅᴇʟᴇᴛᴇ ᴡᴀʀᴘ"
+  type: TNT
+  lore:
+    - " "
+    - " &fClick here to remove the warp!"
+    - " &#FFAAAAThis is irreversible!"
+    - " "
+    - "&#EE0000&lShift + Right Click &#DDDDDD» &#FFAAAADelete Warp"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
 name-icon:
   slot: 4
   # this font is called 'small caps'
@@ -38,6 +51,20 @@ name-icon:
     - "&#33EEBB&lClick On Item &#DDDDDD» &#BBFFDDChange Icon"
     - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDReset Icon"
   actions:
+    - "[SOUND] ui.button.click|1|1"
+
+back:
+  slot: 8
+  name: "&#33EEBB&lʙᴀᴄᴋ"
+  type: BARRIER
+  lore:
+    - " "
+    - " &fClick here to go back"
+    - " &fto the previous menu!"
+    - " "
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
+  actions:
+    - "[BACK]"
     - "[SOUND] ui.button.click|1|1"
 
 description:
@@ -114,6 +141,21 @@ price:
   actions:
     - "[SOUND] ui.button.click|1|1"
 
+transfer:
+  slot: 36
+  name: "&#33EEBB&lᴛʀᴀɴsғᴇʀ ᴏᴡɴᴇʀsʜɪᴘ"
+  type: DIAMOND
+  lore:
+    - " "
+    - "&#33EEBBCurrent owner:"
+    - " &#444444❙ &#BBFFDD%owner%"
+    - " "
+    - "&#33EEBBThis is irreversible!"
+    - " "
+    - "&#33EEBB&lShift + Right Click &#DDDDDD» &#BBFFDDTransfer"
+  actions:
+    - "[SOUND] ui.button.click|1|1"
+
 whitelist:
   slot: 39
   name: "&#33EEBB&lᴡʜɪᴛᴇʟɪsᴛ"
@@ -144,31 +186,19 @@ blacklist:
   actions:
     - "[SOUND] ui.button.click|1|1"
 
-delete:
-  slot: 0
-  name: "&#EE0000&lᴅᴇʟᴇᴛᴇ ᴡᴀʀᴘ"
-  type: TNT
+bank:
+  slot: 44
+  name: "&#33EEBB&lʙᴀɴᴋ"
+  type: RAW_GOLD
   lore:
+    - "&#AAAAAAIf you set a teleport price,"
+    - "&#AAAAAAmoney will be stored here!"
     - " "
-    - " &fClick here to remove the warp!"
-    - " &#FFAAAAThis is irreversible!"
+    - "&#33EEBBCurrent money:"
+    - " &#444444❙ &#BBFFDD%earned_money%"
     - " "
-    - "&#EE0000&lShift + Right Click &#DDDDDD» &#FFAAAADelete Warp"
+    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDWithdraw Money"
   actions:
-    - "[SOUND] ui.button.click|1|1"
-
-back:
-  slot: 8
-  name: "&#33EEBB&lʙᴀᴄᴋ"
-  type: BARRIER
-  lore:
-    - " "
-    - " &fClick here to go back"
-    - " &fto the previous menu!"
-    - " "
-    - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDBack to the Main Menu"
-  actions:
-    - "[BACK]"
     - "[SOUND] ui.button.click|1|1"
 
 #decoration-example:

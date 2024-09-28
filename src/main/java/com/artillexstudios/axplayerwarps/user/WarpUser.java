@@ -8,7 +8,9 @@ import com.artillexstudios.axplayerwarps.sorting.Sort;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,5 +74,26 @@ public class WarpUser {
 
     public List<Warp> getFavorites() {
         return favorites;
+    }
+
+    public int getWarpLimit() {
+        if (hasBypass(player)) return Integer.MAX_VALUE;
+        int am = 1;
+        for (PermissionAttachmentInfo effectivePermission : player.getEffectivePermissions()) {
+            if (!effectivePermission.getPermission().startsWith("axplayerwarps.warps.")) continue;
+
+            int value = Integer.parseInt(effectivePermission.getPermission().substring(effectivePermission.getPermission().lastIndexOf('.') + 1));
+            if (value > am) am = value;
+        }
+        return am;
+    }
+
+    public static boolean hasBypass(OfflinePlayer offlinePlayer) {
+        if (offlinePlayer.isOp()) return true;
+        final Player player = offlinePlayer.getPlayer();
+        if (player == null) return false;
+        if (player.hasPermission("*")) return true;
+        if (player.hasPermission("axplayerwarps.warps.*")) return true;
+        return false;
     }
 }

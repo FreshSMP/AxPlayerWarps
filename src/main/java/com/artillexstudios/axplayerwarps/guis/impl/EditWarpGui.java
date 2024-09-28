@@ -40,6 +40,7 @@ import java.util.Map;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class EditWarpGui extends GuiFrame {
     private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/edit-warp.yml"),
@@ -77,7 +78,10 @@ public class EditWarpGui extends GuiFrame {
         gui.setPlayerInventoryAction(event -> {
             if (event.getCurrentItem() == null) return;
             warp.setIcon(event.getCurrentItem().getType());
-            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
+            AxPlayerWarps.getThreadedQueue().submit(() -> {
+                AxPlayerWarps.getDatabase().updateWarp(warp);
+                MESSAGEUTILS.sendLang(player, "editor.update-icon");
+            });
             open();
         });
     }
@@ -86,26 +90,32 @@ public class EditWarpGui extends GuiFrame {
         return GUI.reload();
     }
 
+    // todo: transfer warp setting
     public void open() {
         GuiItem guiItem = createItem("name-icon", event -> {
             Actions.run(player, this, file.getStringList("name-icon.actions"));
             if (event.isShiftClick() && event.isRightClick()) {
                 warp.setIcon(null);
-                AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
+                AxPlayerWarps.getThreadedQueue().submit(() -> {
+                    AxPlayerWarps.getDatabase().updateWarp(warp);
+                    MESSAGEUTILS.sendLang(player, "editor.remove-icon");
+                });
                 open();
                 return;
             }
             SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("rename-sign")).toArray(Component[]::new), (player1, result) -> {
                 String res = MiniMessage.builder().build().serialize(result[0]);
                 if (res.isBlank()) {
-                    // todo: invalid name
+                    MESSAGEUTILS.sendLang(player, "errors.invalid-name");
                     return;
                 }
                 if (!warp.setName(res.replace(" ", "_"))) {
-                     // todo: warp exists
+                    MESSAGEUTILS.sendLang(player, "errors.name-exists");
                 } else {
-                    AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
-                    // todo: name updated
+                    AxPlayerWarps.getThreadedQueue().submit(() -> {
+                        AxPlayerWarps.getDatabase().updateWarp(warp);
+                        MESSAGEUTILS.sendLang(player, "editor.update-name");
+                    });
                 }
                 Scheduler.get().run(this::open);
             });
@@ -118,7 +128,10 @@ public class EditWarpGui extends GuiFrame {
         createItem("location", event -> {
             Actions.run(player, this, file.getStringList("location.actions"));
             warp.setLocation(player.getLocation());
-            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
+            AxPlayerWarps.getThreadedQueue().submit(() -> {
+                AxPlayerWarps.getDatabase().updateWarp(warp);
+                MESSAGEUTILS.sendLang(player, "editor.update-location");
+            });
             open();
         }, Map.of());
 
@@ -167,6 +180,7 @@ public class EditWarpGui extends GuiFrame {
 
         createItem("price", event -> {
             Actions.run(player, this, file.getStringList("price.actions"));
+            if (warp.getEarnedMoney() > 0) warp.withdrawMoney();
             CurrencyHook currency = warp.getCurrency();
             ArrayList<CurrencyHook> currencies = HookManager.getCurrency();
             int idx = currency == null ? -1 : currencies.indexOf(currency);
@@ -175,11 +189,11 @@ public class EditWarpGui extends GuiFrame {
                     SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("price-sign")).toArray(Component[]::new), (player1, result) -> {
                         String res = MiniMessage.builder().build().serialize(result[0]);
                         if (!NumberUtils.isInt(res)) {
-                            // todo: not a number
+                            MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                         } else {
                             int price = Integer.parseInt(res);
                             if (price < 1) {
-                                // todo: too little number
+                                MESSAGEUTILS.sendLang(player, "errors.must-be-positive");
                                 Scheduler.get().run(this::open);
                                 return;
                             }
@@ -211,10 +225,15 @@ public class EditWarpGui extends GuiFrame {
         createItem("delete", event -> {
             if (event.isShiftClick() && event.isRightClick()) {
                 Actions.run(player, this, file.getStringList("delete.actions"));
-                AxPlayerWarps.getDatabase().deleteWarp(warp);
-                // todo: deleted
+                warp.delete();
                 player.closeInventory();
             }
+        }, Map.of());
+
+        createItem("bank", event -> {
+            Actions.run(player, this, file.getStringList("bank.actions"));
+            warp.withdrawMoney();
+            open();
         }, Map.of());
 
         ItemBuilder builder = new ItemBuilder(file.getSection("description"));
@@ -238,7 +257,7 @@ public class EditWarpGui extends GuiFrame {
             List<String> desc = realDesc == null ? new ArrayList<>() : new ArrayList<>(Arrays.stream(realDesc.split("\n")).toList());
             if (event.isLeftClick()) {
                 if (CONFIG.getInt("warp-description.max-lines") <= desc.size()) {
-                    // todo: max lines reached
+                    MESSAGEUTILS.sendLang(player, "errors.max-lines");
                     open();
                     return;
                 }

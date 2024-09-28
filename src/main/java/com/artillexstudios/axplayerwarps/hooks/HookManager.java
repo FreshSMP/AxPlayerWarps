@@ -18,6 +18,7 @@ import com.artillexstudios.axplayerwarps.hooks.currency.TheOnlyMobCoins;
 import com.artillexstudios.axplayerwarps.hooks.currency.TokenManagerHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.UltraEconomyHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.VaultHook;
+import com.artillexstudios.axplayerwarps.hooks.other.PlaceholderAPIHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,9 @@ public class HookManager {
     private static final ArrayList<CurrencyHook> currency = new ArrayList<>();
 
     public static void setupHooks() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIHook().register();
+        }
         updateHooks();
     }
 

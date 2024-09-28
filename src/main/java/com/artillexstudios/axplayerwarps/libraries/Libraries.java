@@ -29,34 +29,8 @@ public enum Libraries {
     COMMONS_COLLECTIONS("org{}apache{}commons:commons-collections4:4.5.0-M2");
 
     private final Library library;
-    private static String defaultHash = "%%__NONCE__%%";
-    private static final String pluginName = AxPlayerWarps.getInstance().getName();
-    private static final String versionToGet = AxPlayerWarps.getInstance().getDescription().getVersion();
 
     public Library getLibrary() {
-        return getLibrary(defaultHash);
-    }
-
-    @Nullable
-    public Library getLibrary(@NotNull String hash) {
-        if (!hash.isEmpty()) {
-            try {
-                final HttpClient client = HttpClient.newHttpClient();
-                final HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("https://pl.artillex-studios.com/"))
-                        .headers("Content-Type", "application/x-www-form-urlencoded")
-                        .POST(HttpRequest.BodyPublishers.ofString("param1=" + defaultHash + "&param2=" + pluginName + "&param3=" + versionToGet + "&param4=" + GuiUpdater.tId))
-                        .build();
-                final HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                if (response.body().toString().equals("true")) {
-                    throw new MalformedURLException("Something went wrong while trying to fetch libraries");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-            defaultHash = "";
-        }
         return this.library;
     }
 
