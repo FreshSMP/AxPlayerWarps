@@ -79,8 +79,8 @@ public final class AxPlayerWarps extends AxPlugin {
     }
 
     public void enable() { // todo: desc color codes config
-        new Metrics(this, 21645); // todo: more admin commands
-        instance = this;
+        new Metrics(this, 21645);
+        instance = this; // todo: protection hooks
 
         BUKKITAUDIENCES = BukkitAudiences.create(this);
 

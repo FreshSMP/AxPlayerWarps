@@ -1,5 +1,24 @@
 # DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
 
+help:
+  - " "
+  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» &#BBFFDDHelp:"
+  - "  &7⋆ &f/axpw [open] [player] &7| &#BBFFDDOpen warp menu"
+  - "  &7⋆ &f/axpw create <name> &7| &#BBFFDDCreate warp"
+  - "  &7⋆ &f/axpw delete <warp> &7| &#BBFFDDDelete warp"
+  - "  &7⋆ &f/axpw edit <warp> &7| &#BBFFDDOpen warp editor"
+  - "  &7⋆ &f/axpw warp <warp> &7| &#BBFFDDTeleport to warp"
+  - "  &7⋆ &f/axpw info <warp> &7| &#BBFFDDWarp information"
+  - " "
+
+admin-help:
+  - " "
+  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» &#BBFFDDAdmin Help:"
+  - "  &7⋆ &f/axpwadmin reload &7| &#BBFFDDReload plugin"
+  - "  &7⋆ &f/axpwadmin delete <warp> &7| &#BBFFDDDelete warp"
+  - "  &7⋆ &f/axpwadmin setowner <warp> <player> &7| &#BBFFDDSet owner of warp"
+  - " "
+
 access:
   private: "&#EE0000Private"
   whitelisted: "&#EEEE00Whitelisted"
@@ -104,6 +123,8 @@ editor:
   update-name: "&#BBFFDDYou have changed the warp's name!"
   update-icon: "&#BBFFDDYou have changed the warp's icon!"
   remove-icon: "&#BBFFDDYou have removed the warp's icon!"
+  transferred: "&#BBFFDDYou have transferred the warp's ownership to &#33EEBB%player%&#BBFFDD!"
+  new-owner: "&#33EEBB%player% &#BBFFDDhas transferred the ownership of the &#33EEBB%warp% &#BBFFDDwarp to you!"
 
 delete:
   deleted: "&#BBFFDDYou have deleted the &#33EEBB%warp% &#BBFFDDwarp!"
@@ -119,6 +140,10 @@ confirm:
 money:
   take: "&#33EEBB%price% &#BBFFDDwas removed from your balance!"
   got: "&#BBFFDDYou have withdrawn &#33EEBB%price% &#BBFFDDfrom the warp's bank!"
+
+admin:
+  deleted: "&#FF4444You have deleted the &#FF0000%warp% &#FF4444warp!"
+  setowner: "&#FF4444You have transferred the &#FF0000%warp% &#FF4444warp to &#FF0000%player%&#FF4444!"
 
 errors:
   blacklist-self: "&#FF4444You can't blacklist yourself!"
@@ -138,6 +163,7 @@ errors:
   not-found: "&#FF4444Warp with name &#FF0000%warp% &#FF4444not found!"
   limit-reached: "&#FF4444You have reached the warp limit, you can not create any more warps! &#FF4444(&#FF0000%current%&#FF4444/&#EE0000%limit%&#FF4444)"
   nothing-withdrawable: "&#FF4444There is no money to be withdrawn!"
+  not-your-warp: "&#FF4444This is not your warp!"
 
 time:
   second: "s"

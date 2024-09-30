@@ -1,6 +1,5 @@
 package com.artillexstudios.axplayerwarps.listeners;
 
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.warps.WarpQueue;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

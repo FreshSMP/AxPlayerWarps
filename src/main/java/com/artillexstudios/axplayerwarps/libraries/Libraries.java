@@ -3,16 +3,6 @@ package com.artillexstudios.axplayerwarps.libraries;
 
 import com.artillexstudios.axapi.libs.libby.Library;
 import com.artillexstudios.axapi.libs.libby.relocation.Relocation;
-import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.guis.GuiUpdater;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public enum Libraries {
 

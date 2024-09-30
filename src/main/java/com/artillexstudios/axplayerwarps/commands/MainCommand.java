@@ -3,6 +3,7 @@ package com.artillexstudios.axplayerwarps.commands;
 import com.artillexstudios.axapi.nms.NMSHandlers;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.commands.annotations.AllWarps;
 import com.artillexstudios.axplayerwarps.commands.annotations.OwnWarps;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Create;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Info;
@@ -14,7 +15,6 @@ import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class MainCommand implements OrphanCommand {
@@ -45,6 +46,14 @@ public class MainCommand implements OrphanCommand {
         Open.INSTANCE.execute(sender, null);
     }
 
+    @Subcommand({"help"})
+    @CommandPermission("axplayerwarps.help")
+    public void help(@NotNull CommandSender sender) {
+        for (String m : LANG.getStringList("help")) {
+            sender.sendMessage(StringUtils.formatToString(m));
+        }
+    }
+
     @Subcommand({"open"})
     @CommandPermission("axplayerwarps.open")
     public void open2(@NotNull CommandSender sender, @CommandPermission("axplayerwarps.open.other") @Optional Player player) {
@@ -53,7 +62,7 @@ public class MainCommand implements OrphanCommand {
 
     @Subcommand({"warp", "go"})
     @CommandPermission("axplayerwarps.use")
-    public void warp(@NotNull Player sender, Warp warp) {
+    public void warp(@NotNull Player sender, @AllWarps Warp warp) {
         warp.teleportPlayer(sender);
     }
 
@@ -66,27 +75,27 @@ public class MainCommand implements OrphanCommand {
     @Subcommand({"delete"})
     @CommandPermission("axplayerwarps.delete")
     public void delete(@NotNull Player sender, @OwnWarps Warp warp) {
-        if (!warp.getOwner().equals(sender.getUniqueId())) return;
+        if (!warp.getOwner().equals(sender.getUniqueId())) {
+            MESSAGEUTILS.sendLang(sender, "errors.not-your-warp");
+            return;
+        }
         warp.delete();
     }
 
     @Subcommand({"edit", "settings"})
     @CommandPermission("axplayerwarps.edit")
     public void edit(@NotNull Player sender, @OwnWarps Warp warp) {
-        if (!warp.getOwner().equals(sender.getUniqueId())) return;
+        if (!warp.getOwner().equals(sender.getUniqueId())) {
+            MESSAGEUTILS.sendLang(sender, "errors.not-your-warp");
+            return;
+        }
         new EditWarpGui(sender, warp).open();
     }
 
     @Subcommand({"info"})
     @CommandPermission("axplayerwarps.info")
-    public void info(@NotNull CommandSender sender, Warp warp) {
+    public void info(@NotNull CommandSender sender, @AllWarps Warp warp) {
         Info.INSTANCE.execute(sender, warp);
-    }
-
-    @Subcommand({"reload"})
-    @CommandPermission("axplayerwarps.reload")
-    public void reload(@NotNull CommandSender sender) {
-        Reload.INSTANCE.execute(sender);
     }
 
     private static BukkitCommandHandler handler = null;
@@ -107,12 +116,18 @@ public class MainCommand implements OrphanCommand {
                 return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toSet());
             });
 
-            handler.getAutoCompleter().registerParameterSuggestions(Warp.class, (args, sender, command) -> {
-                return WarpManager.getWarps().stream().map(Warp::getName).toList();
-            });
-
-            handler.getAutoCompleter().registerParameterSuggestions(OwnWarps.class, (args, sender, command) -> {
-                return WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(sender.getUniqueId())).map(Warp::getName).toList();
+            handler.getAutoCompleter().registerSuggestionFactory(parameter -> {
+                if (parameter.hasAnnotation(AllWarps.class)) {
+                    return (args, sender, command) -> {
+                        return WarpManager.getWarps().stream().map(Warp::getName).toList();
+                    };
+                }
+                if (parameter.hasAnnotation(OwnWarps.class)) {
+                    return (args, sender, command) -> {
+                        return WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(sender.getUniqueId())).map(Warp::getName).toList();
+                    };
+                }
+                return null;
             });
 
             handler.registerValueResolver(Warp.class, resolver -> {
@@ -130,7 +145,8 @@ public class MainCommand implements OrphanCommand {
         }
 
         handler.unregisterAllCommands();
-        handler.register(Orphans.path(CONFIG.getStringList("open-command-aliases").toArray(String[]::new)).handler(new MainCommand()));
+        handler.register(Orphans.path(CONFIG.getStringList("main-command-aliases").toArray(String[]::new)).handler(new MainCommand()));
+        handler.register(Orphans.path(CONFIG.getStringList("admin-command-aliases").toArray(String[]::new)).handler(new AdminCommand()));
         handler.registerBrigadier();
     }
 }

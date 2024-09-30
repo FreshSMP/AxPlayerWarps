@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +105,7 @@ public class WarpsGui extends GuiFrame {
             }
             SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("search-sign")).toArray(Component[]::new), (player1, result) -> {
                 String msg = MiniMessage.builder().build().serialize(result[0]).toLowerCase();
+                System.out.println(Arrays.toString(result));
                 if (msg.isBlank()) search = null;
                 else search = msg;
                 if (search == null)

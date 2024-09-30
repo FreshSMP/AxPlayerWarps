@@ -19,13 +19,17 @@ permissions:
     default: op
   axplayerwarps.create:
     default: true
-  axplayerwarps.create.other:
-    default: op
-  axplayerwarps.reload:
-    default: op
   axplayerwarps.warps.1:
     default: true
   axplayerwarps.delay-bypass:
+    default: op
+  axplayerwarps.admin.help:
+    default: op
+  axplayerwarps.admin.reload:
+    default: op
+  axplayerwarps.admin.delete:
+    default: op
+  axplayerwarps.admin.setowner:
     default: op
 
 softdepend:

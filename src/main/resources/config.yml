@@ -20,7 +20,7 @@ database:
     connection-timeout: 5000
 
 # you must define at least 1
-open-command-aliases:
+main-command-aliases:
   - "axplayerwarps"
   - "axpw"
   - "pw"
@@ -28,6 +28,15 @@ open-command-aliases:
   - "playerwarp"
   - "pwarp"
   - "pwarps"
+
+admin-command-aliases:
+  - "axplayerwarpsadmin"
+  - "axpwadmin"
+  - "pwadmin"
+  - "playerwarpsadmin"
+  - "playerwarpadmin"
+  - "pwarpadmin"
+  - "pwarpsadmin"
 
 # which material should we use if the player doesn't define an icon for their warp?
 # PLAYER_HEAD will default to the owner's skull (note: sometimes it may not load)

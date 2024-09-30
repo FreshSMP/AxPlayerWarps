@@ -2,7 +2,6 @@ package com.artillexstudios.axplayerwarps.warps;
 
 import com.artillexstudios.axapi.utils.Cooldown;
 import com.artillexstudios.axapi.utils.Pair;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Iterator;

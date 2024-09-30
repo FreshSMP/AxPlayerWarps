@@ -29,6 +29,8 @@ import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
@@ -90,7 +93,6 @@ public class EditWarpGui extends GuiFrame {
         return GUI.reload();
     }
 
-    // todo: transfer warp setting
     public void open() {
         GuiItem guiItem = createItem("name-icon", event -> {
             Actions.run(player, this, file.getStringList("name-icon.actions"));
@@ -133,6 +135,35 @@ public class EditWarpGui extends GuiFrame {
                 MESSAGEUTILS.sendLang(player, "editor.update-location");
             });
             open();
+        }, Map.of());
+
+        createItem("transfer", event -> {
+            Actions.run(player, this, file.getStringList("transfer.actions"));
+            warp.setLocation(player.getLocation());
+            SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("add-player-sign")).toArray(Component[]::new), (player1, result) -> {
+                String res = MiniMessage.builder().build().serialize(result[0]);
+                AxPlayerWarps.getThreadedQueue().submit(() -> {
+                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(res);
+                    if (uuid == null) {
+                        MESSAGEUTILS.sendLang(player, "errors.player-not-found");
+                    } else {
+                        Player transferTo = Bukkit.getPlayer(uuid);
+                        warp.setOwner(uuid);
+                        AxPlayerWarps.getDatabase().updateWarp(warp);
+                        OfflinePlayer pl = Bukkit.getOfflinePlayer(uuid);
+                        AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.WHITELIST, pl);
+                        AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.BLACKLIST, pl);
+
+                        if (transferTo != null)
+                            MESSAGEUTILS.sendLang(transferTo, "editor.new-owner",
+                                    Map.of("%player%", player.getName(), "%warp%", warp.getName()));
+
+                        MESSAGEUTILS.sendLang(player, "editor.transferred", Map.of("%player%", pl.getName() == null ? "---" : pl.getName()));
+                    }
+                    Scheduler.get().run(() -> player.closeInventory());
+                });
+            });
+            sign.open();
         }, Map.of());
 
         createItem("access", event -> {
