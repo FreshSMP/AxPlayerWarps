@@ -105,7 +105,6 @@ public class WarpsGui extends GuiFrame {
             }
             SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("search-sign")).toArray(Component[]::new), (player1, result) -> {
                 String msg = MiniMessage.builder().build().serialize(result[0]).toLowerCase();
-                System.out.println(Arrays.toString(result));
                 if (msg.isBlank()) search = null;
                 else search = msg;
                 if (search == null)

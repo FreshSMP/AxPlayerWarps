@@ -31,6 +31,8 @@ permissions:
     default: op
   axplayerwarps.admin.setowner:
     default: op
+  axplayerwarps.admin.converter:
+    default: op
 
 softdepend:
   - PlaceholderAPI

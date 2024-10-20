@@ -262,8 +262,7 @@ public class Warp {
     }
 
     public CompletableFuture<Boolean> isDangerous() {
-        CompletableFuture<Boolean> res = new CompletableFuture<>();
-        PaperUtils.getChunkAtAsync(location).thenAccept((chunk) -> {
+        return PaperUtils.getChunkAtAsync(location).thenApply((chunk) -> {
             int x = location.getBlockX() & 15;
             int y = location.getBlockY();
             int z = location.getBlockZ() & 15;
@@ -272,21 +271,16 @@ public class Warp {
             Block above = at.getRelative(BlockFace.UP);
 
             if (!at.getType().isAir()) {
-                res.complete(true);
-                return;
+                return true;
             }
             if (!above.getType().isAir()) {
-                res.complete(true);
-                return;
+                return true;
             }
             if (!under.getType().isSolid()) {
-                res.complete(true);
-                return;
+                return true;
             }
-            res.complete(false);
+            return false;
         });
-
-        return res;
     }
 
     private final Cooldown<Player> confirmUnsafe = new Cooldown<>();

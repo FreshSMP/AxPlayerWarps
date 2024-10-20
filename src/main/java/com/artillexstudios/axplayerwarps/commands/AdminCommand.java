@@ -3,8 +3,10 @@ package com.artillexstudios.axplayerwarps.commands;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.commands.annotations.AllWarps;
+import com.artillexstudios.axplayerwarps.commands.subcommands.Converter;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Reload;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
+import com.artillexstudios.axplayerwarps.enums.Converters;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -31,13 +33,13 @@ public class AdminCommand implements OrphanCommand {
         }
     }
 
-    @Subcommand({"reload"})
+    @Subcommand("reload")
     @CommandPermission("axplayerwarps.admin.reload")
     public void reload(@NotNull CommandSender sender) {
         Reload.INSTANCE.execute(sender);
     }
 
-    @Subcommand({"delete"})
+    @Subcommand("delete")
     @CommandPermission("axplayerwarps.admin.delete")
     public void delete(@NotNull CommandSender sender, @AllWarps Warp warp) {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -46,7 +48,7 @@ public class AdminCommand implements OrphanCommand {
         });
     }
 
-    @Subcommand({"setowner"})
+    @Subcommand("setowner")
     @CommandPermission("axplayerwarps.admin.setowner")
     public void setOwner(@NotNull CommandSender sender, @AllWarps Warp warp, OfflinePlayer player) {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -57,5 +59,11 @@ public class AdminCommand implements OrphanCommand {
 
             MESSAGEUTILS.sendLang(sender, "admin.setowner", Map.of("%warp%", warp.getName(), "%player%", player.getName() == null ? "---" : player.getName()));
         });
+    }
+
+    @Subcommand("converter")
+    @CommandPermission("axplayerwarps.admin.converter")
+    public void converter(CommandSender sender, Converters converters) {
+        Converter.INSTANCE.execute(sender, converters);
     }
 }
