@@ -8,7 +8,6 @@ import com.artillexstudios.axplayerwarps.commands.annotations.OwnWarps;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Create;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Info;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Open;
-import com.artillexstudios.axplayerwarps.commands.subcommands.Reload;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
 import com.artillexstudios.axplayerwarps.utils.CommandMessages;
 import com.artillexstudios.axplayerwarps.warps.Warp;

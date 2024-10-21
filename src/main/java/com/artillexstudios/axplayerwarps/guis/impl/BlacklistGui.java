@@ -115,7 +115,7 @@ public class BlacklistGui extends GuiFrame {
                     final Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {
                         var textures = NMSHandlers.getNmsHandler().textures(pl);
-                        if (textures != null) builder.setTextureValue(textures.getFirst());
+                        if (textures != null) builder.setTextureValue(textures.getKey());
                     }
                 }
 

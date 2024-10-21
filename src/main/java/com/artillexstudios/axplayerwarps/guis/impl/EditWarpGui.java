@@ -270,7 +270,7 @@ public class EditWarpGui extends GuiFrame {
         ItemBuilder builder = new ItemBuilder(file.getSection("description"));
         WrappedItemStack wrap = WrappedItemStack.wrap(builder.get());
         List<String> lore = new ArrayList<>();
-        String[] description = warp.getDescription().split("\n");
+        String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
         for (Component line : wrap.get(DataComponents.lore()).lines()) {
             String serialized = Placeholders.mm.serialize(line);
             if (serialized.contains("%description%")) {

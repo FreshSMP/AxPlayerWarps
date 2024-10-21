@@ -32,13 +32,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
@@ -168,7 +168,7 @@ public class WarpsGui extends GuiFrame {
                 ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
                 builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
 
-                String[] description = warp.getDescription().split("\n");
+                String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
 
                 List<String> lore = new ArrayList<>();
                 List<String> lore2 = new ArrayList<>(GUI.getStringList("warp.lore"));
@@ -187,7 +187,7 @@ public class WarpsGui extends GuiFrame {
                     final Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {
                         var textures = NMSHandlers.getNmsHandler().textures(pl);
-                        if (textures != null) builder.setTextureValue(textures.getFirst());
+                        if (textures != null) builder.setTextureValue(textures.getKey());
                     }
                 }
                 gui.addItem(new GuiItem(builder.get(), event -> {

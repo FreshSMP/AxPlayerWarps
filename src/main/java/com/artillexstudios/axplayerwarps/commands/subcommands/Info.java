@@ -8,13 +8,14 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
 public enum Info {
     INSTANCE;
 
     public void execute(CommandSender sender, Warp warp) {
-        String[] description = warp.getDescription().split("\n");
+        String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
         List<String> lore = new ArrayList<>();
         List<String> lore2 = new ArrayList<>(LANG.getStringList("info"));
         for (int i = 0; i < lore2.size(); i++) {
