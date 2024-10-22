@@ -33,7 +33,7 @@ import com.artillexstudios.axplayerwarps.listeners.MoveListener;
 import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
 import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
-import com.artillexstudios.axplayerwarps.utils.LogUtils;
+import com.artillexstudios.axplayerwarps.utils.UpdateNotifier;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import com.artillexstudios.axplayerwarps.warps.WarpQueue;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
@@ -78,9 +78,14 @@ public final class AxPlayerWarps extends AxPlugin {
         }
     }
 
-    public void enable() { // todo: desc color codes config
+    // todo future plans
+    // - desc color codes
+    // - protection hooks
+    // - run commands on warp
+    // - teleport price tax
+    public void enable() {
         new Metrics(this, 21645);
-        instance = this; // todo: protection hooks
+        instance = this;
 
         BUKKITAUDIENCES = BukkitAudiences.create(this);
 
@@ -108,7 +113,6 @@ public final class AxPlayerWarps extends AxPlugin {
 
         database.setup();
 
-        LogUtils.DEBUG = CONFIG.getBoolean("debug", false);
         HookManager.setupHooks();
 
         WorldManager.reload();
@@ -128,7 +132,7 @@ public final class AxPlayerWarps extends AxPlugin {
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
-//        if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, );
+        if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 6657);
     }
 
     public void disable() {

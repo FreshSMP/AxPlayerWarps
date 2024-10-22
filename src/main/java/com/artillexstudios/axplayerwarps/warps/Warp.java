@@ -362,7 +362,7 @@ public class Warp {
             Scheduler.get().run(player::closeInventory);
             boolean isOwner = player.getUniqueId().equals(owner);
             if (!isOwner && isPaid()) {
-                currency.takeBalance(player.getUniqueId(), teleportPrice); // todo: add tax setting
+                currency.takeBalance(player.getUniqueId(), teleportPrice);
                 earnedMoney += teleportPrice;
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(this));
                 MESSAGEUTILS.sendLang(player, "money.take", Map.of("%price%",
