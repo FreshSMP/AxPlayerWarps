@@ -23,6 +23,7 @@ import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.FavoritesGui;
+import com.artillexstudios.axplayerwarps.guis.impl.MyWarpsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RecentsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
@@ -103,6 +104,7 @@ public final class AxPlayerWarps extends AxPlugin {
         EditWarpGui.reload();
         FavoritesGui.reload();
         RecentsGui.reload();
+        MyWarpsGui.reload();
 
         switch (CONFIG.getString("database.type").toLowerCase()) {
 //            case "sqlite" -> database = new SQLite();

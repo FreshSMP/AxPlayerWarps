@@ -7,6 +7,7 @@ import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.FavoritesGui;
+import com.artillexstudios.axplayerwarps.guis.impl.MyWarpsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RateWarpGui;
 import com.artillexstudios.axplayerwarps.guis.impl.RecentsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
@@ -94,6 +95,12 @@ public enum Reload {
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/recent.yml&#99FFDD!"));
+
+        if (!MyWarpsGui.reload()) {
+            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/my-warps.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/my-warps.yml&#99FFDD!"));
 
         HookManager.updateHooks();
         WorldManager.reload();
