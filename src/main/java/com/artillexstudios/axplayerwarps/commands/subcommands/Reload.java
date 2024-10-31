@@ -31,73 +31,73 @@ public enum Reload {
     public void execute(CommandSender sender) {
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB[AxPlayerWarps] &#99FFDDReloading configuration..."));
         if (!CONFIG.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "config.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "config.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fconfig.yml&#99FFDD!"));
 
         if (!LANG.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "lang.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "lang.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &flang.yml&#99FFDD!"));
 
         if (!CURRENCIES.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "currencies.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "currencies.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fcurrencies.yml&#99FFDD!"));
 
         if (!CategoryGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/categories.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/categories.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/categories.yml&#99FFDD!"));
 
         if (!WarpsGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/warps.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/warps.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/warps.yml&#99FFDD!"));
 
         if (!RateWarpGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/rate-warp.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/rate-warp.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/rate-warp.yml&#99FFDD!"));
 
         if (!EditWarpGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/edit-warp.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/edit-warp.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/edit-warp.yml&#99FFDD!"));
 
         if (!WhitelistGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/whitelist.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/whitelist.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/whitelist.yml&#99FFDD!"));
 
         if (!BlacklistGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/blacklist.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/blacklist.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/blacklist.yml&#99FFDD!"));
 
         if (!FavoritesGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/favorites.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/favorites.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/favorites.yml&#99FFDD!"));
 
         if (!RecentsGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/recent.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/recent.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/recent.yml&#99FFDD!"));
 
         if (!MyWarpsGui.reload()) {
-            MESSAGEUTILS.sendFormatted(sender, "reload.failed", Map.of("%file%", "guis/my-warps.yml"));
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/my-warps.yml"));
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/my-warps.yml&#99FFDD!"));

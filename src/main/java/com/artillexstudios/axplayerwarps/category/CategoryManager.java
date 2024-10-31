@@ -16,6 +16,7 @@ public class CategoryManager {
         categories.clear();
 
         AxPlayerWarps.getThreadedQueue().submit(() -> {
+            if (CONFIG.getSection("categories") == null) return;
             for (String raw : CONFIG.getSection("categories").getRoutesAsStrings(false)) {
                 Section section = CONFIG.getSection("categories." + raw);
 
