@@ -12,6 +12,7 @@ import com.artillexstudios.axplayerwarps.warps.Warp;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +41,8 @@ public class Placeholders {
         t = t.replace("%name%", warp.getName());
         t = t.replace("%owner%", AxPlayerWarps.getDatabase().getPlayerName(warp.getOwner()));
         t = t.replace("%created%", TimeUtils.formatDate(warp.getCreated()));
-        t = t.replace("%world%", warp.getLocation().getWorld().getName());
+        World world = warp.getLocation().getWorld();
+        t = t.replace("%world%", world == null ? "---" : world.getName());
         t = t.replace("%x%", df.format(warp.getLocation().getX()));
         t = t.replace("%y%", df.format(warp.getLocation().getY()));
         t = t.replace("%z%", df.format(warp.getLocation().getZ()));

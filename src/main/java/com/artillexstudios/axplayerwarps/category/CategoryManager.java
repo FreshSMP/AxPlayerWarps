@@ -26,14 +26,14 @@ public class CategoryManager {
                 Category category = new Category(id, raw, name, section);
                 categories.put(raw, category);
             }
-        });
 
-        for (Warp warp : WarpManager.getWarps()) {
-            Category curr = warp.getCategory();
-            if (curr == null) continue;
-            Category nw = categories.get(curr.raw());
-            warp.setCategory(nw);
-        }
+            for (Warp warp : WarpManager.getWarps()) {
+                Category curr = warp.getCategory();
+                if (curr == null) continue;
+                Category nw = categories.get(curr.raw());
+                warp.setCategory(nw);
+            }
+        });
     }
 
     public static LinkedHashMap<String, Category> getCategories() {

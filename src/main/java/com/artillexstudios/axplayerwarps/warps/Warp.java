@@ -374,7 +374,12 @@ public class Warp {
             confirmUnsafe.remove(player);
             confirmPaid.remove(player);
 
-            Scheduler.get().run(() -> PaperUtils.teleportAsync(player, location));
+            Scheduler.get().run(() -> {
+                PaperUtils.teleportAsync(player, location);
+                for (String m : CONFIG.getStringList("teleport-commands")) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
+                }
+            });
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 AxPlayerWarps.getDatabase().addVisit(player, this);
             });

@@ -59,6 +59,13 @@ warp-description:
 # if you want to disable categories, make sure to change this to warps
 default-gui: "categories"
 
+# commands that will be run when a player teleports to a warp
+# you can use all warp placeholders (like %name%, %x%, %y%, %x%, etc..) and %player% for the player's name
+# example:
+# - "say %player% teleported to the %name% player warp!"
+# make sure to remove the [] to enable this feature
+teleport-commands: []
+
 # to disable categories you can set this to []
 # also make sure to remove the category selector from the gui
 #
@@ -162,4 +169,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 1
+version: 2
