@@ -106,7 +106,6 @@ public enum Reload {
         WorldManager.reload();
         CategoryManager.reload();
         SortingManager.reload();
-        MainCommand.registerCommand();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╚ &#99FFDDSuccessful reload!"));
         MESSAGEUTILS.sendLang(sender, "reload.success");

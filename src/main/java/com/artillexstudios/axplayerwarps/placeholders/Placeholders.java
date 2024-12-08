@@ -2,7 +2,7 @@ package com.artillexstudios.axplayerwarps.placeholders;
 
 import com.artillexstudios.axapi.items.WrappedItemStack;
 import com.artillexstudios.axapi.items.component.DataComponents;
-import com.artillexstudios.axapi.items.component.ItemLore;
+import com.artillexstudios.axapi.items.component.type.ItemLore;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
