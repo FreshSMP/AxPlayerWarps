@@ -1,7 +1,6 @@
 package com.artillexstudios.axplayerwarps.guis.impl;
 
 import com.artillexstudios.axapi.config.Config;
-import com.artillexstudios.axapi.gui.SignInput;
 import com.artillexstudios.axapi.items.WrappedItemStack;
 import com.artillexstudios.axapi.items.component.DataComponents;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
@@ -29,7 +28,6 @@ import com.artillexstudios.axplayerwarps.warps.Warp;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -109,6 +107,7 @@ public class EditWarpGui extends GuiFrame {
             InputManager.getInput(player, "rename", result -> {
                 if (result.isBlank()) {
                     MESSAGEUTILS.sendLang(player, "errors.invalid-name");
+                    open();
                     return;
                 }
                 AxPlayerWarps.getThreadedQueue().submit(() -> {

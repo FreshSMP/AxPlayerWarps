@@ -1,7 +1,6 @@
 package com.artillexstudios.axplayerwarps.guis.impl;
 
 import com.artillexstudios.axapi.config.Config;
-import com.artillexstudios.axapi.gui.SignInput;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
@@ -18,8 +17,6 @@ import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import dev.triumphteam.gui.guis.Gui;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 import java.io.File;

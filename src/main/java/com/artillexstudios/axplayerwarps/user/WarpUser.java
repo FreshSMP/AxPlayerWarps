@@ -3,7 +3,6 @@ package com.artillexstudios.axplayerwarps.user;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
-import com.artillexstudios.axplayerwarps.enums.Sorting;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.sorting.Sort;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;

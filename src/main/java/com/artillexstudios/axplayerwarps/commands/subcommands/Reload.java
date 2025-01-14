@@ -2,7 +2,6 @@ package com.artillexstudios.axplayerwarps.commands.subcommands;
 
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
-import com.artillexstudios.axplayerwarps.commands.MainCommand;
 import com.artillexstudios.axplayerwarps.guis.impl.BlacklistGui;
 import com.artillexstudios.axplayerwarps.guis.impl.CategoryGui;
 import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;

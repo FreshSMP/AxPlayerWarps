@@ -1,5 +1,6 @@
 package com.artillexstudios.axplayerwarps.input;
 
+import com.artillexstudios.axapi.scheduler.Scheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,9 +24,9 @@ public class InputListener implements Listener {
         if (consumer == null) return;
         event.setCancelled(true);
         if (INPUT.getStringList("chat-cancel-words").contains(event.getMessage())) {
-            consumer.accept("");
+            Scheduler.get().run(() -> consumer.accept(""));
             return;
         }
-        consumer.accept(event.getMessage());
+        Scheduler.get().run(() -> consumer.accept(event.getMessage()));
     }
 }
