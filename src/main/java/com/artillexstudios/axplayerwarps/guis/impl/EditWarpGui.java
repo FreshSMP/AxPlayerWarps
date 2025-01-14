@@ -24,6 +24,7 @@ import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
+import com.artillexstudios.axplayerwarps.utils.WarpNameUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
@@ -110,6 +111,18 @@ public class EditWarpGui extends GuiFrame {
                     open();
                     return;
                 }
+
+                switch (WarpNameUtils.isAllowed(result)) {
+                    case CONTAINS_SPACES -> {
+                        MESSAGEUTILS.sendLang(player, "errors.disallowed-name-space");
+                        return;
+                    }
+                    case INVALID_LENGTH -> {
+                        MESSAGEUTILS.sendLang(player, "errors.disallowed-name-length");
+                        return;
+                    }
+                }
+
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     if (!warp.setName(result.replace(" ", "_"))) {
                         MESSAGEUTILS.sendLang(player, "errors.name-exists");
@@ -213,7 +226,7 @@ public class EditWarpGui extends GuiFrame {
             int idx = currency == null ? -1 : currencies.indexOf(currency);
             if (event.isLeftClick()) {
                 if (event.isShiftClick()) {
-                    InputManager.getInput(player, "transfer", result -> {
+                    InputManager.getInput(player, "price", result -> {
                         if (!NumberUtils.isInt(result)) {
                             MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                         } else {

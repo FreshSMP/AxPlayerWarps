@@ -25,7 +25,7 @@ rate:
     item:
       material: PAPER
       glow: true
-      name: "&f<RATING HERE>"
+      name: "&fRATING HERE"
       lore:
         - "&#33EEBBValid values: 1-5"
   chat:
@@ -45,9 +45,9 @@ search:
     item:
       material: PAPER
       glow: true
-      name: "&f<SEARCH>"
+      name: "&fSEARCH HERE"
       lore:
-        - "&#33EEBB/\ searching for"
+        - "&#33EEBB↑ searching for"
   chat:
     - "&#33EEBBWhat do you want to search for? &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 
@@ -64,9 +64,9 @@ rename:
     item:
       material: PAPER
       glow: true
-      name: "&f<NEW WARP NAME HERE>"
+      name: "&fNEW NAME HERE"
       lore:
-        - "&#33EEBB/\ new name"
+        - "&#33EEBB↑ new name"
   chat:
     - "&#33EEBBWrite the new warp name in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 
@@ -83,9 +83,9 @@ price:
     item:
       material: PAPER
       glow: true
-      name: "&f<PRICE HERE>"
+      name: "&fPRICE HERE"
       lore:
-        - "&#33EEBB/\ price"
+        - "&#33EEBB↑ price"
   chat:
     - "&#33EEBBWrite the new price in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 
@@ -102,9 +102,9 @@ add-line:
     item:
       material: PAPER
       glow: true
-      name: "&f<NEW LINE HERE>"
+      name: "&fNEW LINE HERE"
       lore:
-        - "&#33EEBB/\ new line"
+        - "&#33EEBB↑ new line"
   chat:
     - "&#33EEBBWrite the new line in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 
@@ -121,9 +121,9 @@ add-player:
     item:
       material: PAPER
       glow: true
-      name: "&f<PLAYER'S NAME HERE>"
+      name: "&fPLAYER'S NAME HERE"
       lore:
-        - "&#33EEBB/\ name of player"
+        - "&#33EEBB↑ name of player"
   chat:
     - "&#33EEBBWrite the name of the player in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 
@@ -140,9 +140,9 @@ transfer:
     item:
       material: PAPER
       glow: true
-      name: "&f<PLAYER'S NAME HERE>"
+      name: "&fPLAYER'S NAME HERE"
       lore:
-        - "&#33EEBB/\ name of player"
+        - "&#33EEBB↑ name of player"
   chat:
     - "&#33EEBBWrite the name of the player in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
 

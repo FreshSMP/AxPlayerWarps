@@ -7,7 +7,7 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.INPUT;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
 public class InputConverter {
-    private static Map<String, String> mapping = Map.of(
+    private static final Map<String, String> mapping = Map.of(
             "rating-sign", "rate",
             "search-sign", "search",
             "rename-sign", "rename",

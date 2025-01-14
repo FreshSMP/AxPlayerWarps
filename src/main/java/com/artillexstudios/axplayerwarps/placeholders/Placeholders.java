@@ -6,6 +6,7 @@ import com.artillexstudios.axapi.items.component.type.ItemLore;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
+import com.artillexstudios.axplayerwarps.utils.FormatUtils;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.utils.TimeUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -56,11 +57,11 @@ public class Placeholders {
         boolean isFree = warp.getCurrency() == null || warp.getTeleportPrice() == 0;
         t = t.replace("%price%", isFree ? LANG.getString("placeholders.free") : warp.getCurrency().getDisplayName().replace("%price%", df.format(price)));
 
-        t = t.replace("%price-full%", warp.getCurrency() == null ? df.format(warp.getTeleportPrice()) : warp.getCurrency().getDisplayName().replace("%price%", df.format(warp.getTeleportPrice())));
+        t = t.replace("%price-full%", FormatUtils.formatCurrency(warp.getCurrency(), warp.getTeleportPrice()));
         t = t.replace("%access%", LANG.getString("access." + warp.getAccess().name().toLowerCase()));
 
         double earned = warp.getEarnedMoney();
-        t = t.replace("%earned_money%", warp.getCurrency() == null ? df.format(earned) : warp.getCurrency().getDisplayName().replace("%price%", df.format(earned)));
+        t = t.replace("%earned_money%", FormatUtils.formatCurrency(warp.getCurrency(), earned));
 
         float rating = warp.getRating();
         t = t.replace("%rating_decimal%", df.format(rating));

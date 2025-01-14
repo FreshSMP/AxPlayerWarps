@@ -40,6 +40,24 @@ admin-command-aliases:
   - "pwarpadmin"
   - "pwarpsadmin"
 
+warp-creation-cost:
+  # should creating warps cost money?
+  enabled: false
+  # ask player for a confirmation to make sure
+  # that they are aware of the price of the warp creation
+  confirm: true
+  # price of creation
+  price: 1000
+  # currencies are defined in the currencies.yml
+  currency: Vault
+
+warp-naming:
+  # allowing spaces might make it hard to tab complete warps
+  allow-spaces: false
+  length:
+    min: 1
+    max: 16
+
 # which material should we use if the player doesn't define an icon for their warp?
 # PLAYER_HEAD will default to the owner's skull (note: sometimes it may not load)
 default-material: "PLAYER_HEAD"
@@ -171,4 +189,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 2
+version: 3
