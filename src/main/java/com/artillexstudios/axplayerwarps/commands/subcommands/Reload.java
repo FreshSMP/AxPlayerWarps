@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CURRENCIES;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.INPUT;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
@@ -47,6 +48,12 @@ public enum Reload {
             return;
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fcurrencies.yml&#99FFDD!"));
+
+        if (!INPUT.reload()) {
+            MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "input.yml"));
+            return;
+        }
+        Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &finput.yml&#99FFDD!"));
 
         if (!CategoryGui.reload()) {
             MESSAGEUTILS.sendLang(sender, "reload.failed", Map.of("%file%", "guis/categories.yml"));

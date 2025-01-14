@@ -15,6 +15,7 @@ import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
+import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import dev.triumphteam.gui.guis.Gui;
@@ -78,25 +79,23 @@ public class WhitelistGui extends GuiFrame {
                 });
                 return;
             }
-            SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("add-player-sign")).toArray(Component[]::new), (player1, result) -> {
-                String res = MiniMessage.builder().build().serialize(result[0]);
-                if (res.equalsIgnoreCase(player.getName())) {
+            InputManager.getInput(player, "add-player", result -> {
+                if (result.equalsIgnoreCase(player.getName())) {
                     MESSAGEUTILS.sendLang(player, "errors." + al.name().toLowerCase() + "-self");
-                    Scheduler.get().run(this::open);
+                    open();
                     return;
                 }
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
-                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(res);
+                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(result);
                     if (uuid == null) {
                         MESSAGEUTILS.sendLang(player, "errors.player-not-found");
                     } else {
                         AxPlayerWarps.getDatabase().addToList(warp, al, Bukkit.getOfflinePlayer(uuid));
-                        MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".add", Map.of("%player%", res));
+                        MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".add", Map.of("%player%", result));
                     }
                     Scheduler.get().run(this::open);
                 });
             });
-            sign.open();
         }, Map.of());
 
         load().thenRun(() -> {

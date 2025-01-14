@@ -13,6 +13,7 @@ import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
+import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -93,12 +94,11 @@ public class RateWarpGui extends GuiFrame {
                 });
             }
             if (event.isLeftClick()) {
-                SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("rating-sign")).toArray(Component[]::new), (player1, result) -> {
-                    String res = MiniMessage.builder().build().serialize(result[0]);
-                    if (!NumberUtils.isInt(res)) {
+                InputManager.getInput(player, "rate", result -> {
+                    if (!NumberUtils.isInt(result)) {
                         MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                     } else {
-                        int i = Math.max(1, Math.min(5, Integer.parseInt(res)));
+                        int i = Math.max(1, Math.min(5, Integer.parseInt(result)));
                         AxPlayerWarps.getThreadedQueue().submit(() -> {
                             AxPlayerWarps.getDatabase().setRating(player, warp, i);
                             MESSAGEUTILS.sendLang(player, "rate.add", Map.of("%rating%", "" + i));
@@ -106,7 +106,6 @@ public class RateWarpGui extends GuiFrame {
                     }
                     Scheduler.get().run(this::open);
                 });
-                sign.open();
             }
         }, Map.of());
 

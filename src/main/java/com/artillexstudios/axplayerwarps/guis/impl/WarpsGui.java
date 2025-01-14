@@ -15,6 +15,7 @@ import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
+import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.sorting.WarpComparator;
 import com.artillexstudios.axplayerwarps.user.Users;
@@ -103,17 +104,15 @@ public class WarpsGui extends GuiFrame {
                 open();
                 return;
             }
-            SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("search-sign")).toArray(Component[]::new), (player1, result) -> {
-                String msg = MiniMessage.builder().build().serialize(result[0]).toLowerCase();
-                if (msg.isBlank()) search = null;
-                else search = msg;
+            InputManager.getInput(player, "search", result -> {
+                if (result.isBlank()) search = null;
+                else search = result;
                 if (search == null)
                     MESSAGEUTILS.sendLang(player, "search.reset");
                 else
                     MESSAGEUTILS.sendLang(player, "search.show", Map.of("%search%", search));
-                Scheduler.get().run(() -> open());
+                open();
             });
-            sign.open();
         }, Map.of());
 
         createItem("sorting", event -> {

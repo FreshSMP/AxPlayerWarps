@@ -6,9 +6,9 @@ import com.artillexstudios.axapi.libs.libby.relocation.Relocation;
 
 public enum Libraries {
 
-    MYSQL_CONNECTOR("com{}mysql:mysql-connector-j:8.0.33"),
+    HIKARICP("com{}zaxxer:HikariCP:5.1.0", new Relocation("com{}zaxxer{}hikari", "com.artillexstudios.axplayerwarps.libs.hikari")),
 
-    MARIADB_CONNECTOR("org{}mariadb{}jdbc:mariadb-java-client:3.1.3"),
+    MYSQL_CONNECTOR("com{}mysql:mysql-connector-j:8.0.33"),
 
     SQLITE("org{}xerial:sqlite-jdbc:3.42.0.0"),
 

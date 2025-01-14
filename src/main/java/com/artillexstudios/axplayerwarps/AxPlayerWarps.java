@@ -9,6 +9,7 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.G
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.libs.libby.BukkitLibraryManager;
+import com.artillexstudios.axapi.metrics.AxMetrics;
 import com.artillexstudios.axapi.utils.MessageUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.featureflags.FeatureFlags;
@@ -29,6 +30,7 @@ import com.artillexstudios.axplayerwarps.guis.impl.RecentsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
 import com.artillexstudios.axplayerwarps.guis.impl.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
+import com.artillexstudios.axplayerwarps.input.InputListener;
 import com.artillexstudios.axplayerwarps.libraries.Libraries;
 import com.artillexstudios.axplayerwarps.listeners.MoveListener;
 import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
@@ -53,6 +55,8 @@ public final class AxPlayerWarps extends AxPlugin {
     public static Config CONFIG;
     public static Config LANG;
     public static Config CURRENCIES;
+    public static Config INPUT;
+    private static AxMetrics metrics;
 
     public static ThreadedQueue<Runnable> getThreadedQueue() {
         return threadedQueue;
@@ -82,7 +86,6 @@ public final class AxPlayerWarps extends AxPlugin {
     // todo future plans
     // - desc color codes
     // - protection hooks
-    // - run commands on warp
     // - teleport price tax
     public void enable() {
         new Metrics(this, 21645);
@@ -93,6 +96,9 @@ public final class AxPlayerWarps extends AxPlugin {
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         LANG = new Config(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
         CURRENCIES = new Config(new File(getDataFolder(), "currencies.yml"), getResource("currencies.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
+        INPUT = new Config(new File(getDataFolder(), "input.yml"), getResource("input.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
+
+        InputConverter.start();
 
         threadedQueue = new ThreadedQueue<>("AxPlayerWarps-Datastore-thread");
 
@@ -131,6 +137,10 @@ public final class AxPlayerWarps extends AxPlugin {
         getServer().getPluginManager().registerEvents(new WorldListeners(), this);
         getServer().getPluginManager().registerEvents(new PlayerListeners(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);
+        getServer().getPluginManager().registerEvents(new InputListener(), this);
+
+        metrics = new AxMetrics(17);
+        metrics.start();
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
@@ -138,6 +148,7 @@ public final class AxPlayerWarps extends AxPlugin {
     }
 
     public void disable() {
+        metrics.cancel();
         database.disable();
         GuiUpdater.stop();
         WarpQueue.stop();

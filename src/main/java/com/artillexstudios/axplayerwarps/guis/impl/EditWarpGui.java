@@ -22,6 +22,7 @@ import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
+import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -105,23 +106,21 @@ public class EditWarpGui extends GuiFrame {
                 open();
                 return;
             }
-            SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("rename-sign")).toArray(Component[]::new), (player1, result) -> {
-                String res = MiniMessage.builder().build().serialize(result[0]);
-                if (res.isBlank()) {
+            InputManager.getInput(player, "rename", result -> {
+                if (result.isBlank()) {
                     MESSAGEUTILS.sendLang(player, "errors.invalid-name");
                     return;
                 }
-                if (!warp.setName(res.replace(" ", "_"))) {
-                    MESSAGEUTILS.sendLang(player, "errors.name-exists");
-                } else {
-                    AxPlayerWarps.getThreadedQueue().submit(() -> {
-                        AxPlayerWarps.getDatabase().updateWarp(warp);
-                        MESSAGEUTILS.sendLang(player, "editor.update-name");
-                    });
-                }
-                Scheduler.get().run(this::open);
+                AxPlayerWarps.getThreadedQueue().submit(() -> {
+                    if (!warp.setName(result.replace(" ", "_"))) {
+                        MESSAGEUTILS.sendLang(player, "errors.name-exists");
+                    } else {
+                            AxPlayerWarps.getDatabase().updateWarp(warp);
+                            MESSAGEUTILS.sendLang(player, "editor.update-name");
+                    }
+                    Scheduler.get().run(this::open);
+                });
             });
-            sign.open();
         }, Map.of());
         ItemStack mt = guiItem.getItemStack();
         if (warp.getIcon() != null) mt.setType(warp.getIcon());
@@ -140,10 +139,9 @@ public class EditWarpGui extends GuiFrame {
         createItem("transfer", event -> {
             Actions.run(player, this, file.getStringList("transfer.actions"));
             warp.setLocation(player.getLocation());
-            SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("add-player-sign")).toArray(Component[]::new), (player1, result) -> {
-                String res = MiniMessage.builder().build().serialize(result[0]);
+            InputManager.getInput(player, "transfer", result -> {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
-                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(res);
+                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(result);
                     if (uuid == null) {
                         MESSAGEUTILS.sendLang(player, "errors.player-not-found");
                     } else {
@@ -163,7 +161,6 @@ public class EditWarpGui extends GuiFrame {
                     Scheduler.get().run(() -> player.closeInventory());
                 });
             });
-            sign.open();
         }, Map.of());
 
         createItem("access", event -> {
@@ -217,23 +214,21 @@ public class EditWarpGui extends GuiFrame {
             int idx = currency == null ? -1 : currencies.indexOf(currency);
             if (event.isLeftClick()) {
                 if (event.isShiftClick()) {
-                    SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("price-sign")).toArray(Component[]::new), (player1, result) -> {
-                        String res = MiniMessage.builder().build().serialize(result[0]);
-                        if (!NumberUtils.isInt(res)) {
+                    InputManager.getInput(player, "transfer", result -> {
+                        if (!NumberUtils.isInt(result)) {
                             MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                         } else {
-                            int price = Integer.parseInt(res);
+                            int price = Integer.parseInt(result);
                             if (price < 1) {
                                 MESSAGEUTILS.sendLang(player, "errors.must-be-positive");
-                                Scheduler.get().run(this::open);
+                                open();
                                 return;
                             }
                             warp.setTeleportPrice(price);
                             AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                         }
-                        Scheduler.get().run(this::open);
+                        open();
                     });
-                    sign.open();
                     return;
                 }
                 idx++;
@@ -292,14 +287,14 @@ public class EditWarpGui extends GuiFrame {
                     open();
                     return;
                 }
-                SignInput sign = new SignInput(player, StringUtils.formatList(LANG.getStringList("add-line-sign")).toArray(Component[]::new), (player1, result) -> {
-                    String res = MiniMessage.builder().build().serialize(result[0]);
-                    desc.add(res);
+                InputManager.getInput(player, "add-line", result -> {
+                    desc.add(result);
                     warp.setDescription(desc);
-                    AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
-                    Scheduler.get().run(this::open);
+                    AxPlayerWarps.getThreadedQueue().submit(() -> {
+                        AxPlayerWarps.getDatabase().updateWarp(warp);
+                        Scheduler.get().run(this::open);
+                    });
                 });
-                sign.open();
                 return;
             } else if (event.isRightClick()) {
                 if (event.isShiftClick()) {

@@ -39,7 +39,7 @@ public class SoundUtils {
 
             BUKKITAUDIENCES.player(player).playSound(s);
         } catch (InvalidKeyException ex) {
-            Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#FF0000[AxBoosters] The sound %sound% does not exist, this is a configuration issue!".replace("%sound%", sound)));
+            Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#FF0000[AxPlayerWarps] The sound %sound% does not exist, this is a configuration issue!".replace("%sound%", sound)));
         }
     }
 }

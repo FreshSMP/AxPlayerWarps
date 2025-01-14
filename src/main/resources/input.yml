@@ -1,0 +1,150 @@
+# DOCUMENTATION: https://docs.artillex-studios.com/axplayerwarps.html
+#
+# valid types:
+#  - sign (sign gui)
+#  - anvil (anvil gui)
+#  - chat (input in chat)
+#
+# note: only the selected type's section will be used, you can even delete the unused ones if you want
+
+# if the player writes any of these in chat mode, the plugin will cancel the input
+# make sure to change this in the messages as well if you change it here!
+chat-cancel-words:
+  - "cancel"
+
+rate:
+  type: "anvil"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write new rating!"
+    - "Valid values: 1-5"
+  anvil:
+    title: "&0Rate Warp"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<RATING HERE>"
+      lore:
+        - "&#33EEBBValid values: 1-5"
+  chat:
+    - "&#33EEBBWrite your rating in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+    - "&#DDDDDDValid values: 1-5"
+
+search:
+  type: "chat"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Search for warp"
+    - "in the first line!"
+  anvil:
+    title: "&0Search Here"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<SEARCH>"
+      lore:
+        - "&#33EEBB/\ searching for"
+  chat:
+    - "&#33EEBBWhat do you want to search for? &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+rename:
+  type: "anvil"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write new name"
+    - "in the first line!"
+  anvil:
+    title: "&0Rename Warp"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<NEW WARP NAME HERE>"
+      lore:
+        - "&#33EEBB/\ new name"
+  chat:
+    - "&#33EEBBWrite the new warp name in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+price:
+  type: "anvil"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write new price"
+    - "in the first line!"
+  anvil:
+    title: "&0New Price"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<PRICE HERE>"
+      lore:
+        - "&#33EEBB/\ price"
+  chat:
+    - "&#33EEBBWrite the new price in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+add-line:
+  type: "chat"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write new text"
+    - "in the first line!"
+  anvil:
+    title: "&0Add Line"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<NEW LINE HERE>"
+      lore:
+        - "&#33EEBB/\ new line"
+  chat:
+    - "&#33EEBBWrite the new line in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+add-player:
+  type: "anvil"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write the name"
+    - "in the first line!"
+  anvil:
+    title: "&0Add Player"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<PLAYER'S NAME HERE>"
+      lore:
+        - "&#33EEBB/\ name of player"
+  chat:
+    - "&#33EEBBWrite the name of the player in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+transfer:
+  type: "anvil"
+  # keep the first line empty when using sign
+  sign:
+    - " "
+    - "-----------"
+    - "Write the name"
+    - "in the first line!"
+  anvil:
+    title: "&0Add Player"
+    item:
+      material: PAPER
+      glow: true
+      name: "&f<PLAYER'S NAME HERE>"
+      lore:
+        - "&#33EEBB/\ name of player"
+  chat:
+    - "&#33EEBBWrite the name of the player in the chat: &#DDDDDD(write &#33EEBBcancel &#DDDDDDto stop)"
+
+# do not change this
+version: 1
