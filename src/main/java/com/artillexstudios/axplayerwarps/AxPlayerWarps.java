@@ -10,6 +10,7 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.Lo
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.libs.libby.BukkitLibraryManager;
 import com.artillexstudios.axapi.metrics.AxMetrics;
+import com.artillexstudios.axapi.utils.AsyncUtils;
 import com.artillexstudios.axapi.utils.MessageUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.featureflags.FeatureFlags;
@@ -142,6 +143,8 @@ public final class AxPlayerWarps extends AxPlugin {
         metrics = new AxMetrics(17);
         metrics.start();
 
+        AsyncUtils.setup(3);
+
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
         if (CONFIG.getBoolean("update-notifier.enabled", true)) new UpdateNotifier(this, 6657);
@@ -150,6 +153,7 @@ public final class AxPlayerWarps extends AxPlugin {
     public void disable() {
         metrics.cancel();
         database.disable();
+        AsyncUtils.stop();
         GuiUpdater.stop();
         WarpQueue.stop();
     }

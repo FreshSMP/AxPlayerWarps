@@ -51,10 +51,12 @@ public class InputManager {
                     if (clickEvent.getSlot() != 2) return;
                     ItemStack item = clickEvent.getInventory().getItem(2);
                     String res = item.getItemMeta().getDisplayName();
+                    clickEvent.getInventory().clear();
                     Scheduler.get().run(() -> consumer.accept(res));
                     ended.set(true);
                 },
                 closeEvent -> {
+                    closeEvent.getInventory().clear();
                     if (ended.get()) return;
                     Scheduler.get().run(() -> consumer.accept(""));
                 }

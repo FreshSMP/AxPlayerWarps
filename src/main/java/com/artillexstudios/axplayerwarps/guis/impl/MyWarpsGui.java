@@ -7,6 +7,7 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.Lo
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.nms.NMSHandlers;
 import com.artillexstudios.axapi.scheduler.Scheduler;
+import com.artillexstudios.axapi.utils.AsyncUtils;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
@@ -150,10 +151,20 @@ public class MyWarpsGui extends GuiFrame {
     }
 
     public CompletableFuture<Void> loadWarps() {
-        final CompletableFuture<Void> future = new CompletableFuture<>();
-        AxPlayerWarps.getThreadedQueue().submit(() -> {
-            gui.clearPageItems();
-            for (Warp warp : WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).sorted(new WarpComparator(user.getSorting(), player)).toList()) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        gui.clearPageItems();
+
+        AsyncUtils.submit(() -> {
+            var filtered = WarpManager.getWarps()
+                    .stream()
+                    .filter(warp -> warp.getOwner().equals(player.getUniqueId()))
+                    .sorted(new WarpComparator(user.getSorting(), player))
+                    .toList();
+
+            GuiItem[] axGuiItems = new GuiItem[filtered.size()];
+            List<CompletableFuture<?>> futures = new ArrayList<>();
+            int i = 0;
+            for (Warp warp : filtered) {
 
                 // category
                 if (category != null && !Objects.equals(warp.getCategory(), category)) continue;
@@ -161,43 +172,62 @@ public class MyWarpsGui extends GuiFrame {
                 // search
                 if (search != null && (!warp.getName().toLowerCase().contains(search) && !warp.getOwnerName().toLowerCase().contains(search))) continue;
 
-                Material icon = warp.getIcon();
-                ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
-                builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
+                CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+                futures.add(completableFuture);
 
-                String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
+                int i2 = i;
+                AsyncUtils.submit(() -> {
+                    Material icon = warp.getIcon();
+                    ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
+                    builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
 
-                List<String> lore = new ArrayList<>();
-                List<String> lore2 = new ArrayList<>(GUI.getStringList("warp.lore"));
-                for (int i = 0; i < lore2.size(); i++) {
-                    String line = lore2.get(i);
-                    if (!line.contains("%description%")) {
-                        lore.add(line);
-                        continue;
+                    String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
+
+                    List<String> lore = new ArrayList<>();
+                    List<String> lore2 = new ArrayList<>(GUI.getStringList("warp.lore"));
+                    for (int j = 0; j < lore2.size(); j++) {
+                        String line = lore2.get(j);
+                        if (!line.contains("%description%")) {
+                            lore.add(line);
+                            continue;
+                        }
+                        for (int k = description.length - 1; k >= 0; k--) {
+                            lore.add(j, line.replace("%description%", description[k]));
+                        }
                     }
-                    for (int j = description.length - 1; j >= 0; j--) {
-                        lore.add(i, line.replace("%description%", description[j]));
+                    builder.setLore(Placeholders.parseList(warp, player, lore));
+                    if (icon == Material.PLAYER_HEAD) {
+                        final Player pl = Bukkit.getPlayer(warp.getOwner());
+                        if (pl != null) {
+                            var textures = NMSHandlers.getNmsHandler().textures(pl);
+                            if (textures != null) builder.setTextureValue(textures.getKey());
+                        }
                     }
-                }
-                builder.setLore(Placeholders.parseList(warp, player, lore));
-                if (icon == Material.PLAYER_HEAD) {
-                    final Player pl = Bukkit.getPlayer(warp.getOwner());
-                    if (pl != null) {
-                        var textures = NMSHandlers.getNmsHandler().textures(pl);
-                        if (textures != null) builder.setTextureValue(textures.getKey());
-                    }
-                }
-                gui.addItem(new GuiItem(builder.get(), event -> {
-                    if (event.isLeftClick()) {
-                        warp.teleportPlayer(player);
-                    } else {
-                        new EditWarpGui(player, warp).open();
-                    }
-                }));
+
+                    GuiItem axGuiItem = new GuiItem(builder.get(), event -> {
+                        if (event.isLeftClick()) {
+                            warp.teleportPlayer(player);
+                        } else {
+                            new EditWarpGui(player, warp).open();
+                        }
+                    });
+
+                    axGuiItems[i2] = axGuiItem;
+                    completableFuture.complete(null);
+                });
+                i++;
             }
 
-            Scheduler.get().run(scheduledTask -> {
-                future.complete(null);
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
+                for (GuiItem axGuiItem : axGuiItems) {
+                    if (axGuiItem == null) continue;
+                    gui.addItem(axGuiItem);
+                }
+
+                Scheduler.get().run(scheduledTask -> {
+                    updateTitle();
+                    future.complete(null);
+                });
             });
         });
 
