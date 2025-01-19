@@ -140,7 +140,6 @@ public class WarpsGui extends GuiFrame {
         }, Map.of());
 
         loadWarps().thenRun(() -> {
-            updateTitle();
             gui.open(player, page);
         });
     }
@@ -152,7 +151,6 @@ public class WarpsGui extends GuiFrame {
 
     public CompletableFuture<Void> loadWarps() {
         CompletableFuture<Void> future = new CompletableFuture<>();
-        gui.clearPageItems();
 
         AsyncUtils.submit(() -> {
             var filtered = WarpManager.getWarps()
@@ -218,6 +216,7 @@ public class WarpsGui extends GuiFrame {
             }
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
+                gui.clearPageItems();
                 for (GuiItem axGuiItem : axGuiItems) {
                     if (axGuiItem == null) continue;
                     gui.addItem(axGuiItem);
