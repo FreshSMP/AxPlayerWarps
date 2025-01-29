@@ -112,6 +112,7 @@ admin:
 errors:
   disallowed-name-space: "&#FF4444The given warp name cannot contain spaces!"
   disallowed-name-length: "&#FF4444The length of the given warp name is too short or too long!"
+  disallowed-name-blacklisted: "&#FF4444The given warp name is disallowed!"
   blacklist-self: "&#FF4444You can't blacklist yourself!"
   whitelist-self: "&#FF4444You can't whitelist yourself!"
   player-not-found: "&#FF4444This player has never played on the server!"
@@ -158,4 +159,4 @@ commands:
 update-notifier: "&#88CCFFThere is a new version of AxPlayerWarps available! &#DDDDDD(&#FFFFFFcurrent: &#FF0000%current% &#DDDDDD| &#FFFFFFlatest: &#00FF00%latest%&#DDDDDD)"
 
 # do not change this
-version: 2
+version: 3

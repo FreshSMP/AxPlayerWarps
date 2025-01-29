@@ -6,7 +6,8 @@ public class WarpNameUtils {
     public enum ValidationResult {
         ALLOWED,
         CONTAINS_SPACES,
-        INVALID_LENGTH
+        INVALID_LENGTH,
+        DISALLOWED
     }
 
     public static ValidationResult isAllowed(String name) {
@@ -18,6 +19,10 @@ public class WarpNameUtils {
                 || name.length() > CONFIG.getInt("warp-naming.length.max", 16)
         ) {
             return ValidationResult.INVALID_LENGTH;
+        }
+
+        if (SimpleRegex.matches(CONFIG.getStringList("warp-naming.disallowed"), name)) {
+            return ValidationResult.DISALLOWED;
         }
 
         return ValidationResult.ALLOWED;

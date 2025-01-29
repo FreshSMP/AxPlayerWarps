@@ -36,6 +36,10 @@ public enum Create {
         }
 
         switch (WarpNameUtils.isAllowed(warpName)) {
+            case DISALLOWED -> {
+                MESSAGEUTILS.sendLang(sender, "errors.disallowed-name-blacklisted");
+                return;
+            }
             case CONTAINS_SPACES -> {
                 MESSAGEUTILS.sendLang(sender, "errors.disallowed-name-space");
                 return;

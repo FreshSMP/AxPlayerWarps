@@ -57,6 +57,14 @@ warp-naming:
   length:
     min: 1
     max: 16
+  # blacklisted warp names
+  # some supported regex: (optional)
+  # - 'name' #  only 'name' is disallowed
+  # - 'name*' #  disallows text starting with 'name'
+  # - '*name' #  disallows text ending with 'name'
+  # - '*name*' #  disallows text containing 'name'
+  disallowed:
+    - "*banned_warp_name*"
 
 # which material should we use if the player doesn't define an icon for their warp?
 # PLAYER_HEAD will default to the owner's skull (note: sometimes it may not load)
@@ -189,4 +197,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 3
+version: 4

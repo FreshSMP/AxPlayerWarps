@@ -113,6 +113,10 @@ public class EditWarpGui extends GuiFrame {
                 }
 
                 switch (WarpNameUtils.isAllowed(result)) {
+                    case DISALLOWED -> {
+                        MESSAGEUTILS.sendLang(player, "errors.disallowed-name-blacklisted");
+                        return;
+                    }
                     case CONTAINS_SPACES -> {
                         MESSAGEUTILS.sendLang(player, "errors.disallowed-name-space");
                         return;
