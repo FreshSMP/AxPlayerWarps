@@ -54,6 +54,7 @@ public final class AxPlayerWarps extends AxPlugin {
     public static MessageUtils MESSAGEUTILS;
     public static BukkitAudiences BUKKITAUDIENCES;
     public static Config CONFIG;
+    public static Config HOOKS;
     public static Config LANG;
     public static Config CURRENCIES;
     public static Config INPUT;
@@ -86,7 +87,6 @@ public final class AxPlayerWarps extends AxPlugin {
 
     // todo future plans
     // - desc color codes
-    // - protection hooks
     // - teleport price tax
     public void enable() {
         new Metrics(this, 21645);
@@ -95,6 +95,7 @@ public final class AxPlayerWarps extends AxPlugin {
         BUKKITAUDIENCES = BukkitAudiences.create(this);
 
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
+        HOOKS = new Config(new File(getDataFolder(), "hooks.yml"), getResource("hooks.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         LANG = new Config(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
         CURRENCIES = new Config(new File(getDataFolder(), "currencies.yml"), getResource("currencies.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
         INPUT = new Config(new File(getDataFolder(), "input.yml"), getResource("input.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());

@@ -13,6 +13,7 @@ import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -51,6 +52,7 @@ public class Warp {
     private HashSet<UUID> visitors = new HashSet<>();
     private List<Base.AccessPlayer> whitelisted = Collections.synchronizedList(new ArrayList<>());
     private List<Base.AccessPlayer> blacklisted = Collections.synchronizedList(new ArrayList<>());
+    private UUID worldUUID;
 
     public Warp(int id, long created, @Nullable String description, String name,
                 Location location, @Nullable Category category,
@@ -66,6 +68,7 @@ public class Warp {
         this.description = description;
         this.name = name;
         this.location = location;
+        this.worldUUID = location.getWorld().getUID();
         this.category = category;
         this.owner = owner;
         this.ownerName = ownerName;
@@ -299,9 +302,13 @@ public class Warp {
 
     public void validateTeleport(Player player, boolean noConfirm, Consumer<Boolean> response) {
         if (location.getWorld() == null) {
-            MESSAGEUTILS.sendLang(player, "errors.invalid-world");
-            response.accept(false);
-            return;
+            World world = Bukkit.getWorld(worldUUID);
+            if (world == null) {
+                MESSAGEUTILS.sendLang(player, "errors.invalid-world");
+                response.accept(false);
+                return;
+            }
+            location.setWorld(world);
         }
 
         boolean isOwner = player.getUniqueId().equals(owner);

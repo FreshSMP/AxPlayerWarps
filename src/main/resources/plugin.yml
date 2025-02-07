@@ -36,3 +36,17 @@ permissions:
 
 softdepend:
   - PlaceholderAPI
+  - BentoBox
+  - GriefPrevention
+  - HuskClaims
+  - HuskTowns
+  - IridiumSkyBlock
+  - Kingdoms
+  - Lands
+  - LockettePro
+  - PlotSquared
+  - Residence
+  - SaberFactions
+  - SuperiorSkyblock2
+  - Towny
+  - WorldGuard

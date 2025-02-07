@@ -6,7 +6,7 @@
 
     <groupId>com.artillexstudios</groupId>
     <artifactId>AxPlayerWarps</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
 
     <name>AxPlayerWarps</name>
@@ -67,6 +67,10 @@
                                 <relocation>
                                     <pattern>com.zaxxer.hikari</pattern>
                                     <shadedPattern>com.artillexstudios.axplayerwarps.libs.hikari</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.artillexstudios.axintegrations</pattern>
+                                    <shadedPattern>com.artillexstudios.axplayerwarps.libs.axintegrations</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -313,6 +317,17 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.5.0-M2</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.artillexstudios.axintegrations</groupId>
+            <artifactId>axintegrations</artifactId>
+            <version>1.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

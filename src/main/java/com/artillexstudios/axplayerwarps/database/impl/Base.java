@@ -207,13 +207,13 @@ public class Base implements Database {
         ThreadUtils.checkNotMain("This method can only be called async!");
         try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
                 "SELECT id FROM axplayerwarps_players WHERE uuid = ?",
-                uuid)
+                uuid.toString())
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) return rs.getInt(1);
                 else {
                     OfflinePlayer pl = Bukkit.getOfflinePlayer(uuid);
-                    return insert("INSERT INTO axplayerwarps_players (uuid, name) VALUES (?, ?)", uuid, pl.getName());
+                    return insert("INSERT INTO axplayerwarps_players (uuid, name) VALUES (?, ?)", uuid.toString(), pl.getName());
                 }
             }
         } catch (SQLException ex) {

@@ -1,6 +1,9 @@
 package com.artillexstudios.axplayerwarps.hooks;
 
 import com.artillexstudios.axapi.utils.StringUtils;
+import com.artillexstudios.axintegrations.AxIntegrations;
+import com.artillexstudios.axintegrations.integration.protection.ProtectionIntegration;
+import com.artillexstudios.axintegrations.integration.protection.ProtectionIntegrations;
 import com.artillexstudios.axplayerwarps.hooks.currency.AxQuestBoardHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.BeastTokensHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.CoinsEngineHook;
@@ -20,6 +23,8 @@ import com.artillexstudios.axplayerwarps.hooks.currency.UltraEconomyHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.VaultHook;
 import com.artillexstudios.axplayerwarps.hooks.other.PlaceholderAPIHook;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CURRENCIES;
+import static com.artillexstudios.axplayerwarps.AxPlayerWarps.HOOKS;
 
 public class HookManager {
     private static final ArrayList<CurrencyHook> currency = new ArrayList<>();
@@ -41,6 +47,20 @@ public class HookManager {
 
     public static void updateHooks() {
         currency.removeIf(currencyHook -> !currencyHook.isPersistent());
+
+        ProtectionIntegrations.values().clear();
+        AxIntegrations.INSTANCE.init();
+
+        ProtectionIntegrations.values().removeIf(integration -> !HOOKS.getBoolean("hooks.protection." + integration.id(), false));
+        boolean modified = false;
+        for (ProtectionIntegration integration : ProtectionIntegrations.values()) {
+            if (HOOKS.getString("hooks.protection." + integration.id(), null) == null) {
+                modified = true;
+                HOOKS.set("hooks.protection." + integration.id(), true);
+            }
+            Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into " + integration.id() + "!"));
+        }
+        if (modified) HOOKS.save();
 
         if (CURRENCIES.getBoolean("currencies.Experience.register", true))
             currency.add(new ExperienceHook());
@@ -151,5 +171,13 @@ public class HookManager {
         }
 
         return null;
+    }
+
+    public static boolean canBuild(Player player, Location location) {
+        for (ProtectionIntegration integration : ProtectionIntegrations.values()) {
+            if (integration.canBuild(player, location)) continue;
+            return false;
+        }
+        return true;
     }
 }
