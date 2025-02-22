@@ -9,6 +9,7 @@ import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.utils.FormatUtils;
+import com.artillexstudios.axplayerwarps.utils.SimpleRegex;
 import com.artillexstudios.axplayerwarps.utils.WarpNameUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
@@ -38,6 +39,11 @@ public enum Create {
         }
 
         Location warpLocation = sender.getLocation();
+        if (SimpleRegex.matches(CONFIG.getStringList("disallowed-worlds"), warpLocation.getWorld().getName())) {
+            MESSAGEUTILS.sendLang(sender, "errors.disallowed-world");
+            return;
+        }
+
         if (!HookManager.canBuild(sender, warpLocation)) {
             MESSAGEUTILS.sendLang(sender, "errors.cannot-create-here");
             return;
