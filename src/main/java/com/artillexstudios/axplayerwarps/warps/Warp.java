@@ -384,7 +384,7 @@ public class Warp {
             Scheduler.get().runAt(location, () -> {
                 PaperUtils.teleportAsync(player, location);
                 for (String m : CONFIG.getStringList("teleport-commands")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
+                    Scheduler.get().run(task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName())));
                 }
             });
             AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().addVisit(player, this));
