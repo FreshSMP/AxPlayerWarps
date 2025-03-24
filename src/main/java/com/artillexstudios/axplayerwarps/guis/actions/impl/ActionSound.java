@@ -14,8 +14,6 @@ public class ActionSound extends Action {
 
     @Override
     public void run(Player player, GuiFrame gui, String arguments) {
-        Scheduler.get().run(task -> {
-            SoundUtils.playSound(player, arguments);
-        });
+        Scheduler.get().run(task -> SoundUtils.playSound(player, arguments));
     }
 }

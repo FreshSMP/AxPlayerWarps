@@ -72,7 +72,7 @@ public class RateWarpGui extends GuiFrame {
                     AxPlayerWarps.getDatabase().addToFavorites(player, warp);
                     MESSAGEUTILS.sendLang(player, "favorite.add");
                 }
-                Scheduler.get().run(this::open);
+                Scheduler.get().runAt(player.getLocation(), this::open);
             });
         }, Map.of(), getSlots("favorite"));
 
@@ -87,7 +87,7 @@ public class RateWarpGui extends GuiFrame {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().removeRating(player, warp);
                     MESSAGEUTILS.sendLang(player, "rate.remove");
-                    Scheduler.get().run(this::open);
+                    Scheduler.get().runAt(player.getLocation(), this::open);
                 });
             }
             if (event.isLeftClick()) {
@@ -101,7 +101,7 @@ public class RateWarpGui extends GuiFrame {
                             MESSAGEUTILS.sendLang(player, "rate.add", Map.of("%rating%", "" + i));
                         });
                     }
-                    Scheduler.get().run(this::open);
+                    Scheduler.get().runAt(player.getLocation(), this::open);
                 });
             }
         }, Map.of());

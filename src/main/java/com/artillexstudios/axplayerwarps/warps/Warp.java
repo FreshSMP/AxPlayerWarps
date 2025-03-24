@@ -52,7 +52,7 @@ public class Warp {
     private HashSet<UUID> visitors = new HashSet<>();
     private List<Base.AccessPlayer> whitelisted = Collections.synchronizedList(new ArrayList<>());
     private List<Base.AccessPlayer> blacklisted = Collections.synchronizedList(new ArrayList<>());
-    private UUID worldUUID;
+    private final UUID worldUUID;
 
     public Warp(int id, long created, @Nullable String description, String name,
                 Location location, @Nullable Category category,
@@ -295,7 +295,7 @@ public class Warp {
                 completeTeleportPlayer(player);
                 return;
             }
-            Scheduler.get().run(player::closeInventory);
+            Scheduler.get().runAt(player.getLocation(), player::closeInventory);
             WarpQueue.addToQueue(player, this);
         });
     }
@@ -366,7 +366,7 @@ public class Warp {
     public void completeTeleportPlayer(Player player) {
         validateTeleport(player, true, bool -> {
             if (!bool) return;
-            Scheduler.get().run(player::closeInventory);
+            Scheduler.get().runAt(player.getLocation(), player::closeInventory);
             boolean isOwner = player.getUniqueId().equals(owner);
             if (!isOwner && isPaid()) {
                 currency.takeBalance(player.getUniqueId(), teleportPrice);
@@ -381,15 +381,13 @@ public class Warp {
             confirmUnsafe.remove(player);
             confirmPaid.remove(player);
 
-            Scheduler.get().run(() -> {
+            Scheduler.get().runAt(location, () -> {
                 PaperUtils.teleportAsync(player, location);
                 for (String m : CONFIG.getStringList("teleport-commands")) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
                 }
             });
-            AxPlayerWarps.getThreadedQueue().submit(() -> {
-                AxPlayerWarps.getDatabase().addVisit(player, this);
-            });
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().addVisit(player, this));
         });
     }
 

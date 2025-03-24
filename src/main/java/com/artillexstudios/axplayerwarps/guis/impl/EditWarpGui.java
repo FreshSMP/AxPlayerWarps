@@ -134,7 +134,7 @@ public class EditWarpGui extends GuiFrame {
                             AxPlayerWarps.getDatabase().updateWarp(warp);
                             MESSAGEUTILS.sendLang(player, "editor.update-name");
                     }
-                    Scheduler.get().run(this::open);
+                    Scheduler.get().runAt(player.getLocation(), this::open);
                 });
             });
         }, Map.of());
@@ -174,7 +174,7 @@ public class EditWarpGui extends GuiFrame {
 
                         MESSAGEUTILS.sendLang(player, "editor.transferred", Map.of("%player%", pl.getName() == null ? "---" : pl.getName()));
                     }
-                    Scheduler.get().run(() -> player.closeInventory());
+                    Scheduler.get().runAt(player.getLocation(), player::closeInventory);
                 });
             });
         }, Map.of());
@@ -308,7 +308,7 @@ public class EditWarpGui extends GuiFrame {
                     warp.setDescription(desc);
                     AxPlayerWarps.getThreadedQueue().submit(() -> {
                         AxPlayerWarps.getDatabase().updateWarp(warp);
-                        Scheduler.get().run(this::open);
+                        Scheduler.get().runAt(player.getLocation(), this::open);
                     });
                 });
                 return;

@@ -89,7 +89,7 @@ public class WhitelistGui extends GuiFrame {
                         AxPlayerWarps.getDatabase().addToList(warp, al, Bukkit.getOfflinePlayer(uuid));
                         MESSAGEUTILS.sendLang(player, al.name().toLowerCase() + ".add", Map.of("%player%", result));
                     }
-                    Scheduler.get().run(this::open);
+                    Scheduler.get().runAt(player.getLocation(), this::open);
                 });
             });
         }, Map.of());
@@ -126,9 +126,7 @@ public class WhitelistGui extends GuiFrame {
                 }));
             }
 
-            Scheduler.get().run(scheduledTask -> {
-                future.complete(null);
-            });
+            Scheduler.get().run(scheduledTask -> future.complete(null));
         });
 
         return future;

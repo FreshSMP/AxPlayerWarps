@@ -22,8 +22,6 @@ public class ActionConsoleCommand extends Action {
         }
 
         final String finalFormatted = formatted;
-        Scheduler.get().run(task -> {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalFormatted);
-        });
+        Scheduler.get().run(task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalFormatted));
     }
 }

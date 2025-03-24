@@ -21,8 +21,6 @@ public class ActionPlayerCommand extends Action {
         }
 
         final String finalFormatted = formatted;
-        Scheduler.get().run(task -> {
-            player.performCommand(finalFormatted);
-        });
+        Scheduler.get().run(task -> player.performCommand(finalFormatted));
     }
 }
