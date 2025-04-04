@@ -1,7 +1,6 @@
 package com.artillexstudios.axplayerwarps.commands.subcommands;
 
 import com.artillexstudios.axapi.utils.Cooldown;
-import com.artillexstudios.axintegrations.integration.protection.ProtectionIntegrations;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.enums.Access;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
@@ -100,7 +99,7 @@ public enum Create {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             OfflinePlayer usedPlayer = setPlayer == null ? sender : setPlayer;
             int id = AxPlayerWarps.getDatabase().createWarp(usedPlayer, warpLocation, warpName);
-            Warp warp = new Warp(id, System.currentTimeMillis(), null, warpName, warpLocation, null, usedPlayer.getUniqueId(), usedPlayer.getName(), Access.PUBLIC, null, 0, 0, null);
+            Warp warp = new Warp(id, System.currentTimeMillis(), null, warpName, warpLocation, warpLocation.getWorld().getName(), null, usedPlayer.getUniqueId(), usedPlayer.getName(), Access.PUBLIC, null, 0, 0, null);
             MESSAGEUTILS.sendLang(sender, "create.created", Map.of("%warp%", warpName, "%price%", FormatUtils.formatCurrency(currencyHook, price)));
             WarpManager.getWarps().add(warp);
         });

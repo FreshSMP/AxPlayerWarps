@@ -319,14 +319,14 @@ public class Base implements Database {
     }
 
     @Nullable
-    public World getWorldFromId(int id) {
+    public String getWorldFromId(int id) {
         ThreadUtils.checkNotMain("This method can only be called async!");
         try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
                 "SELECT world FROM axplayerwarps_worlds WHERE id = ?",
                 id)
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return Bukkit.getWorld(rs.getString(1));
+                if (rs.next()) return rs.getString(1);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -869,9 +869,9 @@ public class Base implements Database {
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    World world = getWorldFromId(rs.getInt("world_id"));
+                    String world = getWorldFromId(rs.getInt("world_id"));
                     Location loc = new Location(
-                            world,
+                            Bukkit.getWorld(world),
                             rs.getDouble("x"),
                             rs.getDouble("y"),
                             rs.getDouble("z"),
@@ -903,6 +903,7 @@ public class Base implements Database {
                             rs.getString("description"),
                             rs.getString("name"),
                             loc,
+                            world,
                             category,
                             player.getKey(),
                             player.getValue(),

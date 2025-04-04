@@ -4,6 +4,10 @@
 title: "&0&lAxPWarps > &8Editing %warp%"
 # a gui can have 1-6 rows
 rows: 5
+# should the gui auto update?
+# in ticks, 20 ticks = 1 second
+# set to -1 to disable auto updater
+auto-update-ticks: -1
 
 # ----- ITEMS -----
 

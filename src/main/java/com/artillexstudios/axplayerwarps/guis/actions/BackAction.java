@@ -1,7 +1,7 @@
-package com.artillexstudios.axplayerwarps.guis.actions.impl;
+package com.artillexstudios.axplayerwarps.guis.actions;
 
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
-import com.artillexstudios.axplayerwarps.guis.actions.Action;
+import com.artillexstudios.axguiframework.GuiFrame;
+import com.artillexstudios.axguiframework.actions.Action;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 import java.util.NoSuchElementException;
 
-public class ActionBack extends Action {
+public class BackAction extends Action {
 
-    public ActionBack() {
+    public BackAction() {
         super("back");
     }
 
@@ -22,7 +22,6 @@ public class ActionBack extends Action {
 
         GuiFrame lastEl = last.get(last.size() - 1);
         if (lastEl == null) return;
-//        System.out.println("remove: " + (last.size() - 1) + " " + lastEl);
         last.remove(lastEl);
 
         GuiFrame secondLastEl;
@@ -32,7 +31,7 @@ public class ActionBack extends Action {
             player.closeInventory();
             return;
         }
-//        System.out.println("get: " + (last.size() - 1) + " " + secondLastEl);
+
         secondLastEl.open();
     }
 }

@@ -41,7 +41,7 @@ public interface Database {
 
     Pair<UUID, String> getUUIDAndNameFromId(int id);
 
-    World getWorldFromId(int id);
+    String getWorldFromId(int id);
 
     int getCategoryId(String category);
 

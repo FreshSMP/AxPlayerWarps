@@ -40,6 +40,10 @@ admin-command-aliases:
   - "pwarpadmin"
   - "pwarpsadmin"
 
+# how often should people be able to refresh the gui?
+# all items are stored in memory which should be fast, so this value won't hurt performance unless it is set very low
+gui-refresh-cooldown-milliseconds: 150
+
 warp-creation-cost:
   # should creating warps cost money?
   enabled: false
@@ -54,6 +58,11 @@ warp-creation-cost:
 warp-naming:
   # allowing spaces might make it hard to tab complete warps
   allow-spaces: false
+  # only allow certain characters to be used in warp names
+  allowed-characters:
+    enabled: false
+    # list of allowed characters, without any separator
+    list: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
   length:
     min: 1
     max: 16
@@ -205,4 +214,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 5
+version: 6

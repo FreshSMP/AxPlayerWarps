@@ -21,6 +21,19 @@ public class WarpNameUtils {
             return ValidationResult.INVALID_LENGTH;
         }
 
+        if (CONFIG.getBoolean("warp-naming.allowed-characters.enabled", false)) {
+            char[] list = CONFIG.getString("warp-naming.allowed-characters.list", "").toCharArray();
+            for (char c1 : name.toCharArray()) {
+                boolean found = false;
+                for (char c2 : list) {
+                    if (c1 != c2) continue;
+                    found = true;
+                    break;
+                }
+                if (!found) return ValidationResult.DISALLOWED;
+            }
+        }
+
         if (SimpleRegex.matches(CONFIG.getStringList("warp-naming.disallowed"), name)) {
             return ValidationResult.DISALLOWED;
         }

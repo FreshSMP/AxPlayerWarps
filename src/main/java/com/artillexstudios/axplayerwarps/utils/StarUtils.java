@@ -4,7 +4,7 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 
 public class StarUtils {
 
-    public static String getFormatted(int filled, int max) {
+    public static String getFormatted(float filled, int max) {
         StringBuilder stars = new StringBuilder();
         int starAm = Math.round(filled);
         for (int i = 0; i < starAm; i++) {

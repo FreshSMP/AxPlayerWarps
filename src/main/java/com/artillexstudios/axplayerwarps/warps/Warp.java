@@ -52,10 +52,10 @@ public class Warp {
     private HashSet<UUID> visitors = new HashSet<>();
     private List<Base.AccessPlayer> whitelisted = Collections.synchronizedList(new ArrayList<>());
     private List<Base.AccessPlayer> blacklisted = Collections.synchronizedList(new ArrayList<>());
-    private UUID worldUUID;
+    private String worldName;
 
     public Warp(int id, long created, @Nullable String description, String name,
-                Location location, @Nullable Category category,
+                Location location, String worldName, @Nullable Category category,
                 UUID owner, String ownerName, Access access, @Nullable CurrencyHook currency,
                 double teleportPrice, double earnedMoney, @Nullable Material icon
     ) {
@@ -68,7 +68,7 @@ public class Warp {
         this.description = description;
         this.name = name;
         this.location = location;
-        this.worldUUID = location.getWorld().getUID();
+        this.worldName = worldName;
         this.category = category;
         this.owner = owner;
         this.ownerName = ownerName;
@@ -305,8 +305,8 @@ public class Warp {
     }
 
     public void validateTeleport(Player player, boolean noConfirm, Consumer<Boolean> response) {
-        if (location.getWorld() == null) {
-            World world = Bukkit.getWorld(worldUUID);
+        if (!location.isWorldLoaded()) {
+            World world = Bukkit.getWorld(worldName);
             if (world == null) {
                 MESSAGEUTILS.sendLang(player, "errors.invalid-world");
                 response.accept(false);
@@ -370,7 +370,7 @@ public class Warp {
     public void completeTeleportPlayer(Player player) {
         validateTeleport(player, true, bool -> {
             if (!bool) return;
-            Scheduler.get().run(player::closeInventory);
+            player.closeInventory();
             boolean isOwner = player.getUniqueId().equals(owner);
             if (!isOwner && isPaid()) {
                 currency.takeBalance(player.getUniqueId(), teleportPrice);
@@ -385,12 +385,12 @@ public class Warp {
             confirmUnsafe.remove(player);
             confirmPaid.remove(player);
 
-            Scheduler.get().run(() -> {
-                PaperUtils.teleportAsync(player, location);
-                for (String m : CONFIG.getStringList("teleport-commands")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
-                }
-            });
+            PaperUtils.teleportAsync(player, location);
+
+            for (String m : CONFIG.getStringList("teleport-commands")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
+            }
+
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 AxPlayerWarps.getDatabase().addVisit(player, this);
             });

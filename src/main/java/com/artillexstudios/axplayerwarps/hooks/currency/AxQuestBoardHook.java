@@ -40,16 +40,16 @@ public class AxQuestBoardHook implements CurrencyHook {
 
     @Override
     public double getBalance(@NotNull UUID player) {
-        return AxQuestBoardAPI.getPoints(player);
+        return AxQuestBoardAPI.getQuestPoints(player).join();
     }
 
     @Override
     public void giveBalance(@NotNull UUID player, double amount) {
-        AxQuestBoardAPI.modifyPoints(player, (int) amount);
+        AxQuestBoardAPI.giveQuestPoints(player, (int) amount);
     }
 
     @Override
     public void takeBalance(@NotNull UUID player, double amount) {
-        AxQuestBoardAPI.modifyPoints(player, (int) amount * -1);
+        AxQuestBoardAPI.giveQuestPoints(player, (int) -amount);
     }
 }

@@ -1,21 +1,23 @@
-package com.artillexstudios.axplayerwarps.guis.impl;
+package com.artillexstudios.axplayerwarps.guis;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
-import com.artillexstudios.axapi.nms.NMSHandlers;
+import com.artillexstudios.axapi.nms.wrapper.ServerPlayerWrapper;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
+import com.artillexstudios.axguiframework.GuiFrame;
+import com.artillexstudios.axguiframework.item.AxGuiItem;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
+import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
-import dev.triumphteam.gui.guis.PaginatedGui;
+import com.artillexstudios.gui.guis.Gui;
+import com.artillexstudios.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,9 +33,9 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 
-public class RecentsGui extends GuiFrame {
-    private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/recents.yml"),
-            AxPlayerWarps.getInstance().getResource("guis/recents.yml"),
+public class FavoritesGui extends GuiFrame {
+    private static final Config GUI = new Config(new File(AxPlayerWarps.getInstance().getDataFolder(), "guis/favorites.yml"),
+            AxPlayerWarps.getInstance().getResource("guis/favorites.yml"),
             GeneralSettings.builder().setUseDefaults(false).build(),
             LoaderSettings.builder().build(),
             DumperSettings.DEFAULT,
@@ -41,9 +43,11 @@ public class RecentsGui extends GuiFrame {
     );
 
     private final PaginatedGui gui;
+    private final WarpUser user;
 
-    public RecentsGui(Player player) {
-        super(GUI, player);
+    public FavoritesGui(Player player) {
+        super(GUI.getInt("auto-update-ticks", -1), GUI, player);
+        this.user = Users.get(player);
         this.gui = Gui.paginated()
             .disableAllInteractions()
             .title(Component.empty())
@@ -52,6 +56,7 @@ public class RecentsGui extends GuiFrame {
             .create();
 
         setGui(gui);
+        user.addGui(this);
     }
 
     @Override
@@ -70,11 +75,17 @@ public class RecentsGui extends GuiFrame {
         });
     }
 
+    public void update() {
+        load().thenRun(() -> {
+            gui.update();
+        });
+    }
+
     public CompletableFuture<Void> load() {
         final CompletableFuture<Void> future = new CompletableFuture<>();
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
-            for (Warp warp : AxPlayerWarps.getDatabase().getRecentWarps(player)) {
+            for (Warp warp : user.getFavorites()) {
                 Material icon = warp.getIcon();
                 ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
                 builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
@@ -95,13 +106,14 @@ public class RecentsGui extends GuiFrame {
                 }
                 builder.setLore(Placeholders.parseList(warp, player, lore));
                 if (icon == Material.PLAYER_HEAD) {
-                    final Player pl = Bukkit.getPlayer(warp.getOwner());
+                    Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {
-                        var textures = NMSHandlers.getNmsHandler().textures(pl);
-                        if (textures != null) builder.setTextureValue(textures.getKey());
+                        ServerPlayerWrapper wrapper = ServerPlayerWrapper.wrap(pl);
+                        var textures = wrapper.textures();
+                        if (textures.texture() != null) builder.setTextureValue(textures.texture());
                     }
                 }
-                gui.addItem(new GuiItem(builder.get(), event -> {
+                gui.addItem(new AxGuiItem(builder.get(), event -> {
                     if (event.isLeftClick()) {
                         warp.teleportPlayer(player);
                     } else {
