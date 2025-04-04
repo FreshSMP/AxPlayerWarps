@@ -1,15 +1,15 @@
-package com.artillexstudios.axplayerwarps.guis.actions.impl;
+package com.artillexstudios.axplayerwarps.guis.actions;
 
+import com.artillexstudios.axguiframework.GuiFrame;
+import com.artillexstudios.axguiframework.actions.Action;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
-import com.artillexstudios.axplayerwarps.guis.actions.Action;
-import com.artillexstudios.axplayerwarps.guis.impl.WarpsGui;
+import com.artillexstudios.axplayerwarps.guis.WarpsGui;
 import org.bukkit.entity.Player;
 
-public class ActionCategory extends Action {
+public class CategoryAction extends Action {
 
-    public ActionCategory() {
+    public CategoryAction() {
         super("category");
     }
 

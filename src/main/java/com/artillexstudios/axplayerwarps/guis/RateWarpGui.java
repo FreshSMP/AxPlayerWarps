@@ -1,4 +1,4 @@
-package com.artillexstudios.axplayerwarps.guis.impl;
+package com.artillexstudios.axplayerwarps.guis;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
@@ -9,17 +9,21 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.NumberUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
+import com.artillexstudios.axguiframework.GuiFrame;
+import com.artillexstudios.axguiframework.actions.GuiActions;
+import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
-import com.artillexstudios.axplayerwarps.guis.actions.Actions;
 import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
+import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import dev.triumphteam.gui.guis.Gui;
+import com.artillexstudios.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
@@ -36,13 +40,16 @@ public class RateWarpGui extends GuiFrame {
 
     private final Gui gui;
     private final Warp warp;
+    private final WarpUser user;
 
     public RateWarpGui(Player player, Warp warp) {
-        super(GUI, player);
+        super(GUI.getInt("auto-update-ticks", -1), GUI, player);
+        this.user = Users.get(player);
         setPlaceholder(new Placeholder((pl, s) -> {
             Integer rating = warp.getAllRatings().get(player.getUniqueId());
             s = s.replace("%given_rating_decimal%", rating == null ? "" : Placeholders.df.format(rating));
             s = s.replace("%given_rating_stars%", rating == null ? LANG.getString("placeholders.no-rating") : StarUtils.getFormatted(rating, 5));
+            s = Placeholders.parse(warp, pl, s);
             return s;
         }));
         this.warp = warp;
@@ -52,8 +59,8 @@ public class RateWarpGui extends GuiFrame {
             .rows(GUI.getInt("rows", 5))
             .create();
 
-        setWarp(warp);
         setGui(gui);
+        user.addGui(this);
     }
 
     public static boolean reload() {
@@ -61,33 +68,39 @@ public class RateWarpGui extends GuiFrame {
     }
 
     public void open() {
+        final List<String> slots = file.getBackingDocument().getStringList("favorite.slot");
+        var slotOverrides = getSlots(slots.isEmpty() ? List.of(file.getString("favorite.slot")) : slots);
+
         boolean isFavorite = user.getFavorites().contains(warp);
         createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
-            Actions.run(player, this, file.getStringList("favorite.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("favorite.actions"));
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 if (isFavorite) {
                     AxPlayerWarps.getDatabase().removeFromFavorites(player, warp);
-                    MESSAGEUTILS.sendLang(player, "favorite.remove");
+                    MESSAGEUTILS.sendLang(player, "favorite.remove", Map.of("%warp%", warp.getName()));
                 } else {
                     AxPlayerWarps.getDatabase().addToFavorites(player, warp);
-                    MESSAGEUTILS.sendLang(player, "favorite.add");
+                    MESSAGEUTILS.sendLang(player, "favorite.add", Map.of("%warp%", warp.getName()));
                 }
-                Scheduler.get().runAt(player.getLocation(), this::open);
+                Scheduler.get().run(() -> open());
             });
-        }, Map.of(), getSlots("favorite"));
+        }, slotOverrides);
 
         createItem("teleport", event -> {
-            Actions.run(player, this, file.getStringList("teleport.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("teleport.actions"));
             warp.teleportPlayer(player);
-        }, Map.of());
+        });
 
         createItem("rate", event -> {
-            Actions.run(player, this, file.getStringList("rate.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("rate.actions"));
             if (event.isRightClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().removeRating(player, warp);
                     MESSAGEUTILS.sendLang(player, "rate.remove");
-                    Scheduler.get().runAt(player.getLocation(), this::open);
+                    Scheduler.get().run(() -> open());
                 });
             }
             if (event.isLeftClick()) {
@@ -101,10 +114,10 @@ public class RateWarpGui extends GuiFrame {
                             MESSAGEUTILS.sendLang(player, "rate.add", Map.of("%rating%", "" + i));
                         });
                     }
-                    Scheduler.get().runAt(player.getLocation(), this::open);
+                    Scheduler.get().run(() -> open());
                 });
             }
-        }, Map.of());
+        });
 
         gui.update();
         gui.open(player);

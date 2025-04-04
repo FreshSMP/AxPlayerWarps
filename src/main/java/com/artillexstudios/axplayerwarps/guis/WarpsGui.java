@@ -1,29 +1,33 @@
-package com.artillexstudios.axplayerwarps.guis.impl;
+package com.artillexstudios.axplayerwarps.guis;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
-import com.artillexstudios.axapi.nms.NMSHandlers;
+import com.artillexstudios.axapi.nms.wrapper.ServerPlayerWrapper;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.AsyncUtils;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
+import com.artillexstudios.axguiframework.GuiFrame;
+import com.artillexstudios.axguiframework.actions.GuiActions;
+import com.artillexstudios.axguiframework.item.AxGuiItem;
+import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
-import com.artillexstudios.axplayerwarps.guis.actions.Actions;
+import com.artillexstudios.axplayerwarps.guis.actions.CategoryAction;
+import com.artillexstudios.axplayerwarps.guis.actions.BackAction;
 import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.sorting.WarpComparator;
 import com.artillexstudios.axplayerwarps.user.Users;
+import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
-import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
-import dev.triumphteam.gui.guis.PaginatedGui;
+import com.artillexstudios.gui.guis.Gui;
+import com.artillexstudios.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -61,6 +65,7 @@ public class WarpsGui extends GuiFrame {
 
     private Category category = null;
     private String search = null;
+    private final WarpUser user;
 
     public WarpsGui(Player player, Category category, String search) {
         this(player, category);
@@ -73,8 +78,9 @@ public class WarpsGui extends GuiFrame {
     }
 
     public WarpsGui(Player player) {
-        super(GUI, player);
+        super(GUI.getInt("auto-update-ticks", -1), GUI, player);
         this.user = Users.get(player);
+
         setPlaceholder(new Placeholder((player1, s) -> {
             s = s.replace("%search%", search == null ? LANG.getString("placeholders.no-search") : search);
             s = s.replace("%sorting_selected%", user.getSorting().name());
@@ -84,9 +90,16 @@ public class WarpsGui extends GuiFrame {
         }));
 
         setGui(gui);
+        user.addGui(this);
     }
 
     public static boolean reload() {
+        long cd = CONFIG.getLong("gui-refresh-cooldown-milliseconds", 250);
+        CooldownManager.setCooldownMillis(cd);
+
+        GuiActions.register(new CategoryAction());
+        GuiActions.register(new BackAction());
+
         return GUI.reload();
     }
 
@@ -96,7 +109,8 @@ public class WarpsGui extends GuiFrame {
 
     public void open(int page) {
         createItem("search", event -> {
-            Actions.run(player, this, file.getStringList("search.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("search.actions"));
             if (event.isShiftClick()) {
                 search = null;
                 MESSAGEUTILS.sendLang(player, "search.reset");
@@ -112,10 +126,11 @@ public class WarpsGui extends GuiFrame {
                     MESSAGEUTILS.sendLang(player, "search.show", Map.of("%search%", search));
                 open();
             });
-        }, Map.of());
+        });
 
         createItem("sorting", event -> {
-            Actions.run(player, this, file.getStringList("sorting.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("sorting.actions"));
             if (event.isShiftClick()) {
                 user.resetSorting();
             } else {
@@ -123,10 +138,11 @@ public class WarpsGui extends GuiFrame {
                 if (event.isRightClick()) user.changeSorting(-1);
             }
             open(gui.getCurrentPageNum());
-        }, Map.of());
+        });
 
         createItem("category", event -> {
-            Actions.run(player, this, file.getStringList("category.actions"));
+            if (CooldownManager.getOrAddCooldown(player)) return;
+            GuiActions.run(player, this, file.getStringList("category.actions"));
             if (event.isShiftClick()) {
                 user.resetCategory();
                 category = null;
@@ -137,12 +153,18 @@ public class WarpsGui extends GuiFrame {
             if (event.isRightClick()) user.changeCategory(-1);
             category = user.getCategory();
             open(gui.getCurrentPageNum());
-        }, Map.of());
+        });
 
         loadWarps().thenRun(() -> {
             if (player != null && player.isOnline()) {
                 Scheduler.get().runAt(player.getLocation(), task -> gui.open(player, page));
             }
+        });
+    }
+
+    public void update() {
+        loadWarps().thenRun(() -> {
+            gui.update();
         });
     }
 
@@ -160,7 +182,7 @@ public class WarpsGui extends GuiFrame {
                     .sorted(new WarpComparator(user.getSorting(), player))
                     .toList();
 
-            GuiItem[] axGuiItems = new GuiItem[filtered.size()];
+            AxGuiItem[] axGuiItems = new AxGuiItem[filtered.size()];
             List<CompletableFuture<?>> futures = new ArrayList<>();
             int i = 0;
             for (Warp warp : filtered) {
@@ -196,14 +218,15 @@ public class WarpsGui extends GuiFrame {
                     }
                     builder.setLore(Placeholders.parseList(warp, player, lore));
                     if (icon == Material.PLAYER_HEAD) {
-                        final Player pl = Bukkit.getPlayer(warp.getOwner());
+                        Player pl = Bukkit.getPlayer(warp.getOwner());
                         if (pl != null) {
-                            var textures = NMSHandlers.getNmsHandler().textures(pl);
-                            if (textures != null) builder.setTextureValue(textures.getKey());
+                            ServerPlayerWrapper wrapper = ServerPlayerWrapper.wrap(pl);
+                            var textures = wrapper.textures();
+                            if (textures.texture() != null) builder.setTextureValue(textures.texture());
                         }
                     }
 
-                    GuiItem axGuiItem = new GuiItem(builder.get(), event -> {
+                    AxGuiItem axGuiItem = new AxGuiItem(builder.get(), event -> {
                         if (event.isLeftClick()) {
                             warp.teleportPlayer(player);
                         } else {
@@ -219,7 +242,7 @@ public class WarpsGui extends GuiFrame {
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
                 gui.clearPageItems();
-                for (GuiItem axGuiItem : axGuiItems) {
+                for (AxGuiItem axGuiItem : axGuiItems) {
                     if (axGuiItem == null) continue;
                     gui.addItem(axGuiItem);
                 }

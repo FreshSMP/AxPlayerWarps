@@ -30,12 +30,16 @@ public class InputManager {
 
     private static void openSign(Player player, Section section, Consumer<String> consumer) {
         new SignInput(player, StringUtils.formatList(section.getStringList("sign")).toArray(Component[]::new),(player1, result) -> {
-            String res = MiniMessage.builder().build().serialize(result[0]);
-            if (res.isBlank()) {
-                consumer.accept("");
-                return;
+            try {
+                String res = MiniMessage.builder().build().serialize(result[0]);
+                if (res.isBlank()) {
+                    consumer.accept("");
+                    return;
+                }
+                Scheduler.get().run(() -> consumer.accept(res));
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            Scheduler.get().run(() -> consumer.accept(res));
         }).open();
     }
 

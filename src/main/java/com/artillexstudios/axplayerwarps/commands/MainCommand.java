@@ -1,6 +1,5 @@
 package com.artillexstudios.axplayerwarps.commands;
 
-import com.artillexstudios.axapi.nms.NMSHandlers;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.commands.annotations.AllWarps;
@@ -8,14 +7,11 @@ import com.artillexstudios.axplayerwarps.commands.annotations.OwnWarps;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Create;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Info;
 import com.artillexstudios.axplayerwarps.commands.subcommands.Open;
-import com.artillexstudios.axplayerwarps.guis.impl.EditWarpGui;
+import com.artillexstudios.axplayerwarps.guis.EditWarpGui;
 import com.artillexstudios.axplayerwarps.utils.CommandMessages;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.annotation.DefaultFor;
@@ -24,14 +20,12 @@ import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
-import revxrsal.commands.bukkit.exception.InvalidPlayerException;
 import revxrsal.commands.exception.CommandErrorException;
 import revxrsal.commands.orphan.OrphanCommand;
 import revxrsal.commands.orphan.Orphans;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
@@ -102,18 +96,6 @@ public class MainCommand implements OrphanCommand {
     public static void registerCommand() {
         if (handler == null) {
             handler = BukkitCommandHandler.create(AxPlayerWarps.getInstance());
-
-            handler.registerValueResolver(0, OfflinePlayer.class, context -> {
-                String value = context.pop();
-                if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) return ((BukkitCommandActor) context.actor()).requirePlayer();
-                OfflinePlayer player = NMSHandlers.getNmsHandler().getCachedOfflinePlayer(value);
-                if (player == null && !(player = Bukkit.getOfflinePlayer(value)).hasPlayedBefore()) throw new InvalidPlayerException(context.parameter(), value);
-                return player;
-            });
-
-            handler.getAutoCompleter().registerParameterSuggestions(OfflinePlayer.class, (args, sender, command) -> {
-                return Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toSet());
-            });
 
             handler.getAutoCompleter().registerSuggestionFactory(parameter -> {
                 if (parameter.hasAnnotation(AllWarps.class)) {

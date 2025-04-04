@@ -6,6 +6,10 @@ title: "&0&lAxPWarps > &8Warps (%page%/%pages%)"
 rows: 6
 # how many items should be shown on a single page?
 page-size: 45
+# should the gui auto update?
+# in ticks, 20 ticks = 1 second
+# set to -1 to disable auto updater
+auto-update-ticks: -1
 
 # ----- WARP ITEM -----
 

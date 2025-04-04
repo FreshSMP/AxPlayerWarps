@@ -1,4 +1,4 @@
-package com.artillexstudios.axplayerwarps.guis.impl;
+package com.artillexstudios.axplayerwarps.guis;
 
 import com.artillexstudios.axapi.config.Config;
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
@@ -7,12 +7,12 @@ import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.Lo
 import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
+import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.guis.GuiFrame;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
-import dev.triumphteam.gui.guis.Gui;
+import com.artillexstudios.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -32,16 +32,20 @@ public class CategoryGui extends GuiFrame {
             .title(StringUtils.format(GUI.getString("title", "---")))
             .rows(GUI.getInt("rows", 5))
             .create();
+    private final WarpUser user;
 
     public CategoryGui(Player player) {
-        super(GUI, player);
-        WarpUser user = Users.get(player);
+        super(GUI.getInt("auto-update-ticks", -1), GUI, player);
+        this.user = Users.get(player);
+
         setPlaceholder(new Placeholder((pl, s) -> {
             s = s.replace("%total_warps%", "" + WarpManager.getWarps().size());
             s = s.replace("%favorite_warps%", "" + user.getFavorites().size());
             return s;
         }));
+
         setGui(gui);
+        user.addGui(this);
     }
 
     public static boolean reload() {
