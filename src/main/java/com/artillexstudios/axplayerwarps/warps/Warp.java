@@ -299,7 +299,7 @@ public class Warp {
                 completeTeleportPlayer(player);
                 return;
             }
-            Scheduler.get().run(player::closeInventory);
+            Scheduler.get().runAt(player.getLocation(), player::closeInventory);
             WarpQueue.addToQueue(player, this);
         });
     }
@@ -388,7 +388,7 @@ public class Warp {
             PaperUtils.teleportAsync(player, location);
 
             for (String m : CONFIG.getStringList("teleport-commands")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
+                Scheduler.get().run(task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
             }
 
             AxPlayerWarps.getThreadedQueue().submit(() -> {

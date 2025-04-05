@@ -332,7 +332,6 @@ public class EditWarpGui extends GuiFrame {
                         Scheduler.get().run(() -> open());
                     });
                 });
-                return;
             } else if (event.isRightClick()) {
                 if (event.isShiftClick()) {
                     desc.clear();
@@ -341,7 +340,9 @@ public class EditWarpGui extends GuiFrame {
                     open();
                     return;
                 }
-                desc.remove(desc.size() - 1);
+                if (!desc.isEmpty()) {
+                    desc.removeLast();
+                }
                 warp.setDescription(desc);
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                 open();
