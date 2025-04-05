@@ -40,7 +40,9 @@ public class UpdateNotifier implements Listener {
             this.newest = isLatest(current);
 
             if (latest == null || newest) return;
-            Scheduler.get().runLaterAsync(t2 -> Bukkit.getConsoleSender().sendMessage(getMessage()), 50L);
+            Scheduler.get().runLaterAsync(t2 -> {
+                Bukkit.getConsoleSender().sendMessage(getMessage());
+            }, 50L);
             t.cancel();
         }, 0, time);
     }
@@ -50,7 +52,9 @@ public class UpdateNotifier implements Listener {
         if (latest == null || newest) return;
         if (!CONFIG.getBoolean("update-notifier.on-join", true)) return;
         if (!event.getPlayer().hasPermission(instance.getName().toLowerCase() + ".update-notify")) return;
-        Scheduler.get().runLaterAsync(t -> event.getPlayer().sendMessage(getMessage()), 50L);
+        Scheduler.get().runLaterAsync(t -> {
+            event.getPlayer().sendMessage(getMessage());
+        }, 50L);
     }
 
     private String getMessage() {

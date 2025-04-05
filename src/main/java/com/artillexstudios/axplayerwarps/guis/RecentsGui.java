@@ -122,7 +122,9 @@ public class RecentsGui extends GuiFrame {
                 }));
             }
 
-            Scheduler.get().run(scheduledTask -> future.complete(null));
+            Scheduler.get().run(scheduledTask -> {
+                future.complete(null);
+            });
         });
 
         return future;
