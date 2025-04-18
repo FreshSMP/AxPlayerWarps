@@ -1,10 +1,10 @@
 package com.artillexstudios.axplayerwarps.guis;
 
 import com.artillexstudios.axapi.config.Config;
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.dumper.DumperSettings;
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.general.GeneralSettings;
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.loader.LoaderSettings;
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.settings.updater.UpdaterSettings;
+import com.artillexstudios.axapi.libs.boostedyaml.settings.dumper.DumperSettings;
+import com.artillexstudios.axapi.libs.boostedyaml.settings.general.GeneralSettings;
+import com.artillexstudios.axapi.libs.boostedyaml.settings.loader.LoaderSettings;
+import com.artillexstudios.axapi.libs.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.nms.wrapper.ServerPlayerWrapper;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.AsyncUtils;

@@ -3,7 +3,7 @@ package com.artillexstudios.axplayerwarps.input;
 import com.artillexstudios.axapi.gui.AnvilInput;
 import com.artillexstudios.axapi.gui.SignInput;
 import com.artillexstudios.axapi.items.WrappedItemStack;
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.block.implementation.Section;
+import com.artillexstudios.axapi.libs.boostedyaml.block.implementation.Section;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;

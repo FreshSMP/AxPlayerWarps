@@ -1,6 +1,6 @@
 package com.artillexstudios.axplayerwarps.sorting;
 
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.block.implementation.Section;
+import com.artillexstudios.axapi.libs.boostedyaml.block.implementation.Section;
 import com.artillexstudios.axplayerwarps.enums.Sorting;
 
 import java.util.Iterator;

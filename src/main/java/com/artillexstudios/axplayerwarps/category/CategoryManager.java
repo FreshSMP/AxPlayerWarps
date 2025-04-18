@@ -1,6 +1,6 @@
 package com.artillexstudios.axplayerwarps.category;
 
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.block.implementation.Section;
+import com.artillexstudios.axapi.libs.boostedyaml.block.implementation.Section;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
