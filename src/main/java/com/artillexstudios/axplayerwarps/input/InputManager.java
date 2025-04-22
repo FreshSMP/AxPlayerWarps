@@ -31,7 +31,7 @@ public class InputManager {
     private static void openSign(Player player, Section section, Consumer<String> consumer) {
         new SignInput(player, StringUtils.formatList(section.getStringList("sign")).toArray(Component[]::new),(player1, result) -> {
             try {
-                String res = MiniMessage.builder().build().serialize(result[0]);
+                String res = result[0];
                 if (res.isBlank()) {
                     consumer.accept("");
                     return;
