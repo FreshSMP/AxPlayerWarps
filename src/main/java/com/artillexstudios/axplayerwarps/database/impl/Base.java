@@ -489,6 +489,7 @@ public class Base implements Database {
                 WHERE id = ?
                 """,
                 getPlayerId(warp.getOwner()),
+                worldId,
                 warp.getLocation().getX(),
                 warp.getLocation().getY(),
                 warp.getLocation().getZ(),
