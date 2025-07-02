@@ -188,7 +188,7 @@ public class EditWarpGui extends GuiFrame {
 
                         MESSAGEUTILS.sendLang(player, "editor.transferred", Map.of("%player%", pl.getName() == null ? "---" : pl.getName()));
                     }
-                    Scheduler.get().run(() -> player.closeInventory());
+                    Scheduler.get().runAt(player.getLocation(), () -> player.closeInventory());
                 });
             });
         });
@@ -286,7 +286,7 @@ public class EditWarpGui extends GuiFrame {
             if (event.isShiftClick() && event.isRightClick()) {
                 GuiActions.run(player, this, file.getStringList("delete.actions"));
                 warp.delete();
-                Scheduler.get().runLater(() -> player.closeInventory(), 1);
+                Scheduler.get().runLaterAt(player.getLocation(), () -> player.closeInventory(), 1);
             }
         });
 

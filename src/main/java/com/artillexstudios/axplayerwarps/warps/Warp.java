@@ -299,7 +299,7 @@ public class Warp {
                 completeTeleportPlayer(player);
                 return;
             }
-            Scheduler.get().run(player::closeInventory);
+            Scheduler.get().runAt(player.getLocation(), player::closeInventory);
             WarpQueue.addToQueue(player, this);
         });
     }

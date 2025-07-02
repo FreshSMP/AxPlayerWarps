@@ -63,7 +63,11 @@ public enum Create {
             }
         }
 
-        Optional<Warp> warpOpt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equals(warpName)).findAny();
+        Optional<Warp> warpOpt = WarpManager.getWarps().stream().filter(warp -> {
+            boolean caseSensitive = CONFIG.getBoolean("warp-naming.case-sensitive", false);
+            if (caseSensitive) return warp.getName().equals(warpName);
+            else return warp.getName().equalsIgnoreCase(warpName);
+        }).findAny();
         if (warpOpt.isPresent()) {
             MESSAGEUTILS.sendLang(sender, "errors.name-exists");
             return;
