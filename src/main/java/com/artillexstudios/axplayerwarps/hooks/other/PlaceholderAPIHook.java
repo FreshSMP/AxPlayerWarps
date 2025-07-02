@@ -67,7 +67,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         if (warp.isEmpty()) return LANG.getString("placeholders.warp-not-found", "---");
 
         List<String> parsedArgs = new ArrayList<>(Arrays.asList(args));
-        parsedArgs.remove(0);
+        parsedArgs.removeFirst();
         String fin = "%" + String.join("_", parsedArgs) + "%";
         return Placeholders.parse(warp.get(), player, fin);
     }

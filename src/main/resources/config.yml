@@ -56,6 +56,8 @@ warp-creation-cost:
   currency: Vault
 
 warp-naming:
+  # if enabled, for example "myWarp" and "mywarp" will be considered as separate warps
+  case-sensitive: false
   # allowing spaces might make it hard to tab complete warps
   allow-spaces: false
   # only allow certain characters to be used in warp names
@@ -214,4 +216,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 6
+version: 7

@@ -113,7 +113,7 @@ public class MainCommand implements OrphanCommand {
 
             handler.registerValueResolver(Warp.class, resolver -> {
                 final String str = resolver.popForParameter();
-                java.util.Optional<Warp> opt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equalsIgnoreCase(str)).findAny();
+                java.util.Optional<Warp> opt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equals(str)).findAny();
                 if (opt.isEmpty()) {
                     MESSAGEUTILS.sendLang(resolver.actor().as(BukkitCommandActor.class).getSender(), "errors.not-found", Map.of("%warp%", str));
                     throw new CommandErrorException();
