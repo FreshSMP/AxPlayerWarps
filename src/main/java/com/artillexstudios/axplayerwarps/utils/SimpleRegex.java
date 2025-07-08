@@ -6,6 +6,7 @@ public class SimpleRegex {
 
     public static boolean matches(List<String> list, String cmd) {
         for (String string : list) {
+            if (string.isBlank()) continue;
             RegexType regexType = RegexType.EQUALS;
             boolean starts = string.charAt(0) == '*';
             boolean ends = string.charAt(string.length() - 1) == '*';

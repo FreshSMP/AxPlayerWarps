@@ -3,7 +3,7 @@
 
     <groupId>com.artillexstudios</groupId>
     <artifactId>AxPlayerWarps</artifactId>
-    <version>1.10.2</version>
+    <version>1.10.3</version>
     <packaging>jar</packaging>
 
     <name>AxPlayerWarps</name>
@@ -52,10 +52,6 @@
                                 <relocation>
                                     <pattern>com.artillexstudios.axguiframework</pattern>
                                     <shadedPattern>com.artillexstudios.axplayerwarps.libs.gui</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>net.kyori</pattern>
-                                    <shadedPattern>com.artillexstudios.axplayerwarps.libs.kyori</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>revxrsal.commands</pattern>
@@ -136,7 +132,7 @@
         <dependency>
             <groupId>com.artillexstudios.axapi</groupId>
             <artifactId>axapi</artifactId>
-            <version>1.4.720</version>
+            <version>1.4.732</version>
             <scope>compile</scope>
             <classifier>all</classifier>
         </dependency>
