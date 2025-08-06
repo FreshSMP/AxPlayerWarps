@@ -35,7 +35,12 @@ public class MainCommand implements OrphanCommand {
 
     @DefaultFor({"~"})
     @CommandPermission("axplayerwarps.open")
-    public void open(@NotNull CommandSender sender) {
+    public void open(@NotNull CommandSender sender, @Optional @CommandPermission("axplayerwarps.use") Warp warp) {
+        if (warp != null) {
+            if (!(sender instanceof Player pl)) throw new CommandErrorException("must-be-player");
+            warp.teleportPlayer(pl);
+            return;
+        }
         Open.INSTANCE.execute(sender, null);
     }
 
@@ -122,7 +127,7 @@ public class MainCommand implements OrphanCommand {
             });
 
             handler.getTranslator().add(new CommandMessages());
-            handler.setLocale(new Locale("en", "US"));
+            handler.setLocale(Locale.of("en", "US"));
         }
 
         handler.unregisterAllCommands();

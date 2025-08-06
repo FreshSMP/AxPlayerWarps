@@ -26,7 +26,7 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 public enum Create {
     INSTANCE;
 
-    private final Cooldown<Player> cooldown = new Cooldown<>();
+    private final Cooldown<Player> cooldown = Cooldown.create();
     public void execute(Player sender, String warpName, @Nullable OfflinePlayer setPlayer) {
         WarpUser user = Users.get(sender);
         long limit = user.getWarpLimit();

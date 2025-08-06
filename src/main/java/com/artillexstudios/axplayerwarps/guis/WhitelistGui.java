@@ -121,7 +121,7 @@ public class WhitelistGui extends GuiFrame {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
             for (Base.AccessPlayer accessPlayer : warp.getAccessList(al)) {
-                ItemBuilder builder = new ItemBuilder(file.getSection(al.getRoute()));
+                ItemBuilder builder = ItemBuilder.create(file.getSection(al.getRoute()));
                 if (builder.get().getType() == Material.PLAYER_HEAD) {
                     Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {

@@ -87,7 +87,7 @@ public class RecentsGui extends GuiFrame {
             gui.clearPageItems();
             for (Warp warp : AxPlayerWarps.getDatabase().getRecentWarps(player)) {
                 Material icon = warp.getIcon();
-                ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
+                ItemBuilder builder = ItemBuilder.create(new ItemStack(icon));
                 builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
 
                 String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));

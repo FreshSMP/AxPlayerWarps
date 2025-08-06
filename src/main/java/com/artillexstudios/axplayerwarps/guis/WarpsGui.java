@@ -199,7 +199,7 @@ public class WarpsGui extends GuiFrame {
                 int i2 = i;
                 AsyncUtils.submit(() -> {
                     Material icon = warp.getIcon();
-                    ItemBuilder builder = new ItemBuilder(new ItemStack(icon));
+                    ItemBuilder builder = ItemBuilder.create(new ItemStack(icon));
                     builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
 
                     String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));

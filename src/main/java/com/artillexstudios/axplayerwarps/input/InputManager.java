@@ -12,6 +12,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
@@ -21,7 +22,7 @@ public class InputManager {
 
     public static void getInput(Player player, String route, Consumer<String> consumer) {
         Section section = INPUT.getSection(route);
-        switch (InputType.valueOf(section.getString("type").toUpperCase())) {
+        switch (InputType.valueOf(section.getString("type").toUpperCase(Locale.ENGLISH))) {
             case SIGN -> openSign(player, section, consumer);
             case ANVIL -> openAnvil(player, section, consumer);
             case CHAT -> openChat(player, section, consumer);
@@ -47,7 +48,7 @@ public class InputManager {
         AtomicBoolean ended = new AtomicBoolean(false);
         new AnvilInput(
                 player,
-                WrappedItemStack.wrap(new ItemBuilder(section.getSection("anvil.item")).get()),
+                WrappedItemStack.wrap(ItemBuilder.create(section.getSection("anvil.item")).get()),
                 StringUtils.format(section.getString("anvil.title")),
                 clickEvent -> {
                     clickEvent.setCancelled(true);

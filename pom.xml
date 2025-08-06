@@ -3,7 +3,7 @@
 
     <groupId>com.artillexstudios</groupId>
     <artifactId>AxPlayerWarps</artifactId>
-    <version>1.10.3</version>
+    <version>1.10.4</version>
     <packaging>jar</packaging>
 
     <name>AxPlayerWarps</name>
@@ -132,14 +132,14 @@
         <dependency>
             <groupId>com.artillexstudios.axapi</groupId>
             <artifactId>axapi</artifactId>
-            <version>1.4.732</version>
+            <version>1.4.751</version>
             <scope>compile</scope>
             <classifier>all</classifier>
         </dependency>
         <dependency>
             <groupId>com.artillexstudios</groupId>
             <artifactId>AxGuiFramework</artifactId>
-            <version>1.2.5</version>
+            <version>1.2.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
