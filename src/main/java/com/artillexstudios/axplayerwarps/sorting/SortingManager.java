@@ -6,6 +6,7 @@ import com.artillexstudios.axplayerwarps.enums.Sorting;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 
@@ -22,13 +23,13 @@ public class SortingManager {
 
             Section forwards = section.getSection("forwards");
             if (forwards.getBoolean("enabled")) {
-                Sort sort = new Sort(forwards.getString("name"), Sorting.valueOf(raw.toUpperCase()), false);
+                Sort sort = new Sort(forwards.getString("name"), Sorting.valueOf(raw.toUpperCase(Locale.ENGLISH)), false);
                 sorts.add(sort);
                 if (forwards.getBoolean("default")) def = sort;
             }
             Section backwards = section.getSection("backwards");
             if (backwards.getBoolean("enabled")) {
-                Sort sort = new Sort(backwards.getString("name"), Sorting.valueOf(raw.toUpperCase()), true);
+                Sort sort = new Sort(backwards.getString("name"), Sorting.valueOf(raw.toUpperCase(Locale.ENGLISH)), true);
                 sorts.add(sort);
                 if (backwards.getBoolean("default")) def = sort;
             }

@@ -290,8 +290,8 @@ public class Warp {
         });
     }
 
-    private final Cooldown<Player> confirmUnsafe = new Cooldown<>();
-    private final Cooldown<Player> confirmPaid = new Cooldown<>();
+    private final Cooldown<Player> confirmUnsafe = Cooldown.create();
+    private final Cooldown<Player> confirmPaid = Cooldown.create();
     public void teleportPlayer(Player player) {
         validateTeleport(player, false, bool -> {
             if (!bool) return;

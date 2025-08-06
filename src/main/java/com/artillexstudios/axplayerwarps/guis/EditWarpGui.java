@@ -297,7 +297,7 @@ public class EditWarpGui extends GuiFrame {
             open();
         });
 
-        ItemBuilder builder = new ItemBuilder(file.getSection("description"));
+        ItemBuilder builder = ItemBuilder.create(file.getSection("description"));
         WrappedItemStack wrap = WrappedItemStack.wrap(builder.get());
         List<String> lore = new ArrayList<>();
         String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
