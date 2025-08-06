@@ -15,7 +15,7 @@ import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class WarpQueue {
     private static final Map<Player, Pair<Warp, Long>> queue = Collections.synchronizedMap(new WeakHashMap<>());
-    private static final Cooldown<Player> cooldown = new Cooldown<>();
+    private static final Cooldown<Player> cooldown = Cooldown.create();
 
     public static void start() {
         Scheduler.get().runTimer(() -> {
