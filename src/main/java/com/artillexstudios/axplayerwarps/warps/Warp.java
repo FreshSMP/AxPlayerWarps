@@ -283,10 +283,7 @@ public class Warp {
             if (!above.getType().isAir()) {
                 return true;
             }
-            if (!under.getType().isSolid()) {
-                return true;
-            }
-            return false;
+            return !under.getType().isSolid();
         });
     }
 
@@ -385,15 +382,13 @@ public class Warp {
             confirmUnsafe.remove(player);
             confirmPaid.remove(player);
 
-            PaperUtils.teleportAsync(player, location);
+            Scheduler.get().runAt(player.getLocation(), () -> PaperUtils.teleportAsync(player, location.clone()));
 
             for (String m : CONFIG.getStringList("teleport-commands")) {
                 Scheduler.get().run(task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName())));
             }
 
-            AxPlayerWarps.getThreadedQueue().submit(() -> {
-                AxPlayerWarps.getDatabase().addVisit(player, this);
-            });
+            AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().addVisit(player, this));
         });
     }
 

@@ -154,9 +154,7 @@ public class MyWarpsGui extends GuiFrame {
     }
 
     public void update() {
-        loadWarps().thenRun(() -> {
-            gui.update();
-        });
+        loadWarps().thenRun(gui::update);
     }
 
     @Override
