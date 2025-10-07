@@ -16,7 +16,6 @@ import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
 import com.artillexstudios.axguiframework.replacements.Replacements;
-import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
@@ -105,7 +104,6 @@ public class EditWarpGui extends GuiFrame {
 
     public void open() {
         AxGuiItem guiItem = createItem("name-icon", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("name-icon.actions"));
             if (event.isShiftClick() && event.isRightClick()) {
                 warp.setIcon(null);
@@ -155,7 +153,6 @@ public class EditWarpGui extends GuiFrame {
         guiItem.setItemStack(mt);
 
         createItem("location", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("location.actions"));
             warp.setLocation(player.getLocation());
             AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -166,7 +163,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("transfer", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("transfer.actions"));
             warp.setLocation(player.getLocation());
             InputManager.getInput(player, "transfer", result -> {
@@ -194,7 +190,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("access", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("access.actions"));
             Access currAccess = warp.getAccess();
             ArrayList<Access> accesses = new ArrayList<>(List.of(Access.values()));
@@ -216,7 +211,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("category", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("category.actions"));
             Category category = warp.getCategory();
             ArrayList<Category> categories = new ArrayList<>(CategoryManager.getCategories().values());
@@ -239,7 +233,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("price", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("price.actions"));
             if (warp.getEarnedMoney() > 0) warp.withdrawMoney();
             CurrencyHook currency = warp.getCurrency();
@@ -282,7 +275,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("delete", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             if (event.isShiftClick() && event.isRightClick()) {
                 GuiActions.run(player, this, file.getStringList("delete.actions"));
                 warp.delete();
@@ -291,7 +283,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("bank", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("bank.actions"));
             warp.withdrawMoney();
             open();
@@ -314,7 +305,6 @@ public class EditWarpGui extends GuiFrame {
         builder.setLore(lore);
 
         createItem("description", builder.get(), event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("description.actions"));
             var realDesc = warp.getRealDescription();
             List<String> desc = realDesc == null ? new ArrayList<>() : new ArrayList<>(Arrays.stream(realDesc.split("\n")).toList());
@@ -341,7 +331,7 @@ public class EditWarpGui extends GuiFrame {
                     open();
                     return;
                 }
-                desc.remove(desc.size() - 1);
+                desc.removeLast();
                 warp.setDescription(desc);
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                 open();
@@ -349,13 +339,11 @@ public class EditWarpGui extends GuiFrame {
         }, new Replacements(), List.of());
 
         createItem("whitelist", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("whitelist.actions"));
             new WhitelistGui(player, warp).open();
         });
 
         createItem("blacklist", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("blacklist.actions"));
             new BlacklistGui(player, warp).open();
         });

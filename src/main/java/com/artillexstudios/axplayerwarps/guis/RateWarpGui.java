@@ -11,7 +11,6 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
-import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
@@ -73,7 +72,6 @@ public class RateWarpGui extends GuiFrame {
 
         boolean isFavorite = user.getFavorites().contains(warp);
         createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("favorite.actions"));
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 if (isFavorite) {
@@ -88,13 +86,11 @@ public class RateWarpGui extends GuiFrame {
         }, slotOverrides);
 
         createItem("teleport", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("teleport.actions"));
             warp.teleportPlayer(player);
         });
 
         createItem("rate", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("rate.actions"));
             if (event.isRightClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {

@@ -3,6 +3,7 @@ package com.artillexstudios.axplayerwarps.input;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
@@ -18,7 +19,7 @@ public class InputListener implements Listener {
         return inputPlayers;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Consumer<String> consumer = inputPlayers.remove(event.getPlayer());
         if (consumer == null) return;
