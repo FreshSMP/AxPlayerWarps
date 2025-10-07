@@ -2,21 +2,25 @@
 
 help:
   - " "
-  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» &#BBFFDDHelp:"
-  - "  &7⋆ &f/axpw [open] [player] &7| &#BBFFDDOpen warp menu"
-  - "  &7⋆ &f/axpw create <name> &7| &#BBFFDDCreate warp"
-  - "  &7⋆ &f/axpw delete <warp> &7| &#BBFFDDDelete warp"
-  - "  &7⋆ &f/axpw edit <warp> &7| &#BBFFDDOpen warp editor"
-  - "  &7⋆ &f/axpw warp <warp> &7| &#BBFFDDTeleport to warp"
-  - "  &7⋆ &f/axpw info <warp> &7| &#BBFFDDWarp information"
+  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> <#33CCBB>Help"
+  - " <#33CCBB>➤ <white>/axpw [open] [player] <#DDDDDD>| <#BBFFDD>Open warp menu"
+  - " <#33CCBB>➤ <white>/axpw create <name> <#DDDDDD>| <#BBFFDD>Create warp"
+  - " <#33CCBB>➤ <white>/axpw delete <warp> <#DDDDDD>| <#BBFFDD>Delete warp"
+  - " <#33CCBB>➤ <white>/axpw edit <warp> <#DDDDDD>| <#BBFFDD>Open warp editor"
+  - " <#33CCBB>➤ <white>/axpw warp <warp> <#DDDDDD>| <#BBFFDD>Teleport to warp"
+  - " <#33CCBB>➤ <white>/axpw info <warp> <#DDDDDD>| <#BBFFDD>Warp information"
+  - " <#33CCBB>➤ <white>/axpw set <warp> <#DDDDDD>| <#BBFFDD>Update warp location"
+  - " <#33CCBB>➤ <white>/axpw settings <warp> <#DDDDDD>| <#BBFFDD>Open warp settings"
+  - " <#33CCBB>➤ <#44CCBB>/axpwadmin <#DDDDDD>| <#BBFFDD>Admin commands"
   - " "
 
 admin-help:
   - " "
-  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> &7» &#BBFFDDAdmin Help:"
-  - "  &7⋆ &f/axpwadmin reload &7| &#BBFFDDReload plugin"
-  - "  &7⋆ &f/axpwadmin delete <warp> &7| &#BBFFDDDelete warp"
-  - "  &7⋆ &f/axpwadmin setowner <warp> <player> &7| &#BBFFDDSet owner of warp"
+  - "<gradient:#33EEBB:#3388BB><b>AxPlayerWarps</b></gradient> <#33CCBB>Admin Help"
+  - " <#33CCBB>➤ <white>/axpwadmin reload <#DDDDDD>| <#BBFFDD>Reload plugin"
+  - " <#33CCBB>➤ <white>/axpwadmin delete <warp> <#DDDDDD>| <#BBFFDD>Delete warp"
+  - " <#33CCBB>➤ <white>/axpwadmin setowner <warp> <player> <#DDDDDD>| <#BBFFDD>Set owner of warp"
+  - " <#33CCBB>➤ <white>/axpwadmin converter <#DDDDDD>| <#BBFFDD>Convert data from another plugin"
   - " "
 
 access:

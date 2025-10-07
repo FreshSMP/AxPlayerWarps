@@ -16,7 +16,7 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axapi.utils.featureflags.FeatureFlags;
 import com.artillexstudios.axguiframework.GuiManager;
 import com.artillexstudios.axplayerwarps.category.CategoryManager;
-import com.artillexstudios.axplayerwarps.commands.MainCommand;
+import com.artillexstudios.axplayerwarps.commands.CommandManager;
 import com.artillexstudios.axplayerwarps.database.Database;
 import com.artillexstudios.axplayerwarps.database.impl.H2;
 import com.artillexstudios.axplayerwarps.database.impl.MySQL;
@@ -41,7 +41,6 @@ import com.artillexstudios.axplayerwarps.utils.UpdateNotifier;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import com.artillexstudios.axplayerwarps.warps.WarpQueue;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import revxrsal.zapper.DependencyManager;
@@ -54,7 +53,6 @@ public final class AxPlayerWarps extends AxPlugin {
     private static ThreadedQueue<Runnable> threadedQueue;
     private static Database database;
     public static MessageUtils MESSAGEUTILS;
-    public static BukkitAudiences BUKKITAUDIENCES;
     public static Config CONFIG;
     public static Config HOOKS;
     public static Config LANG;
@@ -98,8 +96,6 @@ public final class AxPlayerWarps extends AxPlugin {
         new Metrics(this, 21645);
         instance = this;
 
-        BUKKITAUDIENCES = BukkitAudiences.create(this);
-
         CONFIG = new Config(new File(getDataFolder(), "config.yml"), getResource("config.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         HOOKS = new Config(new File(getDataFolder(), "hooks.yml"), getResource("hooks.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).build());
         LANG = new Config(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"), GeneralSettings.builder().setUseDefaults(false).build(), LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setKeepAll(true).setVersioning(new BasicVersioning("version")).build());
@@ -142,7 +138,7 @@ public final class AxPlayerWarps extends AxPlugin {
         CategoryManager.reload();
         SortingManager.reload();
 
-        MainCommand.registerCommand();
+        CommandManager.load();
 
         WarpManager.load();
         WarpQueue.start();
@@ -154,8 +150,6 @@ public final class AxPlayerWarps extends AxPlugin {
 
         metrics = new AxMetrics(this, 17);
         metrics.start();
-
-        AsyncUtils.setup(3);
 
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#44f1d7[AxPlayerWarps] Loaded plugin! Using &f" + database.getType() + " &#44f1d7database to store data!"));
 
@@ -170,5 +164,7 @@ public final class AxPlayerWarps extends AxPlugin {
 
     public void updateFlags() {
         FeatureFlags.USE_LEGACY_HEX_FORMATTER.set(true);
+        FeatureFlags.ASYNC_UTILS_POOL_SIZE.set(3);
+        FeatureFlags.ENABLE_PACKET_LISTENERS.set(true);
     }
 }

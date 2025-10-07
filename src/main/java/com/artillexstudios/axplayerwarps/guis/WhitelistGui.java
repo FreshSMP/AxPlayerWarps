@@ -13,7 +13,6 @@ import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
-import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
@@ -75,7 +74,6 @@ public class WhitelistGui extends GuiFrame {
 
     public void open() {
         createItem("add", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("add.actions"));
             if (event.isRightClick() && event.isShiftClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {

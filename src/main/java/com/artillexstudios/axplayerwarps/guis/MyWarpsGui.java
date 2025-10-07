@@ -14,7 +14,6 @@ import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
-import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.input.InputManager;
@@ -100,7 +99,6 @@ public class MyWarpsGui extends GuiFrame {
 
     public void open(int page) {
         createItem("search", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("search.actions"));
             if (event.isShiftClick()) {
                 search = null;
@@ -120,7 +118,6 @@ public class MyWarpsGui extends GuiFrame {
         });
 
         createItem("sorting", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("sorting.actions"));
             if (event.isShiftClick()) {
                 user.resetSorting();
@@ -132,7 +129,6 @@ public class MyWarpsGui extends GuiFrame {
         });
 
         createItem("category", event -> {
-            if (CooldownManager.getOrAddCooldown(player)) return;
             GuiActions.run(player, this, file.getStringList("category.actions"));
             if (event.isShiftClick()) {
                 user.resetCategory();
