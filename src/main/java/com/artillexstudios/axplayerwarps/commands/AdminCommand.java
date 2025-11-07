@@ -8,12 +8,14 @@ import com.artillexstudios.axplayerwarps.commands.subcommands.Reload;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.enums.Converters;
 import com.artillexstudios.axplayerwarps.warps.Warp;
+import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.annotation.DefaultFor;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
+import revxrsal.commands.exception.CommandErrorException;
 import revxrsal.commands.orphan.OrphanCommand;
 
 import java.util.Map;
@@ -41,6 +43,25 @@ public class AdminCommand implements OrphanCommand {
     @CommandPermission("axplayerwarps.admin.delete")
     public void delete(@NotNull CommandSender sender, @AllWarps Warp warp) {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
+            AxPlayerWarps.getDatabase().deleteWarp(warp);
+            MESSAGEUTILS.sendLang(sender, "admin.deleted", Map.of("%warp%", warp.getName()));
+        });
+    }
+
+    @Subcommand("delete id")
+    @CommandPermission("axplayerwarps.admin.delete")
+    public void deleteId(@NotNull CommandSender sender, int id) {
+        AxPlayerWarps.getThreadedQueue().submit(() -> {
+            Warp warp = null;
+            for (Warp w : WarpManager.getWarps()) {
+                if (id != w.getId()) continue;
+                warp = w;
+                break;
+            }
+            if (warp == null) {
+                MESSAGEUTILS.sendLang(sender, "errors.not-found", Map.of("%warp%", String.valueOf(id)));
+                throw new CommandErrorException();
+            }
             AxPlayerWarps.getDatabase().deleteWarp(warp);
             MESSAGEUTILS.sendLang(sender, "admin.deleted", Map.of("%warp%", warp.getName()));
         });

@@ -13,6 +13,7 @@ import revxrsal.commands.orphan.Orphans;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
@@ -42,7 +43,10 @@ public class CommandManager {
 
         handler.registerValueResolver(Warp.class, resolver -> {
             final String str = resolver.popForParameter();
-            java.util.Optional<Warp> opt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equals(str)).findAny();
+            Optional<Warp> opt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equals(str)).findAny();
+            if (opt.isEmpty()) {
+                opt = WarpManager.getWarps().stream().filter(warp -> warp.getName().equalsIgnoreCase(str)).findAny();
+            }
             if (opt.isEmpty()) {
                 MESSAGEUTILS.sendLang(resolver.actor().as(BukkitCommandActor.class).getSender(), "errors.not-found", Map.of("%warp%", str));
                 throw new CommandErrorException();

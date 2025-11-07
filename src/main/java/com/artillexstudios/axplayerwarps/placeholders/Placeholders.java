@@ -39,6 +39,7 @@ public class Placeholders {
     }
 
     public static String parse(Warp warp, @Nullable OfflinePlayer player, String t) {
+        t = t.replace("%id%", "" + warp.getId());
         t = t.replace("%name%", warp.getName());
         t = t.replace("%owner%", AxPlayerWarps.getDatabase().getPlayerName(warp.getOwner()));
         t = t.replace("%created%", TimeUtils.formatDate(warp.getCreated()));
