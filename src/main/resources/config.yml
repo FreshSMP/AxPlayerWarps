@@ -62,7 +62,7 @@ warp-naming:
   allow-spaces: false
   # only allow certain characters to be used in warp names
   allowed-characters:
-    enabled: false
+    enabled: true
     # list of allowed characters, without any separator
     list: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
   length:

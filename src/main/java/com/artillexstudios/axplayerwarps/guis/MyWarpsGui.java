@@ -216,6 +216,10 @@ public class MyWarpsGui extends GuiFrame {
                         if (event.isLeftClick()) {
                             warp.teleportPlayer(player);
                         } else {
+                            if (!player.hasPermission("axplayerwarps.edit")) {
+                                MESSAGEUTILS.sendLang(player, "errors.no-permission");
+                                return;
+                            }
                             new EditWarpGui(player, warp).open();
                         }
                     });
