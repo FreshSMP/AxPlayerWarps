@@ -48,7 +48,7 @@ public class AdminCommand implements OrphanCommand {
         });
     }
 
-    @Subcommand("delete id")
+    @Subcommand("deleteid")
     @CommandPermission("axplayerwarps.admin.delete")
     public void deleteId(@NotNull CommandSender sender, int id) {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
