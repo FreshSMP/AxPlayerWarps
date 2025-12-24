@@ -12,7 +12,6 @@ import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -61,7 +60,7 @@ public class RecentsGui extends GuiFrame {
 
     @Override
     public void updateTitle() {
-        gui.updateTitle(StringUtils.formatToString(GUI.getString("title", ""), new HashMap<>(Map.of("%page%", "" + gui.getCurrentPageNum(), "%pages%", "" + Math.max(1, gui.getPagesNum())))));
+        gui.updateTitle(StringUtils.format(GUI.getString("title", ""), new HashMap<>(Map.of("%page%", "" + gui.getCurrentPageNum(), "%pages%", "" + Math.max(1, gui.getPagesNum())))));
     }
 
     public static boolean reload() {
@@ -88,7 +87,7 @@ public class RecentsGui extends GuiFrame {
             for (Warp warp : AxPlayerWarps.getDatabase().getRecentWarps(player)) {
                 Material icon = warp.getIcon();
                 ItemBuilder builder = ItemBuilder.create(new ItemStack(icon));
-                builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
+                builder.setName(parseText(GUI.getString("warp.name"), warp));
 
                 String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
 
@@ -104,7 +103,7 @@ public class RecentsGui extends GuiFrame {
                         lore.add(i, line.replace("%description%", description[j]));
                     }
                 }
-                builder.setLore(Placeholders.parseList(warp, player, lore));
+                builder.setLore(parseText(lore, warp));
                 if (icon == Material.PLAYER_HEAD) {
                     Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {

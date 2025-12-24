@@ -11,7 +11,6 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.NumberUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
@@ -24,10 +23,8 @@ import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.input.InputManager;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
-import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.utils.WarpNameUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.gui.guis.Gui;
@@ -45,7 +42,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.CONFIG;
-import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class EditWarpGui extends GuiFrame {
@@ -64,19 +60,6 @@ public class EditWarpGui extends GuiFrame {
     public EditWarpGui(Player player, Warp warp) {
         super(GUI.getInt("auto-update-ticks", -1), GUI, player);
         this.user = Users.get(player);
-
-        setPlaceholder(new Placeholder((pl, s) -> {
-            Integer rating = warp.getAllRatings().get(player.getUniqueId());
-            s = s.replace("%given_rating_decimal%", rating == null ? "" : Placeholders.df.format(rating));
-            s = s.replace("%given_rating_stars%", rating == null ? LANG.getString("placeholders.no-rating") : StarUtils.getFormatted(rating, 5));
-
-            s = s.replace("%blacklisted%", "" + warp.getAccessList(AccessList.BLACKLIST).size());
-            s = s.replace("%whitelisted%", "" + warp.getAccessList(AccessList.WHITELIST).size());
-
-            s = Placeholders.parse(warp, pl, s);
-            return s;
-        }));
-
         this.warp = warp;
         this.gui = Gui.gui()
             .disableAllInteractions()
@@ -84,6 +67,7 @@ public class EditWarpGui extends GuiFrame {
             .rows(GUI.getInt("rows", 5))
             .create();
 
+        addPlaceholderParameter(warp);
         setGui(gui);
         user.addGui(this);
 
@@ -104,7 +88,7 @@ public class EditWarpGui extends GuiFrame {
 
     public void open() {
         AxGuiItem guiItem = createItem("name-icon", event -> {
-            GuiActions.run(player, this, file.getStringList("name-icon.actions"));
+            GuiActions.run(player, this, event, file.getStringList("name-icon.actions"));
             if (event.isShiftClick() && event.isRightClick()) {
                 warp.setIcon(null);
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -153,7 +137,7 @@ public class EditWarpGui extends GuiFrame {
         guiItem.setItemStack(mt);
 
         createItem("location", event -> {
-            GuiActions.run(player, this, file.getStringList("location.actions"));
+            GuiActions.run(player, this, event, file.getStringList("location.actions"));
             warp.setLocation(player.getLocation());
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 AxPlayerWarps.getDatabase().updateWarp(warp);
@@ -163,7 +147,7 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("transfer", event -> {
-            GuiActions.run(player, this, file.getStringList("transfer.actions"));
+            GuiActions.run(player, this, event, file.getStringList("transfer.actions"));
             warp.setLocation(player.getLocation());
             InputManager.getInput(player, "transfer", result -> {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -190,7 +174,7 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("access", event -> {
-            GuiActions.run(player, this, file.getStringList("access.actions"));
+            GuiActions.run(player, this, event, file.getStringList("access.actions"));
             Access currAccess = warp.getAccess();
             ArrayList<Access> accesses = new ArrayList<>(List.of(Access.values()));
             int idx = accesses.indexOf(currAccess);
@@ -211,7 +195,7 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("category", event -> {
-            GuiActions.run(player, this, file.getStringList("category.actions"));
+            GuiActions.run(player, this, event, file.getStringList("category.actions"));
             Category category = warp.getCategory();
             ArrayList<Category> categories = new ArrayList<>(CategoryManager.getCategories().values());
             int idx = category == null ? -1 : categories.indexOf(category);
@@ -233,7 +217,7 @@ public class EditWarpGui extends GuiFrame {
         });
 
         createItem("price", event -> {
-            GuiActions.run(player, this, file.getStringList("price.actions"));
+            GuiActions.run(player, this, event, file.getStringList("price.actions"));
             if (warp.getEarnedMoney() > 0) warp.withdrawMoney();
             CurrencyHook currency = warp.getCurrency();
             ArrayList<CurrencyHook> currencies = HookManager.getCurrency();
@@ -276,14 +260,14 @@ public class EditWarpGui extends GuiFrame {
 
         createItem("delete", event -> {
             if (event.isShiftClick() && event.isRightClick()) {
-                GuiActions.run(player, this, file.getStringList("delete.actions"));
+                GuiActions.run(player, this, event, file.getStringList("delete.actions"));
                 warp.delete();
                 Scheduler.get().runLaterAt(player.getLocation(), scheduledTask -> player.closeInventory(), 1);
             }
         });
 
         createItem("bank", event -> {
-            GuiActions.run(player, this, file.getStringList("bank.actions"));
+            GuiActions.run(player, this, event, file.getStringList("bank.actions"));
             warp.withdrawMoney();
             open();
         });
@@ -293,7 +277,7 @@ public class EditWarpGui extends GuiFrame {
         List<String> lore = new ArrayList<>();
         String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
         for (Component line : wrap.get(DataComponents.lore()).lines()) {
-            String serialized = Placeholders.mm.serialize(line);
+            String serialized = StringUtils.MINI_MESSAGE.serialize(line);
             if (serialized.contains("%description%")) {
                 for (String s : description) {
                     lore.add(serialized.replace("%description%", s));
@@ -305,7 +289,7 @@ public class EditWarpGui extends GuiFrame {
         builder.setLore(lore);
 
         createItem("description", builder.get(), event -> {
-            GuiActions.run(player, this, file.getStringList("description.actions"));
+            GuiActions.run(player, this, event, file.getStringList("description.actions"));
             var realDesc = warp.getRealDescription();
             List<String> desc = realDesc == null ? new ArrayList<>() : new ArrayList<>(Arrays.stream(realDesc.split("\n")).toList());
             if (event.isLeftClick()) {
@@ -315,6 +299,12 @@ public class EditWarpGui extends GuiFrame {
                     return;
                 }
                 InputManager.getInput(player, "add-line", result -> {
+                    int maxLineLength = CONFIG.getInt("warp-description.max-line-length");
+                    if (result.length() > CONFIG.getInt("warp-description.max-line-length")) {
+                        MESSAGEUTILS.sendLang(player, "errors.max-length", Map.of("%length%", String.valueOf(maxLineLength)));
+                        Scheduler.get().run(() -> open());
+                        return;
+                    }
                     desc.add(result);
                     warp.setDescription(desc);
                     AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -323,6 +313,7 @@ public class EditWarpGui extends GuiFrame {
                     });
                 });
             } else if (event.isRightClick()) {
+                if (desc.isEmpty()) return;
                 if (event.isShiftClick()) {
                     desc.clear();
                     warp.setDescription(desc);
@@ -340,12 +331,12 @@ public class EditWarpGui extends GuiFrame {
         }, new Replacements(), List.of());
 
         createItem("whitelist", event -> {
-            GuiActions.run(player, this, file.getStringList("whitelist.actions"));
+            GuiActions.run(player, this, event, file.getStringList("whitelist.actions"));
             new WhitelistGui(player, warp).open();
         });
 
         createItem("blacklist", event -> {
-            GuiActions.run(player, this, file.getStringList("blacklist.actions"));
+            GuiActions.run(player, this, event, file.getStringList("blacklist.actions"));
             new BlacklistGui(player, warp).open();
         });
 

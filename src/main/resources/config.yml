@@ -100,6 +100,8 @@ teleport-delay-seconds: 3
 warp-description:
   # how many line of description can players write for their pwarp?
   max-lines: 3
+  # how many characters can a description line be at most?
+  max-line-length: 50
   default: "No description provided."
 
 # example values: categories, warps
@@ -216,4 +218,4 @@ update-notifier:
 debug: false
 
 # do not change this
-version: 7
+version: 8

@@ -23,6 +23,6 @@ public enum Open {
             }
         }
 
-        new ActionMenu().run(openTo, null, CONFIG.getString("default-gui", "categories"));
+        new ActionMenu().run(openTo, null, null, CONFIG.getString("default-gui", "categories"));
     }
 }

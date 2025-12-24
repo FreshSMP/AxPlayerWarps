@@ -8,15 +8,12 @@ import com.artillexstudios.axapi.libs.boostedyaml.settings.updater.UpdaterSettin
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.NumberUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.input.InputManager;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
-import com.artillexstudios.axplayerwarps.utils.StarUtils;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.gui.guis.Gui;
 import org.bukkit.entity.Player;
@@ -25,7 +22,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.artillexstudios.axplayerwarps.AxPlayerWarps.LANG;
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.MESSAGEUTILS;
 
 public class RateWarpGui extends GuiFrame {
@@ -44,13 +40,6 @@ public class RateWarpGui extends GuiFrame {
     public RateWarpGui(Player player, Warp warp) {
         super(GUI.getInt("auto-update-ticks", -1), GUI, player);
         this.user = Users.get(player);
-        setPlaceholder(new Placeholder((pl, s) -> {
-            Integer rating = warp.getAllRatings().get(player.getUniqueId());
-            s = s.replace("%given_rating_decimal%", rating == null ? "" : Placeholders.df.format(rating));
-            s = s.replace("%given_rating_stars%", rating == null ? LANG.getString("placeholders.no-rating") : StarUtils.getFormatted(rating, 5));
-            s = Placeholders.parse(warp, pl, s);
-            return s;
-        }));
         this.warp = warp;
         this.gui = Gui.gui()
             .disableAllInteractions()
@@ -58,6 +47,7 @@ public class RateWarpGui extends GuiFrame {
             .rows(GUI.getInt("rows", 5))
             .create();
 
+        addPlaceholderParameter(warp);
         setGui(gui);
         user.addGui(this);
     }
@@ -72,7 +62,7 @@ public class RateWarpGui extends GuiFrame {
 
         boolean isFavorite = user.getFavorites().contains(warp);
         createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
-            GuiActions.run(player, this, file.getStringList("favorite.actions"));
+            GuiActions.run(player, this, event, file.getStringList("favorite.actions"));
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 if (isFavorite) {
                     AxPlayerWarps.getDatabase().removeFromFavorites(player, warp);
@@ -86,12 +76,12 @@ public class RateWarpGui extends GuiFrame {
         }, slotOverrides);
 
         createItem("teleport", event -> {
-            GuiActions.run(player, this, file.getStringList("teleport.actions"));
+            GuiActions.run(player, this, event, file.getStringList("teleport.actions"));
             warp.teleportPlayer(player);
         });
 
         createItem("rate", event -> {
-            GuiActions.run(player, this, file.getStringList("rate.actions"));
+            GuiActions.run(player, this, event, file.getStringList("rate.actions"));
             if (event.isRightClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().removeRating(player, warp);

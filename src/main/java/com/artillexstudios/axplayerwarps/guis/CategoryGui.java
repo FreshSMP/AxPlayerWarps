@@ -6,12 +6,10 @@ import com.artillexstudios.axapi.libs.boostedyaml.settings.general.GeneralSettin
 import com.artillexstudios.axapi.libs.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
-import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import com.artillexstudios.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
@@ -37,12 +35,6 @@ public class CategoryGui extends GuiFrame {
     public CategoryGui(Player player) {
         super(GUI.getInt("auto-update-ticks", -1), GUI, player);
         this.user = Users.get(player);
-
-        setPlaceholder(new Placeholder((pl, s) -> {
-            s = s.replace("%total_warps%", "" + WarpManager.getWarps().size());
-            s = s.replace("%favorite_warps%", "" + user.getFavorites().size());
-            return s;
-        }));
 
         setGui(gui);
         user.addGui(this);

@@ -46,7 +46,7 @@ my-warps:
   lore:
     - " "
     - " &fClick here to view all the"
-    - " &f&#33EEBB%all_warps% &fwarps on the server!"
+    - " &f&#33EEBB%total_warps% &fwarps on the server!"
     - " "
     - "&#33EEBB&lClick &#DDDDDD» &#BBFFDDOpen Warps"
   actions:

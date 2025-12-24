@@ -6,10 +6,10 @@ import com.artillexstudios.axapi.libs.boostedyaml.settings.general.GeneralSettin
 import com.artillexstudios.axapi.libs.boostedyaml.settings.loader.LoaderSettings;
 import com.artillexstudios.axapi.libs.boostedyaml.settings.updater.UpdaterSettings;
 import com.artillexstudios.axapi.nms.wrapper.ServerPlayerWrapper;
+import com.artillexstudios.axapi.placeholders.PlaceholderHandler;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
@@ -17,7 +17,6 @@ import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.input.InputManager;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
@@ -28,6 +27,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -59,11 +60,7 @@ public class WhitelistGui extends GuiFrame {
             .pageSize(GUI.getInt("page-size", 21))
             .create();
 
-        setPlaceholder(new Placeholder((pl, s) -> {
-            s = Placeholders.parse(warp, pl, s);
-            return s;
-        }));
-
+        addPlaceholderParameter(warp);
         setGui(gui);
         user.addGui(this);
     }
@@ -74,7 +71,7 @@ public class WhitelistGui extends GuiFrame {
 
     public void open() {
         createItem("add", event -> {
-            GuiActions.run(player, this, file.getStringList("add.actions"));
+            GuiActions.run(player, this, event, file.getStringList("add.actions"));
             if (event.isRightClick() && event.isShiftClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().clearList(warp, al);
@@ -129,8 +126,12 @@ public class WhitelistGui extends GuiFrame {
                     }
                 }
 
-                builder.setName(Placeholders.parse(accessPlayer, player, GUI.getString(al.getRoute() + ".name")));
-                builder.setLore(Placeholders.parseList(accessPlayer, player, GUI.getStringList(al.getRoute() + ".lore")));
+                builder.setName(PlaceholderHandler.parse(GUI.getString(al.getRoute() + ".name"), accessPlayer, player));
+                List<String> lore = new ArrayList<>(GUI.getStringList(al.getRoute() + ".lore"));
+                lore.replaceAll(s -> {
+                    return PlaceholderHandler.parse(GUI.getString(al.getRoute() + ".name"), accessPlayer, player);
+                });
+                builder.setLore(lore);
 
                 gui.addItem(new AxGuiItem(builder.get(), event -> {
                     AxPlayerWarps.getThreadedQueue().submit(() -> {
