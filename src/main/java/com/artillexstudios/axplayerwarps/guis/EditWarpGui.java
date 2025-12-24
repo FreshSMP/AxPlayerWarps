@@ -149,28 +149,26 @@ public class EditWarpGui extends GuiFrame {
         createItem("transfer", event -> {
             GuiActions.run(player, this, event, file.getStringList("transfer.actions"));
             warp.setLocation(player.getLocation());
-            InputManager.getInput(player, "transfer", result -> {
-                AxPlayerWarps.getThreadedQueue().submit(() -> {
-                    UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(result);
-                    if (uuid == null) {
-                        MESSAGEUTILS.sendLang(player, "errors.player-not-found");
-                    } else {
-                        Player transferTo = Bukkit.getPlayer(uuid);
-                        warp.setOwner(uuid);
-                        AxPlayerWarps.getDatabase().updateWarp(warp);
-                        OfflinePlayer pl = Bukkit.getOfflinePlayer(uuid);
-                        AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.WHITELIST, pl);
-                        AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.BLACKLIST, pl);
+            InputManager.getInput(player, "transfer", result -> AxPlayerWarps.getThreadedQueue().submit(() -> {
+                UUID uuid = AxPlayerWarps.getDatabase().getUUIDFromName(result);
+                if (uuid == null) {
+                    MESSAGEUTILS.sendLang(player, "errors.player-not-found");
+                } else {
+                    Player transferTo = Bukkit.getPlayer(uuid);
+                    warp.setOwner(uuid);
+                    AxPlayerWarps.getDatabase().updateWarp(warp);
+                    OfflinePlayer pl = Bukkit.getOfflinePlayer(uuid);
+                    AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.WHITELIST, pl);
+                    AxPlayerWarps.getDatabase().removeFromList(warp, AccessList.BLACKLIST, pl);
 
-                        if (transferTo != null)
-                            MESSAGEUTILS.sendLang(transferTo, "editor.new-owner",
-                                    Map.of("%player%", player.getName(), "%warp%", warp.getName()));
+                    if (transferTo != null)
+                        MESSAGEUTILS.sendLang(transferTo, "editor.new-owner",
+                                Map.of("%player%", player.getName(), "%warp%", warp.getName()));
 
-                        MESSAGEUTILS.sendLang(player, "editor.transferred", Map.of("%player%", pl.getName() == null ? "---" : pl.getName()));
-                    }
-                    Scheduler.get().runAt(player.getLocation(), () -> player.closeInventory());
-                });
-            });
+                    MESSAGEUTILS.sendLang(player, "editor.transferred", Map.of("%player%", pl.getName() == null ? "---" : pl.getName()));
+                }
+                Scheduler.get().runAt(player.getLocation(), () -> player.closeInventory());
+            }));
         });
 
         createItem("access", event -> {
@@ -321,9 +319,7 @@ public class EditWarpGui extends GuiFrame {
                     open();
                     return;
                 }
-                if (!desc.isEmpty()) {
-                    desc.removeLast();
-                }
+                desc.removeLast();
                 warp.setDescription(desc);
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(warp));
                 open();
@@ -341,6 +337,6 @@ public class EditWarpGui extends GuiFrame {
         });
 
         gui.update();
-        gui.open(player);
+        Scheduler.get().runAt(player.getLocation(), task -> gui.open(player));
     }
 }

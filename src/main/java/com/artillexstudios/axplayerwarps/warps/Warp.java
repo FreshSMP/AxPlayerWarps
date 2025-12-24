@@ -319,7 +319,7 @@ public class Warp {
             MESSAGEUTILS.sendLang(player, "confirm.paid",
                     Map.of("%warp%", getName(), "%price%",
                             currency.getDisplayName()
-                                    .replace("%price%", WarpPlaceholders.df.format(teleportPrice))
+                                    .replace("%price%", WarpPlaceholders.format(teleportPrice))
                     ));
             response.accept(false);
             return;
@@ -375,7 +375,7 @@ public class Warp {
                 earnedMoney += teleportPrice;
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(this));
                 MESSAGEUTILS.sendLang(player, "money.take", Map.of("%price%",
-                        currency.getDisplayName().replace("%price%", WarpPlaceholders.df.format(teleportPrice))));
+                        currency.getDisplayName().replace("%price%", WarpPlaceholders.format(teleportPrice))));
             }
 
             // send message
@@ -383,7 +383,7 @@ public class Warp {
             confirmUnsafe.remove(player);
             confirmPaid.remove(player);
 
-            Scheduler.get().runAt(player.getLocation(), () -> PaperUtils.teleportAsync(player, location.clone()));
+            Scheduler.get().runAt(player.getLocation(), () -> PaperUtils.teleportAsync(player, location));
 
             for (String m : CONFIG.getStringList("teleport-commands")) {
                 Scheduler.get().run(task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderHandler.parse(m.replace("%player%", player.getName()), this, player)));
@@ -410,7 +410,7 @@ public class Warp {
         currency.giveBalance(owner, earnedMoney);
         MESSAGEUTILS.sendLang(player, "money.got", Map.of("%price%",
                 currency.getDisplayName()
-                        .replace("%price%", WarpPlaceholders.df.format(earnedMoney))));
+                        .replace("%price%", WarpPlaceholders.format(earnedMoney))));
         earnedMoney = 0;
         AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(this));
     }
