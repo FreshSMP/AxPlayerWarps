@@ -10,17 +10,16 @@ import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.AsyncUtils;
 import com.artillexstudios.axapi.utils.ItemBuilder;
 import com.artillexstudios.axapi.utils.StringUtils;
-import com.artillexstudios.axapi.utils.placeholder.Placeholder;
 import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axguiframework.actions.GuiActions;
 import com.artillexstudios.axguiframework.item.AxGuiItem;
+import com.artillexstudios.axguiframework.replacements.Replacements;
 import com.artillexstudios.axguiframework.utils.CooldownManager;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.category.Category;
 import com.artillexstudios.axplayerwarps.guis.actions.BackAction;
 import com.artillexstudios.axplayerwarps.guis.actions.CategoryAction;
 import com.artillexstudios.axplayerwarps.input.InputManager;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
 import com.artillexstudios.axplayerwarps.sorting.WarpComparator;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
@@ -81,14 +80,8 @@ public class WarpsGui extends GuiFrame {
         super(GUI.getInt("auto-update-ticks", -1), GUI, player);
         this.user = Users.get(player);
 
-        setPlaceholder(new Placeholder((player1, s) -> {
-            s = s.replace("%search%", search == null ? LANG.getString("placeholders.no-search") : search);
-            s = s.replace("%sorting_selected%", user.getSorting().name());
-            s = s.replace("%category_selected%", category == null ? LANG.getString("placeholders.no-category") : category.formatted());
-            s = s.replace("%my_warps%", "" + WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).count());
-            return s;
-        }));
-
+        addReplacement(new Replacements("%category_selected%", () -> category == null ? LANG.getString("placeholders.no-category") : category.formatted()));
+        addReplacement(new Replacements("%search%", () -> search == null ? LANG.getString("placeholders.no-search") : search));
         setGui(gui);
         user.addGui(this);
     }
@@ -109,7 +102,7 @@ public class WarpsGui extends GuiFrame {
 
     public void open(int page) {
         createItem("search", event -> {
-            GuiActions.run(player, this, file.getStringList("search.actions"));
+            GuiActions.run(player, this, event, file.getStringList("search.actions"));
             if (event.isShiftClick()) {
                 search = null;
                 MESSAGEUTILS.sendLang(player, "search.reset");
@@ -128,7 +121,7 @@ public class WarpsGui extends GuiFrame {
         });
 
         createItem("sorting", event -> {
-            GuiActions.run(player, this, file.getStringList("sorting.actions"));
+            GuiActions.run(player, this, event, file.getStringList("sorting.actions"));
             if (event.isShiftClick()) {
                 user.resetSorting();
             } else {
@@ -139,7 +132,7 @@ public class WarpsGui extends GuiFrame {
         });
 
         createItem("category", event -> {
-            GuiActions.run(player, this, file.getStringList("category.actions"));
+            GuiActions.run(player, this, event, file.getStringList("category.actions"));
             if (event.isShiftClick()) {
                 user.resetCategory();
                 category = null;
@@ -165,7 +158,7 @@ public class WarpsGui extends GuiFrame {
 
     @Override
     public void updateTitle() {
-        gui.updateTitle(StringUtils.formatToString(GUI.getString("title", ""), new HashMap<>(Map.of("%page%", "" + gui.getCurrentPageNum(), "%pages%", "" + Math.max(1, gui.getPagesNum())))));
+        gui.updateTitle(StringUtils.format(GUI.getString("title", ""), new HashMap<>(Map.of("%page%", "" + gui.getCurrentPageNum(), "%pages%", "" + Math.max(1, gui.getPagesNum())))));
     }
 
     public CompletableFuture<Void> loadWarps() {
@@ -195,7 +188,7 @@ public class WarpsGui extends GuiFrame {
                 AsyncUtils.submit(() -> {
                     Material icon = warp.getIcon();
                     ItemBuilder builder = ItemBuilder.create(new ItemStack(icon));
-                    builder.setName(Placeholders.parse(warp, player, GUI.getString("warp.name")));
+                    builder.setName(parseText(GUI.getString("warp.name"), warp));
 
                     String[] description = warp.getDescription().split("\n", CONFIG.getInt("warp-description.max-lines", 3));
 
@@ -211,7 +204,7 @@ public class WarpsGui extends GuiFrame {
                             lore.add(j, line.replace("%description%", description[k]));
                         }
                     }
-                    builder.setLore(Placeholders.parseList(warp, player, lore));
+                    builder.setLore(parseText(lore, warp));
                     if (icon == Material.PLAYER_HEAD) {
                         Player pl = Bukkit.getPlayer(warp.getOwner());
                         if (pl != null) {

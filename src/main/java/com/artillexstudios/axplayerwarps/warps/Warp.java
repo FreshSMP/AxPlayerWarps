@@ -1,5 +1,6 @@
 package com.artillexstudios.axplayerwarps.warps;
 
+import com.artillexstudios.axapi.placeholders.PlaceholderHandler;
 import com.artillexstudios.axapi.scheduler.Scheduler;
 import com.artillexstudios.axapi.utils.Cooldown;
 import com.artillexstudios.axapi.utils.PaperUtils;
@@ -9,7 +10,7 @@ import com.artillexstudios.axplayerwarps.database.impl.Base;
 import com.artillexstudios.axplayerwarps.enums.Access;
 import com.artillexstudios.axplayerwarps.enums.AccessList;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
-import com.artillexstudios.axplayerwarps.placeholders.Placeholders;
+import com.artillexstudios.axplayerwarps.placeholders.WarpPlaceholders;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -321,7 +322,7 @@ public class Warp {
             MESSAGEUTILS.sendLang(player, "confirm.paid",
                     Map.of("%warp%", getName(), "%price%",
                             currency.getDisplayName()
-                                    .replace("%price%", Placeholders.df.format(teleportPrice))
+                                    .replace("%price%", WarpPlaceholders.format(teleportPrice))
                     ));
             response.accept(false);
             return;
@@ -377,7 +378,7 @@ public class Warp {
                 earnedMoney += teleportPrice;
                 AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(this));
                 MESSAGEUTILS.sendLang(player, "money.take", Map.of("%price%",
-                        currency.getDisplayName().replace("%price%", Placeholders.df.format(teleportPrice))));
+                        currency.getDisplayName().replace("%price%", WarpPlaceholders.format(teleportPrice))));
             }
 
             // send message
@@ -388,7 +389,7 @@ public class Warp {
             PaperUtils.teleportAsync(player, location);
 
             for (String m : CONFIG.getStringList("teleport-commands")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), Placeholders.parse(this, player, m).replace("%player%", player.getName()));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderHandler.parse(m.replace("%player%", player.getName()), this, player));
             }
 
             AxPlayerWarps.getThreadedQueue().submit(() -> {
@@ -414,7 +415,7 @@ public class Warp {
         currency.giveBalance(owner, earnedMoney);
         MESSAGEUTILS.sendLang(player, "money.got", Map.of("%price%",
                 currency.getDisplayName()
-                        .replace("%price%", Placeholders.df.format(earnedMoney))));
+                        .replace("%price%", WarpPlaceholders.format(earnedMoney))));
         earnedMoney = 0;
         AxPlayerWarps.getThreadedQueue().submit(() -> AxPlayerWarps.getDatabase().updateWarp(this));
     }

@@ -12,6 +12,7 @@ import com.artillexstudios.axplayerwarps.guis.RecentsGui;
 import com.artillexstudios.axplayerwarps.guis.WarpsGui;
 import com.artillexstudios.axplayerwarps.guis.WhitelistGui;
 import com.artillexstudios.axplayerwarps.hooks.HookManager;
+import com.artillexstudios.axplayerwarps.placeholders.WarpPlaceholders;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.world.WorldManager;
 import org.bukkit.Bukkit;
@@ -115,6 +116,7 @@ public enum Reload {
         }
         Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33EEBB╠ &#99FFDDReloaded &fguis/my-warps.yml&#99FFDD!"));
 
+        WarpPlaceholders.reload();
         HookManager.updateHooks();
         WorldManager.reload();
         CategoryManager.reload();

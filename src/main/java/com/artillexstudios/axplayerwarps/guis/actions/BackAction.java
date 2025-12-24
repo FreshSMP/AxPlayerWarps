@@ -6,6 +6,7 @@ import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.NoSuchElementException;
 
@@ -16,7 +17,7 @@ public class BackAction extends Action {
     }
 
     @Override
-    public void run(Player player, GuiFrame gui, String arguments) {
+    public void run(Player player, GuiFrame gui, InventoryClickEvent event, String arguments) {
         WarpUser user = Users.get(player);
         CircularFifoQueue<GuiFrame> last = user.getLastGuis();
 

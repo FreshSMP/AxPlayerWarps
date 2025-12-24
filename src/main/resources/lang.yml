@@ -125,6 +125,7 @@ errors:
   invalid-name: "&#FF4444The given name is not valid."
   name-exists: "&#FF4444A warp with this name already exists."
   max-lines: "&#FF4444You can not add more lines to the warp's description!"
+  max-length: "&#FF4444The length of warp description lines can't be more than %length% characters!"
   not-enough-balance: "&#FF4444You do not have enough money to teleport to this warp!"
   create-not-enough-currency: "&#FF4444You need to have &#FF0000%price% &#FF4444to create a warp!"
   cannot-create-here: "&#FF4444You can't create a warp here, because it is in a protected area."
@@ -164,4 +165,4 @@ commands:
 update-notifier: "&#88CCFFThere is a new version of AxPlayerWarps available! &#DDDDDD(&#FFFFFFcurrent: &#FF0000%current% &#DDDDDD| &#FFFFFFlatest: &#00FF00%latest%&#DDDDDD)"
 
 # do not change this
-version: 4
+version: 5

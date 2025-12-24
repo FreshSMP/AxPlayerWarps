@@ -36,6 +36,7 @@ import com.artillexstudios.axplayerwarps.libraries.Libraries;
 import com.artillexstudios.axplayerwarps.listeners.MoveListener;
 import com.artillexstudios.axplayerwarps.listeners.PlayerListeners;
 import com.artillexstudios.axplayerwarps.listeners.WorldListeners;
+import com.artillexstudios.axplayerwarps.placeholders.WarpPlaceholders;
 import com.artillexstudios.axplayerwarps.sorting.SortingManager;
 import com.artillexstudios.axplayerwarps.utils.UpdateNotifier;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
@@ -123,6 +124,8 @@ public final class AxPlayerWarps extends AxPlugin {
         WhitelistGui.reload();
         BlacklistGui.reload();
 
+        WarpPlaceholders.load();
+
         switch (CONFIG.getString("database.type").toLowerCase()) {
 //            case "sqlite" -> database = new SQLite();
             case "mysql" -> database = new MySQL();
@@ -166,5 +169,7 @@ public final class AxPlayerWarps extends AxPlugin {
         FeatureFlags.USE_LEGACY_HEX_FORMATTER.set(true);
         FeatureFlags.ASYNC_UTILS_POOL_SIZE.set(3);
         FeatureFlags.ENABLE_PACKET_LISTENERS.set(true);
+        FeatureFlags.PLACEHOLDER_API_HOOK.set(true);
+        FeatureFlags.PLACEHOLDER_API_IDENTIFIER.set("axplayerwarps");
     }
 }
