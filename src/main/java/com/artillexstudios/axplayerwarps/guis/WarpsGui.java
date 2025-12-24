@@ -146,16 +146,14 @@ public class WarpsGui extends GuiFrame {
         });
 
         loadWarps().thenRun(() -> {
-            if (player != null && player.isOnline()) {
+            if (player != null) {
                 Scheduler.get().runAt(player.getLocation(), task -> gui.open(player, page));
             }
         });
     }
 
     public void update() {
-        loadWarps().thenRun(() -> {
-            gui.update();
-        });
+        loadWarps().thenRun(gui::update);
     }
 
     @Override
