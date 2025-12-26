@@ -54,14 +54,14 @@ public class WarpPlaceholders {
 
         // player
         PlaceholderHandler.register("player_warp_limit", handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             WarpUser user = Users.get(player);
             return String.valueOf(user.getWarpLimit());
         }, true);
 
         ThrowingFunction<PlaceholderContext, String, PlaceholderException> playerWarpsHandler =handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             return String.valueOf(WarpManager.getWarps().stream().filter(warp -> warp.getOwner().equals(player.getUniqueId())).count());
         };
@@ -69,14 +69,14 @@ public class WarpPlaceholders {
         PlaceholderHandler.register("my_warps", playerWarpsHandler, true);
 
         PlaceholderHandler.register("favorite_warps", handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             WarpUser user = Users.get(player);
             return String.valueOf(user.getFavorites().size());
         }, true);
 
         PlaceholderHandler.register("sorting_selected", handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             WarpUser user = Users.get(player);
             return user.getSorting().name();
@@ -254,7 +254,7 @@ public class WarpPlaceholders {
         });
 
         registerWarp("given_rating_decimal", handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             Warp warp = getWarp(handler);
             if (warp == null) return empty;
@@ -263,7 +263,7 @@ public class WarpPlaceholders {
         });
 
         registerWarp("given_rating_stars", handler -> {
-            Player player = handler.raw(Player.class);
+            Player player = handler.resolve(Player.class);
             if (player == null) return empty;
             Warp warp = getWarp(handler);
             if (warp == null) return empty;
