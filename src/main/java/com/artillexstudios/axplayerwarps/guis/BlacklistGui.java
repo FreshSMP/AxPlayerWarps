@@ -127,7 +127,7 @@ public class BlacklistGui extends GuiFrame {
                 builder.setName(PlaceholderHandler.parse(GUI.getString(al.getRoute() + ".name"), accessPlayer, player));
                 List<String> lore = new ArrayList<>(GUI.getStringList(al.getRoute() + ".lore"));
                 lore.replaceAll(s -> {
-                    return PlaceholderHandler.parse(GUI.getString(al.getRoute() + ".name"), accessPlayer, player);
+                    return PlaceholderHandler.parse(s, accessPlayer, player);
                 });
                 builder.setLore(lore);
 
