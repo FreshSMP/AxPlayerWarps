@@ -176,11 +176,9 @@ public class Base implements Database {
         ) {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    System.out.println("found: " + rs.getString("name"));
                     if (rs.getString("name").equals(player.getName())) return;
                     execute("UPDATE axplayerwarps_players SET name = ? WHERE uuid = ?", player.getName(), player.getUniqueId().toString());
                 } else {
-                    System.out.println("new");
                     insert("INSERT INTO axplayerwarps_players (uuid, name) VALUES (?, ?)", player.getUniqueId().toString(), player.getName());
                 }
             }
