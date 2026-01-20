@@ -167,6 +167,26 @@ public class Base implements Database {
         """);
     }
 
+    @Override
+    public void loadOrUpdate(Player player) {
+        ThreadUtils.checkNotMain("This method can only be called async!");
+        try (Connection conn = getConnection(); PreparedStatement stmt = createStatement(conn,
+                "SELECT name FROM axplayerwarps_players WHERE uuid = ?",
+                player.getUniqueId().toString())
+        ) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    if (rs.getString("name").equals(player.getName())) return;
+                    execute("UPDATE axplayerwarps_players SET name = ? WHERE uuid = ?", player.getName(), player.getUniqueId().toString());
+                } else {
+                    insert("INSERT INTO axplayerwarps_players (uuid, name) VALUES (?, ?)", player.getUniqueId().toString(), player.getName());
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void execute(String sql, Object... obj) {
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             int n = 1;

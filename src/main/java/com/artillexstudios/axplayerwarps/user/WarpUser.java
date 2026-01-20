@@ -27,6 +27,7 @@ public class WarpUser {
         this.player = player;
 
         AxPlayerWarps.getThreadedQueue().submit(() -> {
+            AxPlayerWarps.getDatabase().loadOrUpdate(player);
             favorites = Collections.synchronizedList(AxPlayerWarps.getDatabase().getFavoriteWarps(player));
         });
     }
