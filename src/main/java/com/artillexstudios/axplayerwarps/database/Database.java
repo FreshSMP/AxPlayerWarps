@@ -24,6 +24,8 @@ public interface Database {
 
     void setup();
 
+    void loadOrUpdate(Player player);
+
     int getPlayerId(OfflinePlayer offlinePlayer);
 
     int getPlayerId(UUID uuid);
