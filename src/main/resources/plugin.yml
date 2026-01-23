@@ -33,6 +33,8 @@ permissions:
     default: op
   axplayerwarps.admin.converter:
     default: op
+  axplayerwarps.admin.bypass:
+    default: op
 
 softdepend:
   - PlaceholderAPI

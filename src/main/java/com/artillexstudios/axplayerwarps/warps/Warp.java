@@ -261,6 +261,10 @@ public class Warp {
         return al == AccessList.WHITELIST ? whitelisted : blacklisted;
     }
 
+    public String getWorldName() {
+        return worldName;
+    }
+
     public boolean isPaid() {
         return currency != null && teleportPrice > 0;
     }
@@ -311,6 +315,11 @@ public class Warp {
                 return;
             }
             location.setWorld(world);
+        }
+
+        if (player.hasPermission("axplayerwarps.admin.bypass")) {
+            response.accept(true);
+            return;
         }
 
         boolean isOwner = player.getUniqueId().equals(owner);

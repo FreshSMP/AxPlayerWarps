@@ -1,6 +1,8 @@
 package com.artillexstudios.axplayerwarps.world;
 
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
+import com.artillexstudios.axplayerwarps.warps.Warp;
+import com.artillexstudios.axplayerwarps.warps.WarpManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -27,6 +29,11 @@ public class WorldManager {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             WorldManager.getWorlds().put(world, AxPlayerWarps.getDatabase().getWorldId(world));
         });
+
+        for (Warp warp : WarpManager.getWarps()) {
+            if (!world.getName().equals(warp.getWorldName())) continue;
+            warp.getLocation().setWorld(world);
+        }
     }
 
     public static void onWorldUnload(World world) {
