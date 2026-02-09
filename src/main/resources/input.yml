@@ -16,7 +16,7 @@ rate:
   type: "anvil"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write new rating!"
     - "Valid values: 1-5"
@@ -36,7 +36,7 @@ search:
   type: "chat"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Search for warp"
     - "in the first line!"
@@ -55,7 +55,7 @@ rename:
   type: "anvil"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write new name"
     - "in the first line!"
@@ -74,7 +74,7 @@ price:
   type: "anvil"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write new price"
     - "in the first line!"
@@ -93,7 +93,7 @@ add-line:
   type: "chat"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write new text"
     - "in the first line!"
@@ -112,7 +112,7 @@ add-player:
   type: "anvil"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write the name"
     - "in the first line!"
@@ -131,7 +131,7 @@ transfer:
   type: "anvil"
   # keep the first line empty when using sign
   sign:
-    - " "
+    - ""
     - "-----------"
     - "Write the name"
     - "in the first line!"
