@@ -80,17 +80,17 @@ public class WarpUser {
     public int getWarpLimit() {
         if (hasBypass(player)) return Integer.MAX_VALUE;
         int am = player.hasPermission("axplayerwarps.warps.1") ? 1 : 0;
-        for (PermissionAttachmentInfo effectivePermission : player.getEffectivePermissions()) {
-            if (!effectivePermission.getValue()) continue;
-            if (!effectivePermission.getPermission().startsWith("axplayerwarps.warps.")) continue;
+        for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
+            if (!pai.getValue()) continue;
+            if (!pai.getPermission().startsWith("axplayerwarps.warps.")) continue;
 
-            int value = Integer.parseInt(effectivePermission.getPermission().substring(effectivePermission.getPermission().lastIndexOf('.') + 1));
+            int value = Integer.parseInt(pai.getPermission().substring(pai.getPermission().lastIndexOf('.') + 1));
             if (value > am) am = value;
         }
         return am;
     }
 
-    public static boolean hasBypass(OfflinePlayer offlinePlayer) {
+    private static boolean hasBypass(OfflinePlayer offlinePlayer) {
         if (offlinePlayer.isOp()) return true;
         final Player player = offlinePlayer.getPlayer();
         if (player == null) return false;

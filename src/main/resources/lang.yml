@@ -133,7 +133,8 @@ errors:
   blacklisted: "&#FF4444You can not teleport to the &#FF0000%warp% &#FF4444warp, because you are blacklisted!"
   whitelisted: "&#FF4444You can not teleport to the &#FF0000%warp% &#FF4444warp, because it is whitelisted and you are not on the whitelist!"
   private: "&#FF4444The &#FF0000%warp% &#FF4444is currently set to private, only the owner can teleport to it!"
-  invalid-world: "&#FF4444Teleport failed, this warp is in a world that does not exist anymore!"
+  invalid-world: "&#FF4444Teleport failed! This warp is in a world that does not exist anymore!"
+  warp-changed: "&#FF4444Teleport failed! The warp's owner has modified the settings while you were teleporting! Please try again."
   moved: "&#FF4444You have moved, so the teleport was cancelled!"
   not-found: "&#FF4444Warp with name &#FF0000%warp% &#FF4444not found!"
   limit-reached: "&#FF4444You have reached the warp limit, you can not create any more warps! &#FF4444(&#FF0000%current%&#FF4444/&#EE0000%limit%&#FF4444)"
@@ -165,4 +166,4 @@ commands:
 update-notifier: "&#88CCFFThere is a new version of AxPlayerWarps available! &#DDDDDD(&#FFFFFFcurrent: &#FF0000%current% &#DDDDDD| &#FFFFFFlatest: &#00FF00%latest%&#DDDDDD)"
 
 # do not change this
-version: 5
+version: 6
