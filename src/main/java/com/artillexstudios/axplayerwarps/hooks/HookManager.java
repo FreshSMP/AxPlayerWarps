@@ -1,5 +1,6 @@
 package com.artillexstudios.axplayerwarps.hooks;
 
+import com.artillexstudios.axapi.reflection.ClassUtils;
 import com.artillexstudios.axapi.utils.StringUtils;
 import com.artillexstudios.axintegrations.AxIntegrations;
 import com.artillexstudios.axintegrations.integration.protection.ProtectionIntegration;
@@ -9,6 +10,7 @@ import com.artillexstudios.axplayerwarps.hooks.currency.BeastTokensHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.CoinsEngineHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.CurrencyHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.EcoBitsHook;
+import com.artillexstudios.axplayerwarps.hooks.currency.ExcellentEconomyHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.ExperienceHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.KingdomsXHook;
 import com.artillexstudios.axplayerwarps.hooks.currency.PlaceholderCurrencyHook;
@@ -71,11 +73,21 @@ public class HookManager {
             Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into PlayerPoints!"));
         }
 
-        if (CURRENCIES.getBoolean("currencies.CoinsEngine.register", true) && Bukkit.getPluginManager().getPlugin("CoinsEngine") != null) {
-            for (Map<Object, Object> curr : CURRENCIES.getMapList("currencies.CoinsEngine.enabled")) {
-                currency.add(new CoinsEngineHook((String) curr.get("currency-name"), (String) curr.get("name")));
+
+        if (ClassUtils.INSTANCE.classExists("su.nightexpress.excellenteconomy.api.ExcellentEconomyAPI")) {
+            if (CURRENCIES.getBoolean("currencies.ExcellentEconomy.register", true)) {
+                for (Map<Object, Object> curr : CURRENCIES.getMapList("currencies.ExcellentEconomy.enabled")) {
+                    currency.add(new ExcellentEconomyHook((String) curr.get("currency-name"), (String) curr.get("name")));
+                }
+                Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into CoinsEngine!"));
             }
-            Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into CoinsEngine!"));
+        } else {
+            if (CURRENCIES.getBoolean("currencies.CoinsEngine.register", true) && Bukkit.getPluginManager().getPlugin("CoinsEngine") != null) {
+                for (Map<Object, Object> curr : CURRENCIES.getMapList("currencies.CoinsEngine.enabled")) {
+                    currency.add(new CoinsEngineHook((String) curr.get("currency-name"), (String) curr.get("name")));
+                }
+                Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into CoinsEngine!"));
+            }
         }
 
         if (CURRENCIES.getBoolean("currencies.RoyaleEconomy.register", true) && Bukkit.getPluginManager().getPlugin("RoyaleEconomy") != null) {
