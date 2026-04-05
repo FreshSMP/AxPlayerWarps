@@ -25,8 +25,8 @@ import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
 import com.artillexstudios.axplayerwarps.warps.WarpManager;
-import com.artillexstudios.gui.guis.Gui;
-import com.artillexstudios.gui.guis.PaginatedGui;
+import com.artillexstudios.axguiframework.libs.gui.guis.Gui;
+import com.artillexstudios.axguiframework.libs.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -102,7 +102,7 @@ public class WarpsGui extends GuiFrame {
 
     public void open(int page) {
         createItem("search", event -> {
-            GuiActions.run(player, this, event, file.getStringList("search.actions"));
+            GuiActions.run(player, this, event, section.getStringList("search.actions"));
             if (event.isShiftClick()) {
                 search = null;
                 MESSAGEUTILS.sendLang(player, "search.reset");
@@ -121,7 +121,7 @@ public class WarpsGui extends GuiFrame {
         });
 
         createItem("sorting", event -> {
-            GuiActions.run(player, this, event, file.getStringList("sorting.actions"));
+            GuiActions.run(player, this, event, section.getStringList("sorting.actions"));
             if (event.isShiftClick()) {
                 user.resetSorting();
             } else {
@@ -132,7 +132,7 @@ public class WarpsGui extends GuiFrame {
         });
 
         createItem("category", event -> {
-            GuiActions.run(player, this, event, file.getStringList("category.actions"));
+            GuiActions.run(player, this, event, section.getStringList("category.actions"));
             if (event.isShiftClick()) {
                 user.resetCategory();
                 category = null;
