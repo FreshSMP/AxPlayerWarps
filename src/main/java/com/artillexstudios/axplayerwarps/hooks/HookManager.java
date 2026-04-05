@@ -73,7 +73,6 @@ public class HookManager {
             Bukkit.getConsoleSender().sendMessage(StringUtils.formatToString("&#33FF33[AxPlayerWarps] Hooked into PlayerPoints!"));
         }
 
-
         if (ClassUtils.INSTANCE.classExists("su.nightexpress.excellenteconomy.api.ExcellentEconomyAPI")) {
             if (CURRENCIES.getBoolean("currencies.ExcellentEconomy.register", true)) {
                 for (Map<Object, Object> curr : CURRENCIES.getMapList("currencies.ExcellentEconomy.enabled")) {

@@ -11,7 +11,7 @@ import com.artillexstudios.axguiframework.GuiFrame;
 import com.artillexstudios.axplayerwarps.AxPlayerWarps;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
-import com.artillexstudios.gui.guis.Gui;
+import com.artillexstudios.axguiframework.libs.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
 import java.io.File;

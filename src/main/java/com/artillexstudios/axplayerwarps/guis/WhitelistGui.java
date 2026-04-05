@@ -20,8 +20,8 @@ import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import com.artillexstudios.gui.guis.Gui;
-import com.artillexstudios.gui.guis.PaginatedGui;
+import com.artillexstudios.axguiframework.libs.gui.guis.Gui;
+import com.artillexstudios.axguiframework.libs.gui.guis.PaginatedGui;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -71,7 +71,7 @@ public class WhitelistGui extends GuiFrame {
 
     public void open() {
         createItem("add", event -> {
-            GuiActions.run(player, this, event, file.getStringList("add.actions"));
+            GuiActions.run(player, this, event, section.getStringList("add.actions"));
             if (event.isRightClick() && event.isShiftClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().clearList(warp, al);
@@ -114,7 +114,7 @@ public class WhitelistGui extends GuiFrame {
         AxPlayerWarps.getThreadedQueue().submit(() -> {
             gui.clearPageItems();
             for (Base.AccessPlayer accessPlayer : warp.getAccessList(al)) {
-                ItemBuilder builder = ItemBuilder.create(file.getSection(al.getRoute()));
+                ItemBuilder builder = ItemBuilder.create(section.getSection(al.getRoute()));
                 if (builder.get().getType() == Material.PLAYER_HEAD) {
                     Player pl = Bukkit.getPlayer(warp.getOwner());
                     if (pl != null) {

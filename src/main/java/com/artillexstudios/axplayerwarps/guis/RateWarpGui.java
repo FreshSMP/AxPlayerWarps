@@ -15,7 +15,7 @@ import com.artillexstudios.axplayerwarps.input.InputManager;
 import com.artillexstudios.axplayerwarps.user.Users;
 import com.artillexstudios.axplayerwarps.user.WarpUser;
 import com.artillexstudios.axplayerwarps.warps.Warp;
-import com.artillexstudios.gui.guis.Gui;
+import com.artillexstudios.axguiframework.libs.gui.guis.Gui;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -57,12 +57,12 @@ public class RateWarpGui extends GuiFrame {
     }
 
     public void open() {
-        final List<String> slots = file.getBackingDocument().getStringList("favorite.slot");
-        var slotOverrides = getSlots(slots.isEmpty() ? List.of(file.getString("favorite.slot")) : slots);
+        final List<String> slots = section.getStringList("favorite.slot");
+        var slotOverrides = getSlots(slots.isEmpty() ? List.of(section.getString("favorite.slot")) : slots);
 
         boolean isFavorite = user.getFavorites().contains(warp);
         createItem("favorite." + (isFavorite ? "favorite" : "not-favorite"), event -> {
-            GuiActions.run(player, this, event, file.getStringList("favorite.actions"));
+            GuiActions.run(player, this, event, section.getStringList("favorite.actions"));
             AxPlayerWarps.getThreadedQueue().submit(() -> {
                 if (isFavorite) {
                     AxPlayerWarps.getDatabase().removeFromFavorites(player, warp);
@@ -76,12 +76,12 @@ public class RateWarpGui extends GuiFrame {
         }, slotOverrides);
 
         createItem("teleport", event -> {
-            GuiActions.run(player, this, event, file.getStringList("teleport.actions"));
+            GuiActions.run(player, this, event, section.getStringList("teleport.actions"));
             warp.teleportPlayer(player);
         });
 
         createItem("rate", event -> {
-            GuiActions.run(player, this, event, file.getStringList("rate.actions"));
+            GuiActions.run(player, this, event, section.getStringList("rate.actions"));
             if (event.isRightClick()) {
                 AxPlayerWarps.getThreadedQueue().submit(() -> {
                     AxPlayerWarps.getDatabase().removeRating(player, warp);
@@ -94,7 +94,7 @@ public class RateWarpGui extends GuiFrame {
                     if (!NumberUtils.isInt(result)) {
                         MESSAGEUTILS.sendLang(player, "errors.not-a-number");
                     } else {
-                        int i = Math.max(1, Math.min(5, Integer.parseInt(result)));
+                        int i = Math.clamp(Integer.parseInt(result), 1, 5);
                         AxPlayerWarps.getThreadedQueue().submit(() -> {
                             AxPlayerWarps.getDatabase().setRating(player, warp, i);
                             MESSAGEUTILS.sendLang(player, "rate.add", Map.of("%rating%", "" + i));
