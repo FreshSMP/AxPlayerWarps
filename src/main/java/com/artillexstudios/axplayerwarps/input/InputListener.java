@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +19,11 @@ public class InputListener implements Listener {
 
     public static Map<Player, Consumer<String>> getInputPlayers() {
         return inputPlayers;
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        inputPlayers.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
