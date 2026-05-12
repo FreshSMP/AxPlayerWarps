@@ -32,11 +32,13 @@ public class InputManager {
         new SignInput(player, StringUtils.formatList(section.getStringList("sign")).toArray(Component[]::new), (player1, result) -> {
             try {
                 String res = result[0];
-                if (res.isBlank()) {
-                    consumer.accept("");
-                    return;
-                }
-                Scheduler.get().run(() -> consumer.accept(res));
+                Scheduler.get().run(() -> {
+                    if (res.isBlank()) {
+                        consumer.accept("");
+                        return;
+                    }
+                    consumer.accept(res);
+                });
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

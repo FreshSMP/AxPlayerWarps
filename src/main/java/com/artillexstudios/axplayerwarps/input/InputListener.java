@@ -6,17 +6,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.WeakHashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.artillexstudios.axplayerwarps.AxPlayerWarps.INPUT;
 
 public class InputListener implements Listener {
-    public static WeakHashMap<Player, Consumer<String>> inputPlayers = new WeakHashMap<>();
+    public static Map<Player, Consumer<String>> inputPlayers = new HashMap<>();
 
-    public static WeakHashMap<Player, Consumer<String>> getInputPlayers() {
+    public static Map<Player, Consumer<String>> getInputPlayers() {
         return inputPlayers;
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        inputPlayers.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
